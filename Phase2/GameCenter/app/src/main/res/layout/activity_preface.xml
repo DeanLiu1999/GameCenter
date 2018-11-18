@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="group0642.csc207.fall18.gamecenter.Preface">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/scoreboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/scoreboard"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/perGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/score_per_game" />
+
+        <Button
+            android:id="@+id/perPerson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/score_per_person" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="344dp"
+        android:layout_height="353dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/gameSelection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_the_following_games"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/game1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sliding_tiles" />
+
+        <Button
+            android:id="@+id/game2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/coming_soon" />
+
+        <Button
+            android:id="@+id/game3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/coming_soon" />
+
+        <Button
+            android:id="@+id/gam4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/coming_soon" />
+
+        <Button
+            android:id="@+id/game5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/coming_soon" />
+
+        <Button
+            android:id="@+id/game6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/coming_soon" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

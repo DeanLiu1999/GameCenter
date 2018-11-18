@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="group0642.csc207.fall18.gamecenter.GameActivity">
+
+
+    <group0642.csc207.fall18.gamecenter.GestureDetectGridView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="425dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/undo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="group0642.csc207.fall18.gamecenter.GameActivity">
+
+    </group0642.csc207.fall18.gamecenter.GestureDetectGridView>
+
+    <Button
+        android:id="@+id/undo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="103dp"
+        android:text="@string/undo"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        app:layout_constraintEnd_toStartOf="@+id/fullbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grid" />
+
+    <Button
+        android:id="@+id/scoreboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:text="@string/scoreboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/undo"
+        app:layout_constraintTop_toBottomOf="@+id/fullbutton" />
+
+    <Button
+        android:id="@+id/fullbutton"
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="21dp"
+        android:text="@string/full_image"
+        app:layout_constraintStart_toEndOf="@+id/undo"
+        app:layout_constraintTop_toBottomOf="@+id/grid" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="16dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/scoreboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/undo" />
+
+</android.support.constraint.ConstraintLayout>
