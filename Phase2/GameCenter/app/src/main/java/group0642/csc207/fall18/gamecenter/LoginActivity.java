@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         loginClickListener();
         registerClickListener();
         resetClickListener();
+        testClickListener();
     }
 
 
@@ -86,5 +87,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void testClickListener() {
+        Button test = findViewById(R.id.button);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gam = new Intent(LoginActivity.this, BlackjackGameActivity.class);
+                LoginActivity.this.startActivity(gam);
+            }
+        });
+    }
 
 }
