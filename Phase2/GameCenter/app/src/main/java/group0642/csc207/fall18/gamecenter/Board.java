@@ -68,6 +68,10 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
         return score;
     }
 
+    void setScore(int s) {
+        this.score = s;
+    }
+
     /**
      * The TileIterator class inside class Board.
      */

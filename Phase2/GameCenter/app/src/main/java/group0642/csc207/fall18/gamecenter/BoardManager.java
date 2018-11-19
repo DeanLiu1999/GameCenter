@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Manage a board, including swapping tiles, checking for a win, and managing taps.
@@ -12,9 +13,9 @@ class BoardManager implements Serializable {
 
     public int p = 0; // This keeps track of the blank tile's position
 
-    static int undo = 3;
+    private int undo = 3;
 
-    private int[] allMoves = new int[1000];
+    private int[] allMoves = new int[10000];
 
     private int current_state;
 
@@ -46,17 +47,6 @@ class BoardManager implements Serializable {
      * Manage a new shuffled board.
      */
     BoardManager() {
-        List<Tile> tiles = new ArrayList<>();
-        final int numTiles = Board.NUM_ROWS * Board.NUM_COLS;
-        for (int tileNum = 0; tileNum != numTiles; tileNum++) {
-            tiles.add(new Tile(tileNum));
-        }
-        Collections.shuffle(tiles);
-        this.board = new Board(tiles);
-        allMoves[getCurrent_state()] = p;
-        current_state = getCurrent_state() + 1;
-        if (getCurrent_state() > max_state_reached)
-            max_state_reached++;
     }
 
     /**
@@ -84,8 +74,16 @@ class BoardManager implements Serializable {
         for (int tileNum = 0; tileNum != numTiles; tileNum++) {
             tiles.add(new Tile(tileNum));
         }
-        Collections.shuffle(tiles);
+        // Collections.shuffle(tiles);
         this.board = new Board(tiles);
+        // By induction, it is easy to show that the board is always solvable.
+        // By statistics, the number i is big enough so the board generated is indeed random
+        for (int i = 0; i <= 2500; i++) {
+            Random r = new Random();
+            touchMove(r.nextInt(Board.NUM_ROWS * Board.NUM_COLS));
+        }
+        this.board.setScore(1000);
+        p =  current_state = max_state_reached = 0;
     }
 
     /**
@@ -203,10 +201,9 @@ class BoardManager implements Serializable {
      * Process an undo request.
      */
     private void touchBackMove() {
-        if (returnRemainingUndo() == 0)
+        if (returnRemainingUndo() * getCurrent_state() == 0)
             return;
-        if (getCurrent_state() > 0)
-            current_state = getCurrent_state() - 1;
+        current_state = getCurrent_state() - 1;
         p = allMoves[getCurrent_state()];
         int row = p / Board.NUM_COLS;
         int col = p % Board.NUM_COLS;
