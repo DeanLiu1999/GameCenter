@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         registerClickListener();
         resetClickListener();
         testClickListener();
+        test2ClickListener();
     }
 
 
@@ -92,6 +93,18 @@ public class LoginActivity extends AppCompatActivity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent gam = new Intent(LoginActivity.this, BlackjackGameActivity.class);
+                LoginActivity.this.startActivity(gam);
+            }
+        });
+    }
+
+    private void test2ClickListener() {
+        Button test2 = findViewById(R.id.button2);
+        test2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BlackjackGameActivity.load = true;
                 Intent gam = new Intent(LoginActivity.this, BlackjackGameActivity.class);
                 LoginActivity.this.startActivity(gam);
             }
