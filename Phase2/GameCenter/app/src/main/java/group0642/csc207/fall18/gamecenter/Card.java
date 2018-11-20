@@ -1,6 +1,8 @@
 package group0642.csc207.fall18.gamecenter;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private String data;
 
     private int info;
