@@ -59,6 +59,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         stand.setEnabled(false);
         if(load){
             loadGame();
+            load = false;
         }
 
     }
