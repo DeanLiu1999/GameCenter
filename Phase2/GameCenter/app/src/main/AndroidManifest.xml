@@ -28,7 +28,8 @@
         <activity android:name=".GameScoreActivity" />
         <activity android:name=".PerPersonRecord" />
         <activity android:name=".PerGameRecord" />
-        <activity android:name=".EndingScore" >
+        <activity android:name=".EndingScore" />
+        <activity android:name=".BlackjackGameActivity" >
         </activity>
     </application>
 
