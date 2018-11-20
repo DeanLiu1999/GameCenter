@@ -36,8 +36,8 @@ public class StateManager implements Serializable {
     }
 
     void stand() {
-        stageC = 2;
-        while (getComputerScore() < 16 && 0 < getComputerScore() && stageC < 5)
+        this.stageC = 1;
+        while ((getComputerScore() < 16) && (0 < getComputerScore()) && (stageC < 5))
             ++stageC;
     }
 
