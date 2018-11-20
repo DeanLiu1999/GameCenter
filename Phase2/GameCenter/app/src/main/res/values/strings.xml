@@ -64,4 +64,6 @@
     <string name="show_more_scores">Show More Scores</string>
     <string name="start_another_game">Start Another Game</string>
     <string name="exit_000">Exit</string>
+    <string name="hangman">Hangman</string>
+    <string name="blackjack">Blackjack</string>
 </resources>
