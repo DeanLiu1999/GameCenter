@@ -1,8 +1,9 @@
 package group0642.csc207.fall18.gamecenter;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class DeckManager {
+public class DeckManager implements Serializable {
 
     private Card[] cardsTop = new Card[12];
 
