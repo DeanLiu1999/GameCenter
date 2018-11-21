@@ -19,19 +19,45 @@ public class Preface extends AppCompatActivity {
         final String nameId = intent.getStringExtra("name");
         String nameCopy = nameId;
 
-        game1ClickListener(nameCopy);
+        slideTilesClickListener(nameCopy);
+        blackjackClickListener(nameCopy);
+        hangmanClickListener(nameCopy);
         perGameListener();
         perPerson(nameCopy);
+    }
 
+    private void blackjackClickListener(final String names) {
+        Button game1 = findViewById(R.id.blackjack);
+        game1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent playGame1 = new Intent(Preface.this, BlackjackGameActivity.class);
+                playGame1.putExtra("name", names);
+                playGame1.putExtra("game", "Blackjack");
+                Preface.this.startActivity(playGame1);
+            }
+        });
+    }
 
+    private void hangmanClickListener(final String names) {
+        Button game1 = findViewById(R.id.hangman);
+        game1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent playGame1 = new Intent(Preface.this, HangmanActivity.class);
+                playGame1.putExtra("name", names);
+                playGame1.putExtra("game", "Hangman");
+                Preface.this.startActivity(playGame1);
+            }
+        });
     }
 
     /**
      * @param names for username
-     * Proceed to game 1: Sliding Tiles
+     *              Proceed to game 1: Sliding Tiles
      */
-    private void game1ClickListener(final String names) {
-        Button game1 = findViewById(R.id.game1);
+    private void slideTilesClickListener(final String names) {
+        Button game1 = findViewById(R.id.slidingtiles);
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +87,7 @@ public class Preface extends AppCompatActivity {
 
     /**
      * @param s for name
-     * Proceed to scoreboard per person
+     *          Proceed to scoreboard per person
      */
     private void perPerson(final String s) {
         final Button perPerson = findViewById(R.id.perPerson);

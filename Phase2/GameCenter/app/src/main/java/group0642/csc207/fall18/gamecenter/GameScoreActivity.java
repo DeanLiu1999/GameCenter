@@ -10,21 +10,22 @@ public class GameScoreActivity extends AppCompatActivity {
 
     /**
      * @param savedInstanceState is given
-     * Just to show the scores in this game
+     *                           Just to show the scores in this game
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_score);
         sTilesListener();
-
+        hangmanListener();
+        blackjackListener();
     }
 
     /**
      * Show the scores in the game of Sliding Tiles
      */
     private void sTilesListener() {
-        Button sTiles = findViewById(R.id.game_1);
+        Button sTiles = findViewById(R.id.slidingtiles);
 
         sTiles.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,5 +36,34 @@ public class GameScoreActivity extends AppCompatActivity {
                 GameScoreActivity.this.startActivity(viewGameScore);
             }
         });
+    }
+
+    private void hangmanListener() {
+        Button sTiles = findViewById(R.id.hangman);
+
+        sTiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent viewGameScore = new Intent(GameScoreActivity.this,
+                        PerGameRecord.class);
+                viewGameScore.putExtra("gameName", "Hangman");
+                GameScoreActivity.this.startActivity(viewGameScore);
+            }
+        });
+
+    }
+    private void blackjackListener() {
+        Button sTiles = findViewById(R.id.blackjack);
+
+        sTiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent viewGameScore = new Intent(GameScoreActivity.this,
+                        PerGameRecord.class);
+                viewGameScore.putExtra("gameName", "Blackjack");
+                GameScoreActivity.this.startActivity(viewGameScore);
+            }
+        });
+
     }
 }

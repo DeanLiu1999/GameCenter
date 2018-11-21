@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="group0642.csc207.fall18.gamecenter.Preface">
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="344dp"
@@ -31,13 +32,15 @@
             android:id="@+id/perGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/score_per_game" />
+            android:text="@string/score_per_game"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/perPerson"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/score_per_person" />
+            android:text="@string/score_per_person"
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,46 +67,25 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/game1"
+            android:id="@+id/slidingtiles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sliding_tiles" />
+            android:text="@string/sliding_tiles"
+            android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/game2"
+            android:id="@+id/blackjack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/coming_soon" />
+            android:text="@string/blackjack"
+            android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/game3"
+            android:id="@+id/hangman"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/coming_soon" />
-
-        <Button
-            android:id="@+id/gam4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/coming_soon" />
-
-        <Button
-            android:id="@+id/game5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/coming_soon" />
-
-        <Button
-            android:id="@+id/game6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/coming_soon" />
-
+            android:text="@string/hangman"
+            android:textAllCaps="false" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

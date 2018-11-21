@@ -28,9 +28,9 @@
         <activity android:name=".GameScoreActivity" />
         <activity android:name=".PerPersonRecord" />
         <activity android:name=".PerGameRecord" />
-        <activity android:name=".BlackjackDifficulty" />
-        <activity android:name=".HangmanActivity" />
+        <activity android:name=".BlackjackGameActivity" />
         <activity android:name=".HangmanDifficulty" />
+        <activity android:name=".HangmanActivity" />
         <activity android:name=".EndingScore" >
         </activity>
     </application>

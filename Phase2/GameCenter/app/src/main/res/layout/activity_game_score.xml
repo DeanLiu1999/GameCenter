@@ -7,6 +7,7 @@
     tools:context="group0642.csc207.fall18.gamecenter.GameScoreActivity">
 
     <LinearLayout
+        android:id="@+id/layoutboard"
         android:layout_width="368dp"
         android:layout_height="551dp"
         android:layout_marginStart="8dp"
@@ -20,45 +21,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/game_1"
+            android:id="@+id/slidingtiles"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:text="@string/sliding_tiles_1" />
+            android:text="@string/sliding_tiles_1"
+            android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/game2"
+            android:id="@+id/blackjack"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:enabled="false"
-            android:text="@string/coming_soon_1" />
+            android:text="@string/blackjack"
+            android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/game3"
+            android:id="@+id/hangman"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:enabled="false"
-            android:text="@string/coming_soon_2" />
-
-        <Button
-            android:id="@+id/gam4"
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:enabled="false"
-            android:text="@string/coming_soon_3" />
-
-        <Button
-            android:id="@+id/game5"
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:enabled="false"
-            android:text="@string/coming_soon_4" />
-
-        <Button
-            android:id="@+id/game6"
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:enabled="false"
-            android:text="@string/coming_soon_5" />
-
+            android:text="@string/hangman"
+            android:textAllCaps="false" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

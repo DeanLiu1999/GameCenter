@@ -238,7 +238,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
     }
 
     private void addSaveButtonListener(final String user, final String game) {
-        Button saveButton = findViewById(R.id.saveButton);
+        Button saveButton = findViewById(R.id.undoButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

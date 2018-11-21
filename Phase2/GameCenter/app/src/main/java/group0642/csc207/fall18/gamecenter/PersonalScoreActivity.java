@@ -21,7 +21,8 @@ public class PersonalScoreActivity extends AppCompatActivity {
         String nameCopy = nameId;
 
         sTilesListener(nameCopy);
-
+        hangmanListener(nameCopy);
+        blackjackListener(nameCopy);
 
     }
 
@@ -30,7 +31,7 @@ public class PersonalScoreActivity extends AppCompatActivity {
      * Show the scores of the user in the game of Sliding Tiles
      */
     private void sTilesListener(final String s) {
-        final Button sTiles = findViewById(R.id.game1);
+        final Button sTiles = findViewById(R.id.slidingtiles);
         sTiles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,6 +40,36 @@ public class PersonalScoreActivity extends AppCompatActivity {
                         , PerPersonRecord.class);
                 seePersonal.putExtra("userId", s);
                 seePersonal.putExtra("gameName_1", "Sliding Tiles");
+                PersonalScoreActivity.this.startActivity(seePersonal);
+            }
+        });
+    }
+
+    private void hangmanListener(final String s) {
+        final Button sTiles = findViewById(R.id.hangman);
+        sTiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent seePersonal = new Intent(PersonalScoreActivity.this
+                        , PerPersonRecord.class);
+                seePersonal.putExtra("userId", s);
+                seePersonal.putExtra("gameName_1", "Hangman");
+                PersonalScoreActivity.this.startActivity(seePersonal);
+            }
+        });
+    }
+
+    private void blackjackListener(final String s){
+        final Button sTiles = findViewById(R.id.blackjack);
+        sTiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent seePersonal = new Intent(PersonalScoreActivity.this
+                        , PerPersonRecord.class);
+                seePersonal.putExtra("userId", s);
+                seePersonal.putExtra("gameName_1", "Blackjack");
                 PersonalScoreActivity.this.startActivity(seePersonal);
             }
         });
