@@ -7,6 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class BlackjackGameActivity extends AppCompatActivity {
 
@@ -27,6 +34,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private StateManager stateManager;
     private BankManager bankManager;
 
+    public static boolean load = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,37 +51,155 @@ public class BlackjackGameActivity extends AppCompatActivity {
         addClickListener();
         allinClickListener();
         cashOutClickListener();
+        stateManager = new StateManager();
+
+
+        hit.setEnabled(false);
+        stand.setEnabled(false);
+        if(load){
+            loadGame();
+            load = false;
+        }
 
     }
+
+    private void loadGame(){
+        loadFromFile("statemanager.ser", "bankmanager.ser");
+//        stateManager = (StateManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser");
+//        stateManager = new StateManager();
+//        bankManager = (BankManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser");
+        playerCards = strToCards(stateManager.getPlayerCardsStr());
+        computerCards = strToCards(stateManager.getComputerCardsStr());
+
+        for(int i = 0; i<= 5; i++){
+            ImageView card = (ImageView) findViewById(computerCardsId[i]);
+            card.setImageResource(R.drawable.cardback);
+        }
+        for(int i = 0; i<= 5; i++){
+            ImageView card = (ImageView) findViewById(playerCardsId[i]);
+            card.setImageResource(R.drawable.cardback);
+        }
+        for(int i = 0; i <= stateManager.getStageC();i++){
+            ImageView p = (ImageView) findViewById(computerCardsId[i]);
+            p.setImageResource(computerCards[i]);
+        }
+        for(int i = 0; i <= stateManager.getStageP();i++){
+            ImageView p = (ImageView) findViewById(playerCardsId[i]);
+            p.setImageResource(playerCards[i]);
+        }
+        TextView wager = (TextView) findViewById(R.id.textView21);
+        wager.setText(bankManager.getWager().toString());
+        TextView bank = (TextView) findViewById(R.id.bank2);
+        bank.setText(bankManager.getBank().toString());
+        TextView p_score = (TextView) findViewById(R.id.p_score);
+        Integer p_s = stateManager.getPlayerScore();
+        p_score.setText(p_s.toString());
+        TextView c = (TextView) findViewById(R.id.c_score);
+        Integer c_s = stateManager.getComputerScore();
+        c.setText(c_s.toString());
+        if(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0){
+            deal.setEnabled(true);
+            hit.setEnabled(false);
+            stand.setEnabled(false);
+            add.setEnabled(true);
+            allin.setEnabled(true);
+            cashOut.setEnabled(true);
+        }else{
+            deal.setEnabled(false);
+            hit.setEnabled(true);
+            stand.setEnabled(true);
+            add.setEnabled(false);
+            allin.setEnabled(false);
+            cashOut.setEnabled(false);
+        }
+    }
+
+    public void saveToFile(StateManager s, String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(
+                    this.openFileOutput(fileName, MODE_PRIVATE));
+            outputStream.writeObject(s);
+            outputStream.close();
+        } catch (IOException e) {
+//            Log.e(TAG, "File write failed: " + e.toString());
+        }
+    }
+
+    public void saveToFile(BankManager b, String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(
+                    this.openFileOutput(fileName, MODE_PRIVATE));
+            outputStream.writeObject(b);
+            outputStream.close();
+        } catch (IOException e) {
+//            Log.e(TAG, "File write failed: " + e.toString());
+        }
+    }
+
+    private void loadFromFile(String fileName1, String fileName2) {
+
+        try {
+            InputStream inputStream1 = this.openFileInput(fileName1);
+            if (inputStream1 != null) {
+                ObjectInputStream input = new ObjectInputStream(inputStream1);
+                stateManager = (StateManager) input.readObject();
+                inputStream1.close();
+            }
+            InputStream inputStream2 = this.openFileInput(fileName2);
+            if (inputStream2 != null) {
+                ObjectInputStream input = new ObjectInputStream(inputStream2);
+                bankManager = (BankManager) input.readObject();
+                inputStream2.close();
+            }
+        } catch (FileNotFoundException e) {
+//            Log.e(TAG, "File not found: " + e.toString());
+        } catch (IOException e) {
+//            Log.e(TAG, "Can not read file: " + e.toString());
+        } catch (ClassNotFoundException e) {
+//            Log.e(TAG, "File contained unexpected data type: " + e.toString());
+        }
+    }
+
 
     private void dealClickListener() {
         deal = findViewById(R.id.deal);
         deal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              stateManager = new StateManager();
-                playerCards = strToCards(stateManager.getPlayerCardsStr());
-                computerCards = strToCards(stateManager.getComputerCardsStr());
-                for(int i = 1; i<= 5; i++){
-                    ImageView card = (ImageView) findViewById(computerCardsId[i]);
-                    card.setImageResource(R.drawable.cardback);
+                if(bankManager.getWager().equals(0)){
+                    makeToastText("Please Add Wager Before Deal");
+                }else {
+                    stateManager = new StateManager();
+                    playerCards = strToCards(stateManager.getPlayerCardsStr());
+                    computerCards = strToCards(stateManager.getComputerCardsStr());
+                    for (int i = 1; i <= 5; i++) {
+                        ImageView card = (ImageView) findViewById(computerCardsId[i]);
+                        card.setImageResource(R.drawable.cardback);
+                    }
+                    for (int i = 2; i <= 5; i++) {
+                        ImageView card = (ImageView) findViewById(playerCardsId[i]);
+                        card.setImageResource(R.drawable.cardback);
+                    }
+                    ImageView c1 = (ImageView) findViewById(computerCardsId[0]);
+                    c1.setImageResource(computerCards[0]);
+                    ImageView p1 = (ImageView) findViewById(playerCardsId[0]);
+                    p1.setImageResource(playerCards[0]);
+                    ImageView p2 = (ImageView) findViewById(playerCardsId[1]);
+                    p2.setImageResource(playerCards[1]);
+                    TextView c = (TextView) findViewById(R.id.c_score);
+                    Integer c_s = stateManager.getComputerScore();
+                    c.setText(c_s.toString());
+                    TextView p = (TextView) findViewById(R.id.p_score);
+                    Integer p_s = stateManager.getPlayerScore();
+                    p.setText(p_s.toString());
+
+                    hit.setEnabled(true);
+                    stand.setEnabled(true);
+                    add.setEnabled(false);
+                    allin.setEnabled(false);
+                    cashOut.setEnabled(false);
+                    deal.setEnabled(false);
                 }
-                for(int i = 2; i<= 5; i++){
-                    ImageView card = (ImageView) findViewById(playerCardsId[i]);
-                    card.setImageResource(R.drawable.cardback);
-                }
-                ImageView c1 = (ImageView) findViewById(computerCardsId[0]);
-                c1.setImageResource(computerCards[0]);
-                ImageView p1 = (ImageView) findViewById(playerCardsId[0]);
-                p1.setImageResource(playerCards[0]);
-                ImageView p2 = (ImageView) findViewById(playerCardsId[1]);
-                p2.setImageResource(playerCards[1]);
-                TextView c = (TextView) findViewById(R.id.c_score);
-                Integer c_s = stateManager.getComputerScore();
-                c.setText(c_s.toString());
-                TextView p = (TextView) findViewById(R.id.p_score);
-                Integer p_s = stateManager.getPlayerScore();
-                p.setText(p_s.toString());
             }
         });
     }
@@ -95,10 +223,14 @@ public class BlackjackGameActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                saveToFile(stateManager, "statemanager.ser");
+                saveToFile(bankManager, "bankmanager.ser");
+//                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser", stateManager);
+//                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser", bankManager);
             }
         });
     }
+
 
     private void hitClickListener() {
         hit = findViewById(R.id.hit);
@@ -117,6 +249,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     wager.setText(bankManager.getWager().toString());
                     TextView bank = (TextView) findViewById(R.id.bank2);
                     bank.setText(bankManager.getBank().toString());
+                    deal.setEnabled(true);
+                    hit.setEnabled(false);
+                    stand.setEnabled(false);
+                    add.setEnabled(true);
+                    allin.setEnabled(true);
+                    cashOut.setEnabled(true);
+                    makeToastText("You Lose");
                 }
             }
         });
@@ -137,11 +276,22 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 Integer c_s = stateManager.getComputerScore();
                 Integer p_s = stateManager.getPlayerScore();
                 c.setText(c_s.toString());
+                if(p_s >= c_s){
+                    makeToastText("You Win!");
+                }else{
+                    makeToastText("You Lose");
+                }
                     bankManager.checkOut(p_s >= c_s );
                     TextView wager = (TextView) findViewById(R.id.textView21);
                     wager.setText(bankManager.getWager().toString());
                     TextView bank = (TextView) findViewById(R.id.bank2);
                     bank.setText(bankManager.getBank().toString());
+                deal.setEnabled(true);
+                hit.setEnabled(false);
+                stand.setEnabled(false);
+                add.setEnabled(true);
+                allin.setEnabled(true);
+                cashOut.setEnabled(true);
             }
         });
     }
@@ -151,12 +301,17 @@ public class BlackjackGameActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText w = findViewById(R.id.editText);
-                bankManager.addWager(Integer.parseInt(w.getText().toString()));
+                EditText w = findViewById(R.id.guess);
+                if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))){
+                    makeToastText("Not Enough Money");
+                };
                 TextView wager = (TextView) findViewById(R.id.textView21);
                 wager.setText(bankManager.getWager().toString());
                 TextView bank = (TextView) findViewById(R.id.bank2);
                 bank.setText(bankManager.getBank().toString());
+                if(bankManager.getWager() > 0){
+                    deal.setEnabled(true);
+                }
             }
         });
     }
@@ -171,6 +326,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 wager.setText(bankManager.getWager().toString());
                 TextView bank = (TextView) findViewById(R.id.bank2);
                 bank.setText(bankManager.getBank().toString());
+                if(bankManager.getWager() > 0){
+                    deal.setEnabled(true);
+                }
             }
         });
     }
@@ -205,5 +363,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
             }
         }
         return cards;
+    }
+
+    private void makeToastText(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

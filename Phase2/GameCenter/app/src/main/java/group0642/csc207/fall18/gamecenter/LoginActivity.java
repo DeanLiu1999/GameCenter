@@ -15,7 +15,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * @param savedInstanceState given
-     *                           Actions in the login activity happens here
+     * Actions in the login activity happens here
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }
