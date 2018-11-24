@@ -10,7 +10,7 @@ public class Word {
     private String display;
     private int health;
 
-    public Word(String word){
+    Word(String word){
         this.word = word;
         this.length = word.length();
         this.entered = new ArrayList<>();
@@ -18,7 +18,7 @@ public class Word {
         this.health = 10;
     }
 
-    public String validEnter(String letter){
+    private String validEnter(String letter){
         if(letter.length() != 1){
             return "Length must be 1!";
         } //Check if letter is length one
@@ -34,35 +34,39 @@ public class Word {
         return "Pass"; //Check if letter is Capital Letter
     }
 
-    public boolean check(int position, String letter){
-        return String.valueOf(this.word.charAt(position)).equals(letter);
+
+    private boolean check(int position, String letter){
+        if (this.word.length() >= position)
+            return String.valueOf(this.word.charAt(position)).equals(letter);
+        return false;
     }
 
-    public ArrayList<String> getEntered(){
+    ArrayList<String> getEntered(){
         return entered;
     }
 
-    public int getLength(){
-        return length;
+    void setHealth(int health){
+        this.health = health;
     }
 
-    public int getHealth(){
+    int getHealth(){
         return health;
     }
 
-    public boolean win(){
+    boolean win(){
         return word.equals(display);
     }
 
-    public String getDisplay(){
-        String s = "";
+    String getDisplay(){
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < display.length(); i++){
-            s = s + display.charAt(i) + " ";
+            sb.append(display.charAt(i));
+            sb.append(" ");
         }
-        return s;
+        return sb.toString();
     }
 
-    public String enter(String entered){
+    String enter(String entered){
         entered = entered.toLowerCase();
         String good = validEnter(entered);
         if(good.equals("Pass")){
@@ -82,7 +86,7 @@ public class Word {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Word w = new Word("asdwz");
+        Word w = new Word("Whatever");
         while(w.getHealth() != 0 && !w.win()) {
             String message = w.enter(sc.nextLine());
             if(message.equals("Pass")){
