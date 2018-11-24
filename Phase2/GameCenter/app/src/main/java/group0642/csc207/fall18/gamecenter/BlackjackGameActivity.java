@@ -303,16 +303,19 @@ public class BlackjackGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText w = findViewById(R.id.guess);
-                if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))){
+                if (!w.getText().toString().equals("")){
+                if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))) {
                     makeToastText("Not Enough Money");
-                };
+                }
+                ;
                 TextView wager = (TextView) findViewById(R.id.textView21);
                 wager.setText(bankManager.getWager().toString());
                 TextView bank = (TextView) findViewById(R.id.bank2);
                 bank.setText(bankManager.getBank().toString());
-                if(bankManager.getWager() > 0){
+                if (bankManager.getWager() > 0) {
                     deal.setEnabled(true);
                 }
+            }
             }
         });
     }
