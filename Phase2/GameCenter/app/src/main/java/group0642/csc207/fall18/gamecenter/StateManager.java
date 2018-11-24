@@ -3,7 +3,7 @@ package group0642.csc207.fall18.gamecenter;
 import java.io.Serializable;
 import java.util.*;
 
-public class StateManager implements Serializable {
+class StateManager implements Serializable {
 
     private int stageP;
 
@@ -36,16 +36,23 @@ public class StateManager implements Serializable {
     }
 
     void stand() {
-        this.stageC = 1;
-        while ((getComputerScore() < 16) && (0 < getComputerScore()) && (stageC < 5))
             ++stageC;
+            hold();
     }
 
-    public int getStageC() {
+    void hold() {
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println("Time Delay issue...");
+        }
+    }
+
+    int getStageC() {
         return stageC;
     }
 
-    public int getStageP() {
+    int getStageP() {
         return stageP;
     }
 
@@ -53,7 +60,7 @@ public class StateManager implements Serializable {
         return stageC >= 1 || getPlayerScore() == 0;
     }
 
-    public String[] getComputerCardsStr() {
+    String[] getComputerCardsStr() {
         String[] s = new String[6];
         for (int i = 0; i < 6; i++) {
             s[i] = computerCards[i].getData();
@@ -61,7 +68,7 @@ public class StateManager implements Serializable {
         return s;
     }
 
-    public String[] getPlayerCardsStr() {
+    String[] getPlayerCardsStr() {
         String[] s = new String[6];
         for (int i = 0; i < 6; i++) {
             s[i] = playerCards[i].getData();

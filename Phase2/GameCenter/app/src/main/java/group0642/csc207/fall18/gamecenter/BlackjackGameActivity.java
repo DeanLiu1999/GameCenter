@@ -266,10 +266,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
         stand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stateManager.stand();
-                for(int i = 1; i <= stateManager.getStageC();i++){
-                    ImageView p = (ImageView) findViewById(computerCardsId[i]);
-                    p.setImageResource(computerCards[i]);
+                int i = 1;
+                while ((stateManager.getComputerScore() < 16) && (0 < stateManager.getComputerScore()) && (stateManager.getStageC() < 5)) {
+                    stateManager.stand();
+                    standDisplay(i);
+                    i++;
                 }
 
                 TextView c = (TextView) findViewById(R.id.c_score);
@@ -281,11 +282,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 }else{
                     makeToastText("You Lose");
                 }
-                    bankManager.checkOut(p_s >= c_s );
-                    TextView wager = (TextView) findViewById(R.id.textView21);
-                    wager.setText(bankManager.getWager().toString());
-                    TextView bank = (TextView) findViewById(R.id.bank2);
-                    bank.setText(bankManager.getBank().toString());
+                bankManager.checkOut(p_s >= c_s );
+                TextView wager = (TextView) findViewById(R.id.textView21);
+                wager.setText(bankManager.getWager().toString());
+                TextView bank = (TextView) findViewById(R.id.bank2);
+                bank.setText(bankManager.getBank().toString());
                 deal.setEnabled(true);
                 hit.setEnabled(false);
                 stand.setEnabled(false);
@@ -302,19 +303,16 @@ public class BlackjackGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText w = findViewById(R.id.guess);
-                if (!w.getText().toString().equals("")){
-                    if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))) {
-                        makeToastText("Not Enough Money");
-                    }
-                ;
+                if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))){
+                    makeToastText("Not Enough Money");
+                };
                 TextView wager = (TextView) findViewById(R.id.textView21);
                 wager.setText(bankManager.getWager().toString());
                 TextView bank = (TextView) findViewById(R.id.bank2);
                 bank.setText(bankManager.getBank().toString());
-                if (bankManager.getWager() > 0) {
+                if(bankManager.getWager() > 0){
                     deal.setEnabled(true);
                 }
-            }
             }
         });
     }
@@ -353,7 +351,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 R.drawable.club_k, };
         Integer[] cards = new Integer[6];
         for(int i = 0; i < 6; i++){
-            if(cardStr[i].equals("A")){
+            if (cardStr[i].equals("A")){
                 cards[i] = cardsId[0];
             }else if(cardStr[i].equals("J")) {
                 cards[i] = cardsId[10];
@@ -370,5 +368,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
 
     private void makeToastText(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void standDisplay(int i) {
+        ImageView p = (ImageView) findViewById(computerCardsId[i]);
+        p.setImageResource(computerCards[i]);
     }
 }
