@@ -36,17 +36,12 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boardManager = new BoardManager();
 
         Intent inherit = getIntent();
         String name = inherit.getStringExtra("name");
         String game = inherit.getStringExtra("game");
 
-        // Default complexity (4x4) and background (no image) for a game of SlidingTiles.
-        int size = 4;
-        boardManager.setGameSize(size);
-        int back = 0;
-        Tile.setImages(back);
+
 
         getExternalFilesDir(null);//create the directory for file writing and reading
 
@@ -155,7 +150,6 @@ public class StartingActivity extends AppCompatActivity {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
                     this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(boardManager);
             outputStream.close();
         } catch (IOException e) {
             Log.e(TAG, "File write failed: " + e.toString());

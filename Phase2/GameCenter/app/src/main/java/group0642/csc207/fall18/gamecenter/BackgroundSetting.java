@@ -24,11 +24,18 @@ public class BackgroundSetting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(StartingActivity.TEMP_SAVE_FILENAME);
         setContentView(R.layout.activity_background_choosing);
         Intent i = getIntent();
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
+
+        // Default complexity (4x4) and background (no image) for a game of SlidingTiles.
+
+        boardManager = new BoardManager();
+        int size = 4;
+        boardManager.setGameSize(size);
+        int back = 0;
+        Tile.setImages(back);
 
         final Button next = findViewById(R.id.nextbutton);
         next.setOnClickListener(new View.OnClickListener()
@@ -58,23 +65,6 @@ public class BackgroundSetting extends AppCompatActivity {
 
     }
 
-    private void loadFromFile(String fileName) {
-
-        try {
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                boardManager = (BoardManager) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
-    }
 
     /**
      * Save the board manager to fileName.
