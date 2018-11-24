@@ -267,7 +267,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int i = 1;
-                while ((stateManager.getComputerScore() < 16) && (0 < stateManager.getComputerScore()) && (stateManager.getStageC() < 5)) {
+                while ((stateManager.getComputerScore() < 16) && (0 <
+                        stateManager.getComputerScore()) && (stateManager.getStageC() < 5)) {
                     stateManager.stand();
                     standDisplay(i);
                     i++;

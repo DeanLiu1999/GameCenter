@@ -37,15 +37,13 @@ class StateManager implements Serializable {
 
     void stand() {
             ++stageC;
-            hold();
     }
 
-    void hold() {
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {
-            System.out.println("Time Delay issue...");
-        }
+    int[] getComputerScores() {
+        int[] scores = new int[6];
+        for (int i = 0; i < 6; i++)
+            scores[i] = d.calculateScore(i, computerCards);
+        return scores;
     }
 
     int getStageC() {
