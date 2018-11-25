@@ -28,25 +28,32 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
-    private int score;
+    private int mode = 2; /// TODO: 2018/11/25 Need to pass a value when player chose mode, 1 is infinitely
+    private TextView view;
+    private TextView healthBar;
+    private int score = 0;
     private Word answer;
+    private Random randomGenerator;
+    private ArrayList<String> wordList;
+    private Button showScoreboard_1;
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
 
+        randomGenerator = new Random();
+        wordList = readFromFile("vocabulary_list.txt");
 
         answer = new Word(chooseTheAnswer());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman);
 
-        TextView view = findViewById(R.id.wordDisplay);
-        TextView healthBar = findViewById(R.id.healthBar);
-        view.setText(answer.getDisplay());
-        healthBar.setText(String.valueOf(answer.getHealth()));
-        final Button showScoreboard_1 = findViewById(R.id.showScoreboard_1);
-        enterButtonListener(healthBar, view, answer, showScoreboard_1);
+        view = findViewById(R.id.wordDisplay);
+        healthBar = findViewById(R.id.healthBar);
+        update();
+        showScoreboard_1 = findViewById(R.id.showScoreboard_1);
+        enterButtonListener();
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
@@ -70,54 +77,59 @@ public class HangmanActivity extends AppCompatActivity {
 
 
     public String chooseTheAnswer() {
-        final Random randomGenerator = new Random();
-        final ArrayList<String> wordList = readFromFile("vocabulary_list.txt");
         int index = randomGenerator.nextInt(wordList.size());
         return wordList.get(index);
     }
 
-    public void enterButtonListener(final TextView health, final TextView display, final Word word,
-                                    final Button scores) {
+    void update(){
+        view.setText(answer.getDisplay());
+        healthBar.setText(String.valueOf(answer.getHealth()));
+    }
+
+    public void enterButtonListener() {
         final Button enter = findViewById(R.id.enterButton);
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText textEntry = findViewById(R.id.guess);
-                String s = word.enter(textEntry.getText().toString());
+                String s = answer.enter(textEntry.getText().toString());
                 if (!s.equals("Pass")) {
                     makeToastEntryText(s);
                 } else {
-                    health.setText(String.valueOf(word.getHealth()));
-                    display.setText(word.getDisplay());
+                    update();
                 }
 
-                if (word.win()) {
-                    makeToastWonText();
+                if (answer.win()) {
+                    if (mode == 1){
+                        int health = answer.getHealth();
+                        answer = new Word(chooseTheAnswer());
+                        answer.setHealth(health + 1);
+                        update();
+                        score++;
+                    }
+                    else {
+                        makeToastEntryText("You win");
+                        enter.setEnabled(false);
+                        score = answer.getHealth();
+                        showScoreboard_1.setEnabled(true);
+                    }
+                } else if (answer.getHealth() == 0) {
                     enter.setEnabled(false);
-                    score = word.getHealth();
-                    scores.setEnabled(true);
-                } else if (word.getHealth() == 0) {
-                    makeToastLostText();
-                    enter.setEnabled(false);
+                    if (mode == 1){
+                        makeToastEntryText("Game Over");
+                        showScoreboard_1.setEnabled(true);
+                    }
+                    else {
+                        makeToastEntryText("You lose");
+                    }
                 }
             }
         });
     }
 
-    private void makeToastWonText() {
-        Toast.makeText(this, "You win", Toast.LENGTH_SHORT).show();
-    }
-
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-    }
-
-    private void makeToastLostText() {
-        {
-            Toast.makeText(this, "You lose", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private ArrayList<String> readFromFile(String fileName) {
@@ -126,12 +138,11 @@ public class HangmanActivity extends AppCompatActivity {
         try {
             final InputStream file = getAssets().open(fileName);
             reader = new BufferedReader(new InputStreamReader(file));
-            String line;
-            while ((line = reader.readLine()) != null) {
+            String line = reader.readLine();
+            while (line != null) {
                 Log.d("StackOverflow", line);
+                wordList.add(line.toLowerCase());
                 line = reader.readLine();
-                wordList.add(line);
-
             }
             file.close();
 
