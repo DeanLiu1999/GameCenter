@@ -13,7 +13,7 @@
         android:layout_marginStart="127dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="126dp"
-        android:text="100"
+        android:text="10"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
@@ -43,13 +43,15 @@
         android:layout_width="374dp"
         android:layout_height="224dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="36dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordDisplay">
 
         <TextView
             android:id="@+id/hint"
@@ -80,20 +82,22 @@
             tools:layout_editor_absoluteY="353dp" />
 
         <Button
-            android:id="@+id/undoButton"
+            android:id="@+id/saveButton_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Undo"
+            android:text="Save"
             android:textAllCaps="false"
             tools:layout_editor_absoluteX="74dp"
             tools:layout_editor_absoluteY="428dp" />
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/showScoreboard_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save"
+            android:layout_height="62dp"
+            android:enabled="false"
+            android:text="Show scoreboard"
             android:textAllCaps="false"
+            tools:enabled="false"
             tools:layout_editor_absoluteX="265dp"
             tools:layout_editor_absoluteY="449dp" />
 
