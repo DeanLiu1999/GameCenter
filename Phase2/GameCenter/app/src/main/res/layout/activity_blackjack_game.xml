@@ -247,34 +247,6 @@
             app:layout_constraintTop_toBottomOf="@+id/undo"
             app:srcCompat="@drawable/cardback" />
 
-        <TextView
-            android:id="@+id/c_score"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="311dp"
-            android:layout_marginTop="51dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="152dp"
-            android:text="0"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/p_score"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/undo" />
-
-        <TextView
-            android:id="@+id/p_score"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="311dp"
-            android:layout_marginEnd="12dp"
-            android:text="0"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView21"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/c_score" />
-
         <Button
             android:id="@+id/hit"
             android:layout_width="wrap_content"
@@ -374,9 +346,8 @@
             android:id="@+id/textView21"
             android:layout_width="112dp"
             android:layout_height="51dp"
-            android:layout_marginTop="40dp"
             android:layout_marginEnd="6dp"
-            android:layout_marginBottom="13dp"
+            android:layout_marginBottom="27dp"
             android:text="0"
             android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@+id/cashout"
@@ -388,14 +359,38 @@
             android:id="@+id/cashout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="29dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="27dp"
             android:text="Cash out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/allin"
             app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <ImageView
+            android:id="@+id/c_score"
+            android:layout_width="56dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="314dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginBottom="141dp"
+            app:layout_constraintBottom_toTopOf="@+id/p_score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/undo"
+            app:srcCompat="@drawable/s00" />
+
+        <ImageView
+            android:id="@+id/p_score"
+            android:layout_width="56dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="314dp"
+            android:layout_marginBottom="42dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/c_score"
+            app:srcCompat="@drawable/s00" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
