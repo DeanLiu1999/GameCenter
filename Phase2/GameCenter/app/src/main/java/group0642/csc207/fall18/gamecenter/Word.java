@@ -1,9 +1,10 @@
 package group0642.csc207.fall18.gamecenter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
-public class Word {
+public class Word implements Serializable {
     private String word;
     private int length;
     private ArrayList<String> entered;
@@ -33,7 +34,6 @@ public class Word {
         this.entered.add(letter);
         return "Pass"; //Check if letter is Capital Letter
     }
-
 
     private boolean check(int position, String letter){
         if (this.word.length() >= position)

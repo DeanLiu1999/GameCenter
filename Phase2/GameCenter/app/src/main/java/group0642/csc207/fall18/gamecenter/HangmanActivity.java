@@ -26,72 +26,79 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
-
+    private TextView view;
+    private TextView healthBar;
+    private Word answer;
+    private Random randomGenerator;
+    private ArrayList<String> wordList;
     @Override
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        final Random randomGenerator = new Random();
+        randomGenerator = new Random();
 
-
-        final ArrayList<String> wordList = readFromFile("vocabulary_list.txt");
+        wordList = readFromFile("vocabulary_list.txt");
         int index = randomGenerator.nextInt(wordList.size());
         String the_answer = wordList.get(index);
-        final Word answer = new Word(the_answer);
+        answer = new Word(the_answer);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman);
-        TextView view = findViewById(R.id.wordDisplay);
-        TextView healthBar = findViewById(R.id.healthBar);
-        view.setText(answer.getDisplay());
-        healthBar.setText(String.valueOf(answer.getHealth()));
-        enterButtonListener(healthBar, view, answer);
+        view = findViewById(R.id.wordDisplay);
+        healthBar = findViewById(R.id.healthBar);
+        update();
+        enterButtonListener(healthBar, view);
+
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
 
     }
 
+    void update(){
+        view.setText(answer.getDisplay());
+        healthBar.setText(String.valueOf(answer.getHealth()));
+    }
 
-    public void enterButtonListener(final TextView health, final TextView display, final Word word) {
+    public void enterButtonListener(final TextView health, final TextView display) {
         final Button enter = findViewById(R.id.enterButton);
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText textEntry = findViewById(R.id.guess);
-                String s = word.enter(textEntry.getText().toString());
+                String s = answer.enter(textEntry.getText().toString());
                 if (!s.equals("Pass")) {
                     makeToastEntryText(s);
                 } else {
-                    health.setText(String.valueOf(word.getHealth()));
-                    display.setText(word.getDisplay());
+                    health.setText(String.valueOf(answer.getHealth()));
+                    display.setText(answer.getDisplay());
                 }
 
-                if (word.win()) {
-                    makeToastWonText();
-                    enter.setEnabled(false);
-                } else if (word.getHealth() == 0) {
-                    makeToastLostText();
+                if (answer.win()) {
+                    if (true){ /// TODO: 2018/11/24 Change the if statement to a condition (some value means infinitely mode) 
+                        int health = answer.getHealth();
+                        int index = randomGenerator.nextInt(wordList.size());
+                        String the_answer = wordList.get(index);
+                        answer = new Word(the_answer);
+                        answer.setHealth(health + 1);
+                        update();
+                    }
+                    else {
+                        makeToastEntryText("You Win");
+                        enter.setEnabled(false);
+                    }
+                } else if (answer.getHealth() == 0) {
+                    makeToastEntryText("You Lose");
                     enter.setEnabled(false);
                 }
             }
         });
     }
 
-    private void makeToastWonText() {
-        Toast.makeText(this, "You win", Toast.LENGTH_SHORT).show();
-    }
-
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
-    private void makeToastLostText() {
-        {
-            Toast.makeText(this, "You lose", Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     private ArrayList<String> readFromFile(String fileName) {
         BufferedReader reader;
