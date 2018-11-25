@@ -28,35 +28,56 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
+    private int score;
     private Word answer;
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
-        final Random randomGenerator = new Random();
 
 
-        final ArrayList<String> wordList = readFromFile("vocabulary_list.txt");
-        int index = randomGenerator.nextInt(wordList.size());
-        String the_answer = wordList.get(index);
-        answer = new Word(the_answer);
-
+        answer = new Word(chooseTheAnswer());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman);
+
         TextView view = findViewById(R.id.wordDisplay);
         TextView healthBar = findViewById(R.id.healthBar);
         view.setText(answer.getDisplay());
         healthBar.setText(String.valueOf(answer.getHealth()));
-        enterButtonListener(healthBar, view, answer);
+        final Button showScoreboard_1 = findViewById(R.id.showScoreboard_1);
+        enterButtonListener(healthBar, view, answer, showScoreboard_1);
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
 
+        showScoreboard_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchToScore(name, game, score);
+            }
+        });
     }
 
 
-    public void enterButtonListener(final TextView health, final TextView display, final Word word) {
+    public void switchToScore(String s, String t, int x) {
+        Intent goToScore = new Intent(HangmanActivity.this, EndingScore.class);
+        goToScore.putExtra("name", s);
+        goToScore.putExtra("game", t);
+        goToScore.putExtra("score", x);
+        HangmanActivity.this.startActivity(goToScore);
+    }
+
+
+    public String chooseTheAnswer() {
+        final Random randomGenerator = new Random();
+        final ArrayList<String> wordList = readFromFile("vocabulary_list.txt");
+        int index = randomGenerator.nextInt(wordList.size());
+        return wordList.get(index);
+    }
+
+    public void enterButtonListener(final TextView health, final TextView display, final Word word,
+                                    final Button scores) {
         final Button enter = findViewById(R.id.enterButton);
 
         enter.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +95,8 @@ public class HangmanActivity extends AppCompatActivity {
                 if (word.win()) {
                     makeToastWonText();
                     enter.setEnabled(false);
+                    score = word.getHealth();
+                    scores.setEnabled(true);
                 } else if (word.getHealth() == 0) {
                     makeToastLostText();
                     enter.setEnabled(false);
@@ -130,6 +153,7 @@ public class HangmanActivity extends AppCompatActivity {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
     private void loadFromFile(String fileName) {
 
         try {
