@@ -15,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,9 +28,9 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
+    private Word answer;
 
     @Override
-
 
     protected void onCreate(Bundle savedInstanceState) {
         final Random randomGenerator = new Random();
@@ -37,7 +39,9 @@ public class HangmanActivity extends AppCompatActivity {
         final ArrayList<String> wordList = readFromFile("vocabulary_list.txt");
         int index = randomGenerator.nextInt(wordList.size());
         String the_answer = wordList.get(index);
-        final Word answer = new Word(the_answer);
+        answer = new Word(the_answer);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman);
         TextView view = findViewById(R.id.wordDisplay);
@@ -114,5 +118,33 @@ public class HangmanActivity extends AppCompatActivity {
             Toast.makeText(this, "Error reading file", Toast.LENGTH_SHORT).show();
         }
         return wordList;
+    }
+
+    public void saveToFile(String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(
+                    this.openFileOutput(fileName, MODE_PRIVATE));
+            outputStream.writeObject(answer);
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+    private void loadFromFile(String fileName) {
+
+        try {
+            InputStream inputStream = this.openFileInput(fileName);
+            if (inputStream != null) {
+                ObjectInputStream input = new ObjectInputStream(inputStream);
+                answer = (Word) input.readObject();
+                inputStream.close();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        } catch (ClassNotFoundException e) {
+            Log.e("login activity", "File contained unexpected data type: " + e.toString());
+        }
     }
 }
