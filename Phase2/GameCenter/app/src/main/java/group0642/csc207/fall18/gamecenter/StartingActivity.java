@@ -3,16 +3,9 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import android.widget.TextView;
 
 /**
  * The initial activity for the sliding puzzle tile game.
@@ -20,33 +13,23 @@ import java.io.ObjectOutputStream;
 public class StartingActivity extends AppCompatActivity {
 
     /**
-     * The log tag of this class.
-     */
-    private static final String TAG = "StartingActivity_SlidingTiles";
-    /**
      * A temporary save file.
      */
     public static final String TEMP_SAVE_FILENAME = "save_file_temp.ser";
-    /**
-     * The board manager.
-     */
-    private BoardManager boardManager;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getExternalFilesDir(null);//create the directory for file writing and reading
+        setContentView(R.layout.activity_starting_);
         Intent inherit = getIntent();
         String name = inherit.getStringExtra("name");
         String game = inherit.getStringExtra("game");
+        TextView title = findViewById(R.id.GameText);
+        title.setText(String.format("Welcome to %s", game));
 
-
-
-        getExternalFilesDir(null);//create the directory for file writing and reading
-
-        saveToFile(TEMP_SAVE_FILENAME);
-        setContentView(R.layout.activity_starting_);
         addStartButtonListener(name, game);
         addLoadButtonListener(name, game);
     }
@@ -62,11 +45,19 @@ public class StartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (gm.equals("Blackjack")) {
+                    switchToBlackjack(nm, gm);
 
-                switchToSetting(nm, gm);
+                } else if (gm.equals("Sliding Tiles")) {
+
+                    switchToSlidingTilesSetting(nm, gm);
+                } else if (gm.equals("Hangman")) {
+                    switchToHangman(nm, gm);
+                }
             }
         });
     }
+
 
     /**
      * Activate the load button.
@@ -79,20 +70,17 @@ public class StartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSaved = new Intent(StartingActivity.this, LoadActivity.class);
-                goToSaved.putExtra("name", user);
-                goToSaved.putExtra("game", game);
-                StartingActivity.this.startActivity(goToSaved);
+                if (game.equals("Sliding Tiles")) {
+                    LoadSlidingTiles(user, game);
+                } else if (game.equals("Blackjack")) {
+                    LoadBlackjack(user, game);
+                } else if (game.equals("Hangman")) {
+                    LoadHangman(user, game);
+                }
+
             }
         });
     }
-
-    /**
-     * Activate the save button.
-     *
-     * @param user the username of the current active user
-     * @param game the currently selected game
-     */
 
 
     /**
@@ -101,7 +89,7 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile(TEMP_SAVE_FILENAME);
+
     }
 
     /**
@@ -110,49 +98,50 @@ public class StartingActivity extends AppCompatActivity {
      * @param s the username of the current active user
      * @param t the currently selected game
      */
-    private void switchToSetting(String s, String t) {
+    private void switchToSlidingTilesSetting(String s, String t) {
         Intent GameSettingIntent = new Intent(this, BackgroundSetting.class);
         GameSettingIntent.putExtra("name", s);
         GameSettingIntent.putExtra("game", t);
-        saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
+
         StartingActivity.this.startActivity(GameSettingIntent);
     }
 
-    /**
-     * Load the board manager from fileName.
-     *
-     * @param fileName the name of the file
-     */
-    private void loadFromFile(String fileName) {
+    private void switchToBlackjack(String s, String t) {
+        Intent BlackjackGameIntent = new Intent(this, BlackjackGameActivity.class);
+        BlackjackGameIntent.putExtra("name", s);
+        BlackjackGameIntent.putExtra("game", t);
+        StartingActivity.this.startActivity(BlackjackGameIntent);
 
-        try {
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                boardManager = (BoardManager) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
     }
 
-    /**
-     * Save the board manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }
+    private void switchToHangman(String s, String t) {
+        Intent HangmanGameIntent = new Intent(this, HangmanActivity.class);
+        HangmanGameIntent.putExtra("name", s);
+        HangmanGameIntent.putExtra("game", t);
+        StartingActivity.this.startActivity(HangmanGameIntent);
     }
+
+    private void LoadSlidingTiles(String s, String t) {
+        Intent goToSaved = new Intent(StartingActivity.this, LoadActivity.class);
+        goToSaved.putExtra("name", s);
+        goToSaved.putExtra("game", t);
+        StartingActivity.this.startActivity(goToSaved);
+
+    }
+
+    private void LoadHangman(String s, String t) {
+        Intent HangmanLoadIntent = new Intent(this, LoadHangman.class);
+        HangmanLoadIntent.putExtra("name", s);
+        HangmanLoadIntent.putExtra("game", t);
+        StartingActivity.this.startActivity(HangmanLoadIntent);
+    }
+
+    private void LoadBlackjack(String s, String t) {
+        Intent BlackjackLoadIntent = new Intent(this, LoadBlackjack.class);
+        BlackjackLoadIntent.putExtra("name", s);
+        BlackjackLoadIntent.putExtra("game", t);
+        StartingActivity.this.startActivity(BlackjackLoadIntent);
+    }
+
+
 }

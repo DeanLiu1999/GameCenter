@@ -31,7 +31,7 @@ public class Preface extends AppCompatActivity {
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent playGame1 = new Intent(Preface.this, BlackjackGameActivity.class);
+                Intent playGame1 = new Intent(Preface.this, StartingActivity.class);
                 playGame1.putExtra("name", names);
                 playGame1.putExtra("game", "Blackjack");
                 Preface.this.startActivity(playGame1);
@@ -44,7 +44,7 @@ public class Preface extends AppCompatActivity {
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent playGame1 = new Intent(Preface.this, HangmanActivity.class);
+                Intent playGame1 = new Intent(Preface.this, StartingActivity.class);
                 playGame1.putExtra("name", names);
                 playGame1.putExtra("game", "Hangman");
                 Preface.this.startActivity(playGame1);
