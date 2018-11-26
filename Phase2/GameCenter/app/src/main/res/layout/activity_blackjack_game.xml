@@ -402,5 +402,15 @@
             app:layout_constraintTop_toBottomOf="@+id/deck15"
             app:srcCompat="@drawable/game_win" />
 
+        <ImageView
+            android:id="@+id/gameover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/deck15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deal"
+            app:srcCompat="@drawable/game_over" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
