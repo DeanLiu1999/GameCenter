@@ -14,7 +14,9 @@ public class BoardAndTileTest {
     BoardManager b;
 
     @Test
-    public void addition_isCorrect() {
+    public void testAdditionIsCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+
 }
