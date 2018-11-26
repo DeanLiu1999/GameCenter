@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -41,6 +42,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private BankManager bankManager;
     ImageView toast;
 
+    private String name;
+    private String game;
+
     public static boolean load = false;
     private long d = 1000;
 
@@ -50,7 +54,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         setUp();
         stateManager = new StateManager();
         bankManager = new BankManager();
-
+        Intent i = getIntent();
+        name = i.getStringExtra("name");
+        game = i.getStringExtra("game");
         hit.setEnabled(false);
         stand.setEnabled(false);
         if(load){
@@ -252,7 +258,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
 
 
     private void loadGame(){
-        loadFromFile("statemanager.ser", "bankmanager.ser");
+        String FileName = name + "_" + game + ".ser";
+        loadFromFile("stateManager" + FileName, "bankManager" + FileName);
 //        stateManager = (StateManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser");
 //        stateManager = new StateManager();
 //        bankManager = (BankManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser");
@@ -263,6 +270,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         ImageView deck = findViewById(R.id.deck15);
         deck.setVisibility(View.INVISIBLE);
         ObjectAnimator animator0 = ObjectAnimator.ofFloat(d,"alpha",1f,0f);
+        animations.add(animator0);
         for(int i = 0; i <= stateManager.getStageC();i++){
             ImageView p = findViewById(computerCardsId[i]);
             p.setImageResource(computerCards[i]);
@@ -380,8 +388,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToFile(stateManager, "statemanager.ser");
-                saveToFile(bankManager, "bankmanager.ser");
+                String saveFileName = name + "_" + game + ".ser";
+                saveToFile(stateManager, "stateManager" + saveFileName);
+                saveToFile(bankManager, "bankManager" + saveFileName);
+//                saveToFile(stateManager, "statemanager.ser");
+//                saveToFile(bankManager, "bankmanager.ser");
+                makeToastText("Game Saved!");
 //                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser", stateManager);
 //                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser", bankManager);
             }
