@@ -260,12 +260,25 @@ public class BlackjackGameActivity extends AppCompatActivity {
         computerCards = strToCards(stateManager.getComputerCardsStr());
         setUp();
         ArrayList<Animator> animations = new ArrayList<>();
+        ImageView deck = findViewById(R.id.deck15);
+        deck.setVisibility(View.INVISIBLE);
+        ObjectAnimator animator0 = ObjectAnimator.ofFloat(d,"alpha",1f,0f);
         for(int i = 0; i <= stateManager.getStageC();i++){
             ImageView p = findViewById(computerCardsId[i]);
             p.setImageResource(computerCards[i]);
             ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 200f);
             animator1.setDuration(d);
             ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", i * 130f);
+            animator2.setDuration(d);
+            animations.add(animator1);
+            animations.add(animator2);
+        }
+        if(stateManager.getStageC() == 0){
+            ImageView p = findViewById(computerCardsId[1]);
+            p.setImageResource(R.drawable.cardback);
+            ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 200f);
+            animator1.setDuration(d);
+            ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x",  130f);
             animator2.setDuration(d);
             animations.add(animator1);
             animations.add(animator2);
@@ -288,21 +301,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         animatorSet.start();
 
         setInGameButton(!(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0));
-//        if(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0){
-//            deal.setEnabled(true);
-//            hit.setEnabled(false);
-//            stand.setEnabled(false);
-//            add.setEnabled(true);
-//            allin.setEnabled(true);
-//            cashOut.setEnabled(true);
-//        }else{
-//            deal.setEnabled(false);
-//            hit.setEnabled(true);
-//            stand.setEnabled(true);
-//            add.setEnabled(false);
-//            allin.setEnabled(false);
-//            cashOut.setEnabled(false);
-//        }
+        undo.setEnabled(stateManager.getStageP() == 1);
     }
 
     public void saveToFile(StateManager s, String fileName) {
