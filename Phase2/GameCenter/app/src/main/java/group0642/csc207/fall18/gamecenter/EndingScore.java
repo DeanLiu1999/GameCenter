@@ -15,7 +15,7 @@ public class EndingScore extends AppCompatActivity {
 
     /**
      * @param savedInstanceState is given
-     * The display of the user's score after finishing the game
+     *                           The display of the user's score after finishing the game
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,10 @@ public class EndingScore extends AppCompatActivity {
 
     /**
      * @param game is the name of a game
-     * Show the PerGameRecord page.
+     *             Show the PerGameRecord page.
      */
     private void showButtonListener(final String game) {
-        Button showScore = findViewById(R.id.scoreBoard);
+        Button showScore = findViewById(R.id.showScoreboard);
         showScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,9 +68,8 @@ public class EndingScore extends AppCompatActivity {
     }
 
     /**
-     * @param name
-     * This is where users can go back to the interface that allows them to choose games. It shows
-     * the Preface page
+     * @param name This is where users can go back to the interface that allows them to choose games. It shows
+     *             the Preface page
      */
     private void anotherGameButtonListener(final String name) {
 
@@ -86,9 +85,9 @@ public class EndingScore extends AppCompatActivity {
     }
 
     /**
-     * @param lst is a list of scores
+     * @param lst    is a list of scores
      * @param points is the score of the user's last game
-     * @param name is the name of the user
+     * @param name   is the name of the user
      * @return an integer that marks a user's score in the recent game
      */
     private int marker(ArrayList lst, int points, String name) {
@@ -108,10 +107,10 @@ public class EndingScore extends AppCompatActivity {
 
 
     /**
-     * @param lst is an ArrayList of Object arrays of size 2
+     * @param lst  is an ArrayList of Object arrays of size 2
      * @param flag is a marker of where is user position in this list
-     * This is the method that displays a segment of the scoreboard that contains tht user's last
-     * game's score and the this score's rank in the scoreboard for the game.
+     *             This is the method that displays a segment of the scoreboard that contains tht user's last
+     *             game's score and the this score's rank in the scoreboard for the game.
      */
     private void display_score(ArrayList lst, int flag) {
         // The size of the ArrayList should be less than 10

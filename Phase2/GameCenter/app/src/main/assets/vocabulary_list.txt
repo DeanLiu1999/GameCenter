@@ -4,7 +4,7 @@ banjo
 bungler
 croquet
 crypt
-dwarves
+dwarf
 fluff
 fervid
 fishhook
@@ -25,7 +25,6 @@ kiosk
 klutz
 memento
 mystify
-numbskull
 ostracize
 oxygen
 pajama
@@ -215,11 +214,11 @@ dirndl
 disavow
 dizzying
 duplex
-dwarves
+dwarf
 embezzle
 equip
 espionage
-euouae
+edouard
 exodus
 faking
 fishhook
@@ -263,7 +262,7 @@ jazzy
 jelly
 jigsaw
 jinx
-jiujitsu
+jujitsu
 jockey
 jogging
 joking
@@ -296,7 +295,6 @@ mystify
 naphtha
 nightclub
 nowadays
-numbskull
 nymph
 onyx
 ovary
@@ -374,12 +372,10 @@ witchcraft
 wizard
 woozy
 wristwatch
-wyvern
 xylophone
 yachtsman
 yippee
 yoked
-youthful
 yummy
 zephyr
 zigzag

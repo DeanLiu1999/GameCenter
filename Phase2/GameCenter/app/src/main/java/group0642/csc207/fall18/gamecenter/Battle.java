@@ -34,4 +34,9 @@ public class Battle {
             return info;
         return  singleIndicator;
     }
+
+    String[] getNames() {
+        String[] s = {computer.getName(), player.getName()};
+        return s;
+    }
 }
