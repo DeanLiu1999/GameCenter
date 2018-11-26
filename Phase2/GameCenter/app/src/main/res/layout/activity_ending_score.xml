@@ -84,7 +84,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/scoreBoard"
+            android:id="@+id/showScoreboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/show_more_scores" />
