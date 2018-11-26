@@ -83,6 +83,15 @@ public class BlackjackGameActivity extends AppCompatActivity {
         cashOut.setEnabled(!inGame);
     }
 
+    private void disableAllButton(){
+        deal.setEnabled(false);
+        hit.setEnabled(false);
+        stand.setEnabled(false);
+        add.setEnabled(false);
+        allin.setEnabled(false);
+        cashOut.setEnabled(false);
+    }
+
     private void refreshMoney(){
         TextView wager = findViewById(R.id.textView21);
         String w = bankManager.getWager().toString();
@@ -180,7 +189,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
             playerCards = strToCards(stateManager.getPlayerCardsStr());
             computerCards = strToCards(stateManager.getComputerCardsStr());
             ArrayList<Animator> animations = new ArrayList<>();
-
+            setInGameButton(true);
+            hit.setEnabled(false);
+            stand.setEnabled(false);
             ImageView c1 = findViewById(computerCardsId[0]);
             c1.setImageResource(computerCards[0]);
             ObjectAnimator animator1 = ObjectAnimator.ofFloat(c1, "y", 200f);
@@ -222,13 +233,20 @@ public class BlackjackGameActivity extends AppCompatActivity {
             animations.add(animator5);
             animations.add(animator6);
             refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
-
+            animations.get(animations.size()-1).addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                        hit.setEnabled(true);
+                        stand.setEnabled(true);
+                }
+            });
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playSequentially(animations);
             animatorSet.start();
 
 
-            setInGameButton(true);
+
         }
     }
 
@@ -379,6 +397,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 stateManager.hit();
                 undo.setEnabled(false);
+                disableAllButton();
                 ImageView p = findViewById(playerCardsId[stateManager.getStageP()]);
                 p.setImageResource(playerCards[stateManager.getStageP()]);
                 ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 700f);
@@ -395,13 +414,26 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     bankManager.checkOut(false);
                     showImage(animations, R.drawable.game_lose);
                     refreshMoney(animations);
-                    setInGameButton(false);
-                    makeToastText("You Lose");
+                    animations.get(animations.size()-1).addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            setInGameButton(false);
+                        }
+                    });
+
+                }else{
+                animations.get(animations.size()-1).addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        hit.setEnabled(true);
+                        stand.setEnabled(true);
+                    }
+                });
                 }
                 animatorSet.playSequentially(animations);
                 animatorSet.start();
-
-
             }
         });
     }
@@ -412,7 +444,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ArrayList<Animator> animations = new ArrayList<>();
-
+                disableAllButton();
                 int i = 1;
                 while ((stateManager.getComputerScore() < 16) && (0 <
                         stateManager.getComputerScore()) && (stateManager.getStageC() < 5)) {
@@ -458,9 +490,16 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 }
                 bankManager.checkOut(p_s >= c_s );
                 refreshMoney(animations);
-                setInGameButton(false);
+
                 undo.setEnabled(false);
                 AnimatorSet animatorSet = new AnimatorSet();
+                animations.get(animations.size()-1).addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        setInGameButton(false);
+                    }
+                });
                 animatorSet.playSequentially(animations);
                 animatorSet.start();
             }
@@ -472,6 +511,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                add.setEnabled(false);
+                allin.setEnabled(false);
                 EditText w = findViewById(R.id.guess);
                 if (!w.getText().toString().equals("")){
                     ArrayList<Animator> animations = new ArrayList<>();
@@ -479,6 +520,14 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     makeToastText("Not Enough Money");
                 }
                 refreshMoney(animations);
+                    animations.get(animations.size()-1).addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            add.setEnabled(true);
+                            allin.setEnabled(true);
+                        }
+                    });
                 if (bankManager.getWager() > 0) {
                     deal.setEnabled(true);
                 }
