@@ -1,7 +1,5 @@
 package group0642.csc207.fall18.gamecenter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 public class Word implements Serializable {
@@ -37,11 +35,11 @@ public class Word implements Serializable {
 
     String getDisplay() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < display.length(); i++) {
+        for (int i = 0; i < display.length() - 1; i++) {
             sb.append(display.charAt(i));
             sb.append(" ");
         }
-        return sb.toString();
+        return sb.toString() + display.charAt(display.length() - 1);
     }
 
     void enter(String entered) {
@@ -57,19 +55,3 @@ public class Word implements Serializable {
         }
     }
 }
-
-/*
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Word w = new Word("Whatever");
-        while(w.getHealth() != 0 && !w.win()) {
-            String message = w.enter(sc.nextLine());
-            if(message.equals("Pass")){
-                System.out.println("Display: " + w.getDisplay() + "Remaining health: " + w.getHealth());
-            }
-            else{
-                System.out.println(message);
-            }
-        }
-    }
-    */
