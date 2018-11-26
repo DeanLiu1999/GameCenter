@@ -36,7 +36,8 @@ public class Battle {
     }
 
     String[] getNames() {
-        String[] s = {computer.getName(), player.getName()};
+        String[] s;
+        s = new String[]{computer.getName(), player.getName()};
         return s;
     }
 }
