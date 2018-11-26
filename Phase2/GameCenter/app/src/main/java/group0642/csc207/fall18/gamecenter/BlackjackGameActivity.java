@@ -41,6 +41,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private StateManager stateManager;
     private BankManager bankManager;
     ImageView toast;
+    ImageView gameOver;
 
     private String name;
     private String game;
@@ -78,6 +79,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
         cashOutClickListener();
         toast = findViewById(R.id.toast);
         toast.setVisibility(View.INVISIBLE);
+        gameOver = findViewById(R.id.gameover);
+        gameOver.setVisibility(View.INVISIBLE);
     }
 
     private void setInGameButton(boolean inGame) {
@@ -143,7 +146,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     }
 
     private void showImage(ArrayList<Animator> animators, int id) {
-        final ImageView toast = findViewById(R.id.toast);
+        toast = findViewById(R.id.toast);
         final int imageId = id;
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(toast, "alpha", 0f, 1f);
         animator1.setDuration(d);
@@ -162,6 +165,42 @@ public class BlackjackGameActivity extends AppCompatActivity {
         animators.add(animator1);
         animators.add(animator2);
         animators.add(animator3);
+    }
+
+    private void setGameOver(ArrayList<Animator> animators){
+            gameOver = findViewById(R.id.gameover);
+            ObjectAnimator animator1 = ObjectAnimator.ofFloat(gameOver, "alpha", 0f, 1f);
+            animator1.setDuration(d);
+            animator1.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    gameOver.setVisibility(View.VISIBLE);
+                }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    String leave = "Leave";
+                    cashOut.setText(leave);
+                    cashOut.setEnabled(true);
+                }
+            });
+            animators.add(animator1);
+
+    }
+
+    private void gameLose(ArrayList<Animator> animators){
+        if(bankManager.getBank().equals(0) && bankManager.getBank().equals(0)) {
+            setGameOver(animators);
+        }else{
+            animators.get(animators.size() - 1).addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    setInGameButton(false);
+                }
+            });
+        }
     }
 
     private void refreshScore(ArrayList<Animator> animators, int Id, final int s) {
@@ -423,14 +462,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     bankManager.checkOut(false);
                     showImage(animations, R.drawable.game_lose);
                     refreshMoney(animations);
-                    animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            setInGameButton(false);
-                        }
-                    });
-
+                    gameLose(animations);
                 } else {
                     animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
                         @Override
@@ -502,13 +534,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
 
                 undo.setEnabled(false);
                 AnimatorSet animatorSet = new AnimatorSet();
-                animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        setInGameButton(false);
-                    }
-                });
+                gameLose(animations);
                 animatorSet.playSequentially(animations);
                 animatorSet.start();
             }
