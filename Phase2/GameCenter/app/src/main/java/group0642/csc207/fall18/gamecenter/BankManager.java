@@ -4,15 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BankManager implements Serializable {
-    private ArrayList<Integer> history;
     private Integer wager;
     private Integer bank;
 
     public BankManager(){
-        history = new ArrayList();
         bank = 800;
         wager = 0;
-        history.add(bank);
     }
 
     Integer getWager(){
@@ -37,7 +34,6 @@ public class BankManager implements Serializable {
             bank += 2* wager;
         }
         wager = 0;
-        history.add(bank);
     }
 
     void allIn(){
