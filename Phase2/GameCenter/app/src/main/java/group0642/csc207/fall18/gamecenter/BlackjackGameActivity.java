@@ -113,36 +113,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private void refreshMoney(ArrayList<Animator> animators) {
         final TextView wager = findViewById(R.id.textView21);
         final TextView bank = findViewById(R.id.bank2);
-
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(bank, "alpha", 1f, 0f);
-        animator1.setDuration(d);
-        animator1.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                String b = bankManager.getBank().toString();
-                bank.setText(b);
-            }
-        });
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(bank, "alpha", 0f, 1f);
-        animator2.setDuration(d);
-        animators.add(animator1);
-        animators.add(animator2);
-
-        ObjectAnimator animator3 = ObjectAnimator.ofFloat(wager, "alpha", 1f, 0f);
-        animator3.setDuration(d);
-        animator3.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                String w = bankManager.getWager().toString();
-                wager.setText(w);
-            }
-        });
-        ObjectAnimator animator4 = ObjectAnimator.ofFloat(wager, "alpha", 0f, 1f);
-        animator4.setDuration(d);
-        animators.add(animator3);
-        animators.add(animator4);
+        fade(animators, bank, 1f, 0f);
+        changeTextOnAnimationEnd(animators.get(animators.size() - 1), bank, bankManager.getBank().toString());
+        fade(animators, bank, 0f, 1f);
+        fade(animators, wager, 1f, 0f);
+        changeTextOnAnimationEnd(animators.get(animators.size() - 1), wager, bankManager.getWager().toString());
+        fade(animators, wager, 0f, 1f);
     }
 
     private void showImage(ArrayList<Animator> animators, int id) {
@@ -164,7 +140,27 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
-    private void fade(ArrayList<Animator> animators, ImageView iv, float start, float end){
+    private void changeImageOnAnimationEnd(Animator animator, final ImageView iv, final int imageId){
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                iv.setImageResource(imageId);
+            }
+        });
+    }
+
+    private void changeTextOnAnimationEnd(Animator animator, final TextView tv, final String text){
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                tv.setText(text);
+            }
+        });
+    }
+
+    private void fade(ArrayList<Animator> animators, View iv, float start, float end){
         ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "alpha", start, end);
         animator.setDuration(d);
         animators.add(animator);
@@ -213,19 +209,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 R.drawable.s11, R.drawable.s12, R.drawable.s13, R.drawable.s14, R.drawable.s15, R.drawable.s16,
                 R.drawable.s17, R.drawable.s18, R.drawable.s19, R.drawable.s20, R.drawable.s21};
         final ImageView score = findViewById(Id);
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(score, "alpha", 1f, 0f);
-        animator1.setDuration(d);
-        animator1.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                score.setImageResource(scoreImageId[s]);
-            }
-        });
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(score, "alpha", 0f, 1f);
-        animator2.setDuration(d);
-        animators.add(animator1);
-        animators.add(animator2);
+        fade(animators, score, 1f, 0f);
+        changeImageOnAnimationEnd(animators.get(animators.size() - 1), score, scoreImageId[s]);
+        fade(animators, score, 0f, 1f);
     }
 
     private void playAnimations(ArrayList<Animator> animators){
