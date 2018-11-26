@@ -198,6 +198,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     setInGameButton(inGame);
+                    save();
                 }
             });
         }
@@ -247,6 +248,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         deck.setVisibility(View.INVISIBLE);
         ObjectAnimator animator0 = ObjectAnimator.ofFloat(d, "alpha", 1f, 0f);
         animators.add(animator0);
+    }
+
+    private void save(){
+        String saveFileName = name + "_" + game + ".ser";
+        saveToFile(stateManager, "stateManager" + saveFileName);
+        saveToFile(bankManager, "bankManager" + saveFileName);
+        makeToastText("Game Saved");
     }
 
     private void deal() {
@@ -375,10 +383,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String saveFileName = name + "_" + game + ".ser";
-                saveToFile(stateManager, "stateManager" + saveFileName);
-                saveToFile(bankManager, "bankManager" + saveFileName);
-                makeToastText("Game Saved!");
+                save();
             }
         });
     }
@@ -534,6 +539,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
             }
         }
         return cards;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        save();
     }
 
     private void makeToastText(String text) {
