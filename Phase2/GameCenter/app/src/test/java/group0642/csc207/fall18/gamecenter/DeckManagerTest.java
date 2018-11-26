@@ -8,6 +8,14 @@ public class DeckManagerTest {
 
     private DeckManager d;
 
+    private boolean contain(String c, String[] cards) {
+        for (String s: cards) {
+            if (s.equals(c))
+                return true;
+        }
+        return false;
+    }
+
     @Test
     public void testCalculateScore() {
         d = new DeckManager();
@@ -17,5 +25,15 @@ public class DeckManagerTest {
         assertEquals(d.calculateScore(1, cards), 21);
         assertEquals(d.calculateScore(2, cards), 20);
         assertEquals(d.calculateScore(3, cards), 0);
+    }
+
+    @Test
+    public void testGetCardsTopAndInitialization() {
+        d = new DeckManager();
+        Card[] cards = d.getCardsTop();
+        assertTrue(contain(cards[0].getData(), DeckManager.deck));
+        assertTrue(contain(cards[2].getData(), DeckManager.deck));
+        assertTrue(contain(cards[6].getData(), DeckManager.deck));
+        assertTrue(contain(cards[11].getData(), DeckManager.deck));
     }
 }

@@ -127,13 +127,9 @@ public class HangmanActivity extends AppCompatActivity {
 
 
     public void letterEntryListener(Button[] lst, Button button, String str) {
-        String s = answer.enter(str);
+        answer.enter(str);
         button.setEnabled(false);
-        if (!s.equals("Pass")) {
-            makeToastEntryText(s);
-        } else {
-            update();
-        }
+        update();
 
         if (answer.win()) {
             if (mode == 1) {
