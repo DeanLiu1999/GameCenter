@@ -190,7 +190,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     }
 
     private void gameLose(ArrayList<Animator> animators){
-        if(bankManager.getBank().equals(0) && bankManager.getBank().equals(0)) {
+        if(bankManager.getBank().equals(0) && bankManager.getWager().equals(0)) {
             setGameOver(animators);
         }else{
             animators.get(animators.size() - 1).addListener(new AnimatorListenerAdapter() {
@@ -305,6 +305,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
         computerCards = strToCards(stateManager.getComputerCardsStr());
         setUp();
         ArrayList<Animator> animations = new ArrayList<>();
+        disableAllButton();
+        undo.setEnabled(false);
         ImageView deck = findViewById(R.id.deck15);
         deck.setVisibility(View.INVISIBLE);
         ObjectAnimator animator0 = ObjectAnimator.ofFloat(d, "alpha", 1f, 0f);
@@ -342,12 +344,25 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
         refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
         refreshMoney();
+
         AnimatorSet animatorSet = new AnimatorSet();
+        if(bankManager.getBank().equals(0) && bankManager.getWager().equals(0)) {
+            setGameOver(animations);
+        }else{
+            animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    setInGameButton(!(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0));
+                }
+            });
+        }
+
         animatorSet.playSequentially(animations);
         animatorSet.start();
 
-        setInGameButton(!(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0));
-        undo.setEnabled(stateManager.getStageP() == 1);
+
+        undo.setEnabled(stateManager.getStageP() == 1 && stateManager.getStageC() == 0);
     }
 
     public void saveToFile(StateManager s, String fileName) {
