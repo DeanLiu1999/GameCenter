@@ -1,4 +1,4 @@
-# GROUP 0534
+# GROUP 0642
 ## URL to clone
 https://markus.teach.cs.toronto.edu/git/csc207-2018-09-reg/group_0642
 ## Steps of setting up
