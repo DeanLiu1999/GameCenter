@@ -15,15 +15,15 @@ public class BankManager implements Serializable {
         history.add(bank);
     }
 
-    public Integer getWager(){
+    Integer getWager(){
         return wager;
     }
 
-    public Integer getBank(){
+    Integer getBank(){
         return bank;
     }
 
-    public boolean addWager(Integer w){
+    boolean addWager(Integer w){
         if(w <= bank){
             bank -= w;
             wager += w;
@@ -32,23 +32,15 @@ public class BankManager implements Serializable {
         return false;
     }
 
-    public void checkOut(boolean result){
-        if(result){
+    void checkOut(boolean result){
+        if(result) {
             bank += 2* wager;
         }
         wager = 0;
         history.add(bank);
     }
 
-    public void allIn(){
+    void allIn(){
         addWager(bank);
     }
-
-    public void undo(){
-        if(history.size() > 1){
-            history.remove(history.size() - 1);
-        }
-        bank = history.get(history.size() - 1);
-    }
-
 }

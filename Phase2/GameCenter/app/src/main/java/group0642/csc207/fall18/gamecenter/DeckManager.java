@@ -28,7 +28,7 @@ public class DeckManager implements Serializable {
         return cardsTop;
     }
 
-    public int calculateScore(int stage, Card[] sixCards) {
+    int calculateScore(int stage, Card[] sixCards) {
         int result = 0;
         int numAce = 0;
         for (int i = 0; i <= stage; i++) {
