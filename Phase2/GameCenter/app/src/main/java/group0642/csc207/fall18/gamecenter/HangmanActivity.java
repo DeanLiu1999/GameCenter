@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +19,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static group0642.csc207.fall18.gamecenter.ScoreBoard.updateScoreBoard;
+
 public class HangmanActivity extends AppCompatActivity {
 
 
@@ -28,7 +29,7 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
-    private int mode = 2; /// TODO: 2018/11/25 Need to pass a value when player chose mode, 1 is infinitely
+    private int mode;
     private TextView view;
     private TextView healthBar;
     private int score = 0;
@@ -37,26 +38,38 @@ public class HangmanActivity extends AppCompatActivity {
     private ArrayList<String> wordList;
     private Button showScoreboard_1;
 
+
+    private String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
 
-        randomGenerator = new Random();
-        wordList = readFromFile("vocabulary_list.txt");
-
-        answer = new Word(chooseTheAnswer());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman);
+
+        Button[] entries = new Button[]{findViewById(R.id.a), findViewById(R.id.b), findViewById(R.id.c),
+                findViewById(R.id.d), findViewById(R.id.e), findViewById(R.id.f), findViewById(R.id.g),
+                findViewById(R.id.h), findViewById(R.id.i), findViewById(R.id.j), findViewById(R.id.k),
+                findViewById(R.id.l), findViewById(R.id.m), findViewById(R.id.n), findViewById(R.id.o),
+                findViewById(R.id.p), findViewById(R.id.q), findViewById(R.id.r), findViewById(R.id.s),
+                findViewById(R.id.t), findViewById(R.id.u), findViewById(R.id.v), findViewById(R.id.w),
+                findViewById(R.id.x), findViewById(R.id.y), findViewById(R.id.z)};
+
+        randomGenerator = new Random();
+        wordList = readFromFile("vocabulary_list.txt");
+        answer = new Word(chooseTheAnswer());
 
         view = findViewById(R.id.wordDisplay);
         healthBar = findViewById(R.id.healthBar);
         update();
         showScoreboard_1 = findViewById(R.id.showScoreboard_1);
-        enterButtonListener();
+
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
+        mode = intent.getIntExtra("mode", 2);
 
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +77,34 @@ public class HangmanActivity extends AppCompatActivity {
                 switchToScore(name, game, score);
             }
         });
+        buttonListActions(entries, alphabet);
+
     }
 
+    public void buttonListActions(Button[] lst, String[] lstOfStrings) {
+        int i = 0;
+        while (i < lst.length) {
+
+            buttonListListener(lst[i], lst, lstOfStrings[i]);
+            i++;
+        }
+    }
+
+    public void buttonListListener(final Button b, final Button[] lst, final String string) {
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                letterEntryListener(lst, b, string);
+            }
+        });
+    }
+
+    public void disableAllButton(Button[] lst, boolean enabled) {
+        for (Button aLst : lst) {
+            aLst.setEnabled(false);
+        }
+
+    }
 
     public void switchToScore(String s, String t, int x) {
         Intent goToScore = new Intent(HangmanActivity.this, EndingScore.class);
@@ -81,52 +120,48 @@ public class HangmanActivity extends AppCompatActivity {
         return wordList.get(index);
     }
 
-    void update(){
+    void update() {
         view.setText(answer.getDisplay());
         healthBar.setText(String.valueOf(answer.getHealth()));
     }
 
-    public void enterButtonListener() {
-        final Button enter = findViewById(R.id.enterButton);
 
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText textEntry = findViewById(R.id.guess);
-                String s = answer.enter(textEntry.getText().toString());
-                if (!s.equals("Pass")) {
-                    makeToastEntryText(s);
-                } else {
-                    update();
-                }
+    public void letterEntryListener(Button[] lst, Button button, String str) {
+        String s = answer.enter(str);
+        button.setEnabled(false);
+        if (!s.equals("Pass")) {
+            makeToastEntryText(s);
+        } else {
+            update();
+        }
 
-                if (answer.win()) {
-                    if (mode == 1){
-                        int health = answer.getHealth();
-                        answer = new Word(chooseTheAnswer());
-                        answer.setHealth(health + 1);
-                        update();
-                        score++;
-                    }
-                    else {
-                        makeToastEntryText("You win");
-                        enter.setEnabled(false);
-                        score = answer.getHealth();
-                        showScoreboard_1.setEnabled(true);
-                    }
-                } else if (answer.getHealth() == 0) {
-                    enter.setEnabled(false);
-                    if (mode == 1){
-                        makeToastEntryText("Game Over");
-                        showScoreboard_1.setEnabled(true);
-                    }
-                    else {
-                        makeToastEntryText("You lose");
-                    }
-                }
+        if (answer.win()) {
+            if (mode == 1) {
+                int health = answer.getHealth();
+                answer = new Word(chooseTheAnswer());
+                answer.setHealth(health + 1);
+                update();
+                score++;
+                disableAllButton(lst, true);
+            } else {
+                makeToastEntryText("You win");
+                score = answer.getHealth();
+                showScoreboard_1.setEnabled(true);
+                updateScoreBoard(game, name, score);
+                disableAllButton(lst, false);
             }
-        });
+        } else if (answer.getHealth() == 0) {
+            if (mode == 1) {
+                makeToastEntryText("Game Over");
+                updateScoreBoard(game, name, score);
+                showScoreboard_1.setEnabled(true);
+            } else {
+                makeToastEntryText("You lose ");
+                disableAllButton(lst, true);
+            }
+        }
     }
+
 
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
