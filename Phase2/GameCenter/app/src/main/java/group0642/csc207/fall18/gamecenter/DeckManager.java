@@ -28,14 +28,6 @@ public class DeckManager implements Serializable {
         return cardsTop;
     }
 
-    public String visitData(Card c) {
-        return c.getData();
-    }
-
-    public int visitInfo(Card c) {
-        return c.getInfo();
-    }
-
     public int calculateScore(int stage, Card[] sixCards) {
         int result = 0;
         int numAce = 0;
