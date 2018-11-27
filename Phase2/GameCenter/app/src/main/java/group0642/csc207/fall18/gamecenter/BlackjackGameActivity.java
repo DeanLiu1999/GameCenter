@@ -266,8 +266,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
             setUp();
             refreshMoney();
             stateManager = new StateManager();
-            playerCards = strToCards(stateManager.getPlayerCardsStr());
-            computerCards = strToCards(stateManager.getComputerCardsStr());
+            playerCards = stateManager.getPlayerCardsId();
+            computerCards = stateManager.getComputerCardsId();
             ArrayList<Animator> animations = new ArrayList<>();
             disableAllButton();
             animationBugFixer(animations);
@@ -288,27 +288,27 @@ public class BlackjackGameActivity extends AppCompatActivity {
         loadFromFile("stateManager" + FileName, "bankManager" + FileName);
         setUp();
         refreshMoney();
-        if(!(stateManager == null)){
-        playerCards = strToCards(stateManager.getPlayerCardsStr());
-        computerCards = strToCards(stateManager.getComputerCardsStr());
-        ArrayList<Animator> animations = new ArrayList<>();
-        disableAllButton();
-        undo.setEnabled(false);
-        animationBugFixer(animations);
-        for (int i = 0; i <= stateManager.getStageC(); i++) {
-            moveCard(animations, computerCardsId[i], computerCards[i], i * 130f, 200f);
-        }
-        if (stateManager.getStageC() == 0) {
-            moveCard(animations, computerCardsId[1], R.drawable.cardback, 130f, 200f);
-        }
-        refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
-        for (int i = 0; i <= stateManager.getStageP(); i++) {
-            moveCard(animations, playerCardsId[i], playerCards[i], i * 130f, 700f);
-        }
-        refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
-        gameFinish(animations, !(stateManager.gameEnd()));
-        playAnimations(animations);
-        undo.setEnabled(stateManager.initialStage());
+        if (!(stateManager == null)) {
+            playerCards = stateManager.getPlayerCardsId();
+            computerCards = stateManager.getComputerCardsId();
+            ArrayList<Animator> animations = new ArrayList<>();
+            disableAllButton();
+            undo.setEnabled(false);
+            animationBugFixer(animations);
+            for (int i = 0; i <= stateManager.getStageC(); i++) {
+                moveCard(animations, computerCardsId[i], computerCards[i], i * 130f, 200f);
+            }
+            if (stateManager.getStageC() == 0) {
+                moveCard(animations, computerCardsId[1], R.drawable.cardback, 130f, 200f);
+            }
+            refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
+            for (int i = 0; i <= stateManager.getStageP(); i++) {
+                moveCard(animations, playerCardsId[i], playerCards[i], i * 130f, 700f);
+            }
+            refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
+            gameFinish(animations, !(stateManager.gameEnd()));
+            playAnimations(animations);
+            undo.setEnabled(stateManager.initialStage());
         }
     }
 
@@ -420,7 +420,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
                         stateManager.getStageP() * 130f, 700f);
                 int p_s = stateManager.getPlayerScore();
                 refreshScore(animations, R.id.p_score, p_s);
-                if (p_s == 0) {
+                if (stateManager.gameEnd()) {
                     bankManager.checkOut(false);
                     showImage(animations, R.drawable.game_lose);
                     refreshMoney(animations);
@@ -541,34 +541,6 @@ public class BlackjackGameActivity extends AppCompatActivity {
         goToScore.putExtra("game", game);
         goToScore.putExtra("score", score);
         BlackjackGameActivity.this.startActivity(goToScore);
-    }
-
-    private Integer[] strToCards(String[] cardStr) {
-        Integer[] cardsId = {R.drawable.club_a, R.drawable.club_2, R.drawable.club_3, R.drawable.club_4,
-                R.drawable.club_5, R.drawable.club_6, R.drawable.club_7, R.drawable.club_8,
-                R.drawable.club_9, R.drawable.club_10, R.drawable.club_j, R.drawable.club_q,
-                R.drawable.club_k,};
-        Integer[] cards = new Integer[6];
-        for (int i = 0; i < 6; i++) {
-            switch (cardStr[i]) {
-                case "A":
-                    cards[i] = cardsId[0];
-                    break;
-                case "J":
-                    cards[i] = cardsId[10];
-                    break;
-                case "Q":
-                    cards[i] = cardsId[11];
-                    break;
-                case "K":
-                    cards[i] = cardsId[12];
-                    break;
-                default:
-                    cards[i] = cardsId[Integer.parseInt(cardStr[i]) - 1];
-                    break;
-            }
-        }
-        return cards;
     }
 
     @Override
