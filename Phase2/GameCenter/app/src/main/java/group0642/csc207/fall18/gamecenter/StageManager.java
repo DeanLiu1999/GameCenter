@@ -74,5 +74,9 @@ class StateManager implements Serializable {
         }
         return s;
     }
+    
+    boolean initialStage(){
+        return getStageP() == 1 && getStageC() == 0;
+    }
 }
 
