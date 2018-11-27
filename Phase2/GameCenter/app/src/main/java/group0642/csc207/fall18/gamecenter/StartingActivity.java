@@ -139,9 +139,10 @@ public class StartingActivity extends AppCompatActivity {
     }
 
     private void LoadHangman(String s, String t) {
-        Intent HangmanLoadIntent = new Intent(this, LoadHangman.class);
+        Intent HangmanLoadIntent = new Intent(this, HangmanModes.class);
         HangmanLoadIntent.putExtra("name", s);
         HangmanLoadIntent.putExtra("game", t);
+        HangmanLoadIntent.putExtra("load", true);
         StartingActivity.this.startActivity(HangmanLoadIntent);
     }
 
