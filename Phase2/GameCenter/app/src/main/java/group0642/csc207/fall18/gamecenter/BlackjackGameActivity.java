@@ -81,6 +81,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         toast.setVisibility(View.INVISIBLE);
         gameOver = findViewById(R.id.gameover);
         gameOver.setVisibility(View.INVISIBLE);
+        undo.setEnabled(false);
     }
 
     private void setInGameButton(boolean inGame) {
@@ -373,8 +374,21 @@ public class BlackjackGameActivity extends AppCompatActivity {
         undo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deal();
+                setUp();
+                refreshMoney();
+                bankManager.undo();
+                ArrayList<Animator> animations = new ArrayList<>();
                 undo.setEnabled(false);
+                refreshMoney(animations);
+                disableAllButton();
+                animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        setInGameButton(false);
+                    }
+                });
+                playAnimations(animations);
             }
         });
     }
