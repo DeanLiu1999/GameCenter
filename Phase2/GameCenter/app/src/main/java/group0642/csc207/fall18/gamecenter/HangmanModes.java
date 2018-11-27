@@ -15,16 +15,16 @@ public class HangmanModes extends AppCompatActivity {
         Intent inherit = getIntent();
         String name = inherit.getStringExtra("name");
         String game = inherit.getStringExtra("game");
-        launchNormalMode(name, game);
+        launchBattleMode(name, game);
         launchInfinityMode(name, game);
     }
 
-    private void launchNormalMode(final String name, final String game) {
+    private void launchBattleMode(final String name, final String game) {
         Button launchNormal = findViewById(R.id.normalButton);
         launchNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToNormal(name, game);
+                switchToBattle(name, game);
             }
         });
     }
@@ -38,7 +38,7 @@ public class HangmanModes extends AppCompatActivity {
         });
     }
 
-    private void switchToNormal(String s, String t) {
+    private void switchToBattle(String s, String t) {
         Intent goToNormal = new Intent(this, HangmanBattle.class);
         goToNormal.putExtra("name", s);
         goToNormal.putExtra("game", t);
