@@ -39,7 +39,7 @@ public class HangmanModes extends AppCompatActivity {
     }
 
     private void switchToNormal(String s, String t) {
-        Intent goToNormal = new Intent(this, HangmanActivity.class);
+        Intent goToNormal = new Intent(this, HangmanBattle.class);
         goToNormal.putExtra("name", s);
         goToNormal.putExtra("game", t);
         goToNormal.putExtra("mode", 2);
