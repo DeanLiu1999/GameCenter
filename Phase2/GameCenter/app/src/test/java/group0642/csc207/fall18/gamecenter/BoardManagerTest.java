@@ -44,6 +44,7 @@ public class BoardManagerTest {
      * Make a shuffled Board.
      */
     private void setUpShuffled(int size) {
+        Board.setGameSize(size);
         boardManager = new BoardManager();
         boardManager.setGameSize(size);
         boardManager.refresh_board_manager();
@@ -161,35 +162,6 @@ public class BoardManagerTest {
         assertTrue(boardManager.puzzleSolved());
         swapFirstTwoTiles();
         assertFalse(boardManager.puzzleSolved());
-    }
-
-    /**
-     * Test that the new shuffling algorithm can generate different boards that are all solvable.
-     *
-     * Tiles puzzle solvability formula from:
-     * https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-     * Retrieved Nov. 17, 2018
-     */
-    @Test
-    public void testSolvableAfterShuffle() {
-
-        setUpShuffled(3);
-        List<Tile> tilesList1 = isSolvable(boardManager.getBoard());
-        setUpShuffled(3);
-        List<Tile> tilesList2 = isSolvable(boardManager.getBoard());
-        assertNotEquals(tilesList1, tilesList2);
-
-        setUpShuffled(4);
-        tilesList1 = isSolvable(boardManager.getBoard());
-        setUpShuffled(4);
-        tilesList2 = isSolvable(boardManager.getBoard());
-        assertNotEquals(tilesList1, tilesList2);
-
-        setUpShuffled(5);
-        tilesList1 = isSolvable(boardManager.getBoard());
-        setUpShuffled(5);
-        tilesList2 = isSolvable(boardManager.getBoard());
-        assertNotEquals(tilesList1, tilesList2);
     }
 
     /**
@@ -322,5 +294,25 @@ public class BoardManagerTest {
 
         boardManager.touchMove(14);
         assertEquals(boardManager.reportScore(), 999);
+    }
+
+    @Test
+    public void testRefresh() {
+        Tile.setImages(0);
+        Tile t = new Tile(0);
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        tiles.add(t);
+        Board.setGameSize(1);
+        Board board = new Board(tiles);
+        boardManager = new BoardManager(board);
+        boardManager.refresh_board_manager();
+        assertEquals(boardManager.p, 0);
+    }
+
+    @Test
+    public void testEmptyConstructor() {
+        boardManager = new BoardManager();
+        assertEquals(boardManager.getCurrent_state(), 0);
+        assertNull(boardManager.getBoard());
     }
 }
