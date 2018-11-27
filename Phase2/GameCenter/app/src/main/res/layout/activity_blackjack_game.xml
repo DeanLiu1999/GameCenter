@@ -252,13 +252,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="143dp"
+            android:layout_marginTop="139dp"
             android:layout_marginEnd="9dp"
             android:text="HIt"
             app:layout_constraintBottom_toTopOf="@+id/guess"
             app:layout_constraintEnd_toStartOf="@+id/stand"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deal" />
+            app:layout_constraintTop_toBottomOf="@+id/deal"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <Button
             android:id="@+id/stand"
@@ -305,7 +306,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="29dp"
             android:text=" All In"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -315,32 +315,27 @@
 
         <TextView
             android:id="@+id/bank1"
-            android:layout_width="84dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="35dp"
+            android:layout_width="50dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="16dp"
             android:text="BANK:"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/bank2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/bank2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/guess" />
 
         <TextView
             android:id="@+id/bank2"
-            android:layout_width="49dp"
-            android:layout_height="33dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="9dp"
-            android:layout_marginBottom="29dp"
+            android:layout_width="179dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="30dp"
             android:text="800"
-            android:textSize="14sp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/allin"
-            app:layout_constraintStart_toEndOf="@+id/bank1"
-            app:layout_constraintTop_toBottomOf="@+id/add" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bank1" />
 
         <TextView
             android:id="@+id/textView21"
@@ -360,7 +355,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="27dp"
+            android:layout_marginBottom="26dp"
             android:text="Cash out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
