@@ -3,7 +3,7 @@ package group0642.csc207.fall18.gamecenter;
 import java.io.Serializable;
 import java.util.*;
 
-class StageManager implements Serializable {
+class StateManager implements Serializable {
 
     private int stageP;
 
@@ -15,7 +15,7 @@ class StageManager implements Serializable {
 
     private DeckManager d = new DeckManager();
 
-    StageManager() {
+    StateManager() {
         stageP = 1;
         stageC = 0;
         this.playerCards = Arrays.copyOfRange(d.getCardsTop(), 0, 6);
