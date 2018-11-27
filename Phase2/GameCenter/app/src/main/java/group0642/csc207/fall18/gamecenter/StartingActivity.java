@@ -147,7 +147,7 @@ public class StartingActivity extends AppCompatActivity {
 
     private void LoadBlackjack(String s, String t) {
         String FileName = name + "_" + game + ".ser";
-        if(loadFromFile("stateManager" + FileName) != null &&
+        if(
                 loadFromFile("bankManager" + FileName) != null) {
             Intent BlackjackLoadIntent = new Intent(this, BlackjackGameActivity.class);
             BlackjackLoadIntent.putExtra("name", s);
