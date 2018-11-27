@@ -459,10 +459,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add.setEnabled(false);
-                allin.setEnabled(false);
                 EditText w = findViewById(R.id.guess);
-                if (!w.getText().toString().equals("")) {
+                if (w.getText().toString().matches("\\d+")) {
+                    add.setEnabled(false);
+                    allin.setEnabled(false);
                     ArrayList<Animator> animations = new ArrayList<>();
                     if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))) {
                         makeToastText("Not Enough Money");
@@ -471,6 +471,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     enableButtonOnAnimationEnd(animations.get(animations.size() - 1), add, allin);
                     deal.setEnabled(bankManager.getWager() > 0);
                     playAnimations(animations);
+                }else {
+                    makeToastText("Please Enter an Integer");
                 }
             }
         });
