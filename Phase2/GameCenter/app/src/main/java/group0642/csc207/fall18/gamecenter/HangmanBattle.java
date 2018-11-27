@@ -48,6 +48,7 @@ public class HangmanBattle extends AppCompatActivity {
     private ImageView monster;
     private ImageView character;
     private int[] monsters;
+    private boolean result = false;
 
 
     private String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
@@ -62,7 +63,6 @@ public class HangmanBattle extends AppCompatActivity {
         monsters = new int[]{R.drawable.level1, R.drawable.level2,
                 R.drawable.level3, R.drawable.level4, R.drawable.level5, R.drawable.level6};
 
-
         Button[] entries = new Button[]{findViewById(R.id.a), findViewById(R.id.b), findViewById(R.id.c),
                 findViewById(R.id.d), findViewById(R.id.e), findViewById(R.id.f), findViewById(R.id.g),
                 findViewById(R.id.h), findViewById(R.id.i), findViewById(R.id.j), findViewById(R.id.k),
@@ -70,6 +70,9 @@ public class HangmanBattle extends AppCompatActivity {
                 findViewById(R.id.p), findViewById(R.id.q), findViewById(R.id.r), findViewById(R.id.s),
                 findViewById(R.id.t), findViewById(R.id.u), findViewById(R.id.v), findViewById(R.id.w),
                 findViewById(R.id.x), findViewById(R.id.y), findViewById(R.id.z)};
+
+        showScoreboard_1 = findViewById(R.id.showScoreboard_1);
+
         monster = findViewById(R.id.monster);
         character = findViewById(R.id.character);
 
@@ -85,21 +88,42 @@ public class HangmanBattle extends AppCompatActivity {
 
         update();
         updatePicture(level, monsters);
-        showScoreboard_1 = findViewById(R.id.showScoreboard_1);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
+        buttonListActions(entries, alphabet);
+        setShowScoreboard_1Listener();
+    }
 
-
+    void setShowScoreboard_1Listener() {
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToScore(name, game, score);
+                if (!result) {
+                    switchToStart(name, game);
+                } else {
+
+                    switchToScore(name, game, score);
+                }
             }
         });
-        buttonListActions(entries, alphabet);
 
+    }
+
+    public void switchToScore(String s, String t, int x) {
+        Intent goToScore = new Intent(HangmanBattle.this, EndingScore.class);
+        goToScore.putExtra("name", s);
+        goToScore.putExtra("game", t);
+        goToScore.putExtra("score", x);
+        HangmanBattle.this.startActivity(goToScore);
+    }
+
+    public void switchToStart(String s, String t) {
+        Intent goToScore = new Intent(HangmanBattle.this, StartingActivity.class);
+        goToScore.putExtra("name", s);
+        goToScore.putExtra("game", t);
+        HangmanBattle.this.startActivity(goToScore);
     }
 
     public void buttonListActions(Button[] lst, String[] lstOfStrings) {
@@ -126,14 +150,6 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
-    public void switchToScore(String s, String t, int x) {
-        Intent goToScore = new Intent(HangmanBattle.this, EndingScore.class);
-        goToScore.putExtra("name", s);
-        goToScore.putExtra("game", t);
-        goToScore.putExtra("score", x);
-        HangmanBattle.this.startActivity(goToScore);
-    }
-
 
     public String chooseTheAnswer() {
         int index = randomGenerator.nextInt(wordList.size());
@@ -158,8 +174,6 @@ public class HangmanBattle extends AppCompatActivity {
         characterHealth.setText(String.valueOf(charHlth));
         characterDamage.setText(String.valueOf(charDmg));
         monsterHealth.setText(String.valueOf(monHlth));
-
-
     }
 
 
@@ -179,37 +193,37 @@ public class HangmanBattle extends AppCompatActivity {
             s = "The monster attacked you";
             makeToastEntryText(s);
         }
-
-        endingDetermination(notOver, lst);
+        if (!notOver) {
+            endingDetermination(lst);
+        }
 
     }
 
-    private void endingDetermination(boolean notOver, Button[] lst) {
-        if (!notOver) {
-            answer.setFinalDisplay();
-            if (charHlth > 0) {
-                if (level <= 4) {
-                    level++;
-                    makeToastEntryText("Level " + level);
-                    battle = new Battle(level, level);
-                    answer = new Word(chooseTheAnswer());
-                    disableAllButton(lst, true);
-                    update();
-                    updatePicture(level, monsters);
-                } else {
-                    makeToastEntryText("You win");
-                    score = level;
-                    updateScoreBoard(game, name, score);
-                    showScoreboard_1.setEnabled(true);
-                    disableAllButton(lst, false);
-                }
+    private void endingDetermination(Button[] lst) {
+        answer.setFinalDisplay();
+        if (charHlth > 0) {
+            if (level <= 4) {
+                level++;
+                makeToastEntryText("Level " + level);
+                battle = new Battle(level, level);
+                answer = new Word(chooseTheAnswer());
+                disableAllButton(lst, true);
+                update();
+                updatePicture(level, monsters);
             } else {
-                makeToastEntryText("You lose ");
+                makeToastEntryText("You win");
+                score = level;
+                updateScoreBoard(game, name, score);
                 disableAllButton(lst, false);
-
+                result = true;
+                showScoreboard_1.setText("Show scoreboard");
             }
+        } else {
+            makeToastEntryText("You lose ");
+            disableAllButton(lst, false);
 
         }
+
     }
 
 
