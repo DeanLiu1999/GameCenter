@@ -53,13 +53,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUp();
-        stateManager = new StateManager();
         bankManager = new BankManager();
         Intent i = getIntent();
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
-        hit.setEnabled(false);
-        stand.setEnabled(false);
+
         if (load) {
             loadGame();
             load = false;
@@ -82,6 +80,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
         gameOver = findViewById(R.id.gameover);
         gameOver.setVisibility(View.INVISIBLE);
         undo.setEnabled(false);
+        hit.setEnabled(false);
+        stand.setEnabled(false);
     }
 
     private void setInGameButton(boolean inGame) {
@@ -286,9 +286,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private void loadGame() {
         String FileName = name + "_" + game + ".ser";
         loadFromFile("stateManager" + FileName, "bankManager" + FileName);
+        setUp();
+        refreshMoney();
+        if(!(stateManager == null)){
         playerCards = strToCards(stateManager.getPlayerCardsStr());
         computerCards = strToCards(stateManager.getComputerCardsStr());
-        setUp();
         ArrayList<Animator> animations = new ArrayList<>();
         disableAllButton();
         undo.setEnabled(false);
@@ -304,10 +306,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
             moveCard(animations, playerCardsId[i], playerCards[i], i * 130f, 700f);
         }
         refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
-        refreshMoney();
         gameFinish(animations, !(stateManager.gameEnd()));
         playAnimations(animations);
         undo.setEnabled(stateManager.initialStage());
+        }
     }
 
     public void saveToFile(StateManager s, String fileName) {
@@ -548,16 +550,22 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 R.drawable.club_k,};
         Integer[] cards = new Integer[6];
         for (int i = 0; i < 6; i++) {
-            if (cardStr[i].equals("A")) {
-                cards[i] = cardsId[0];
-            } else if (cardStr[i].equals("J")) {
-                cards[i] = cardsId[10];
-            } else if (cardStr[i].equals("Q")) {
-                cards[i] = cardsId[11];
-            } else if (cardStr[i].equals("K")) {
-                cards[i] = cardsId[12];
-            } else {
-                cards[i] = cardsId[Integer.parseInt(cardStr[i]) - 1];
+            switch (cardStr[i]) {
+                case "A":
+                    cards[i] = cardsId[0];
+                    break;
+                case "J":
+                    cards[i] = cardsId[10];
+                    break;
+                case "Q":
+                    cards[i] = cardsId[11];
+                    break;
+                case "K":
+                    cards[i] = cardsId[12];
+                    break;
+                default:
+                    cards[i] = cardsId[Integer.parseInt(cardStr[i]) - 1];
+                    break;
             }
         }
         return cards;
