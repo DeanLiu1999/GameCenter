@@ -39,4 +39,8 @@ public class BankManager implements Serializable {
     void allIn(){
         addWager(bank);
     }
+
+    boolean gameOver(){ return getBank().equals(0) && getWager().equals(0);}
+
+    boolean wagerIsZero(){return getWager().equals(0);}
 }
