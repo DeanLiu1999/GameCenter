@@ -124,7 +124,7 @@ public class StartingActivity extends AppCompatActivity {
     }
 
     private void switchToHangman(String s, String t) {
-        Intent HangmanGameIntent = new Intent(this, HangmanActivity.class);
+        Intent HangmanGameIntent = new Intent(this, HangmanModes.class);
         HangmanGameIntent.putExtra("name", s);
         HangmanGameIntent.putExtra("game", t);
         StartingActivity.this.startActivity(HangmanGameIntent);

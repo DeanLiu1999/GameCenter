@@ -57,6 +57,7 @@ class StateManager implements Serializable {
     boolean gameEnd() {
         return stageC >= 1 || getPlayerScore() == 0;
     }
+    boolean gameWin(){ return getPlayerScore() >= getComputerScore(); }
 
     String[] getComputerCardsStr() {
         String[] s = new String[6];

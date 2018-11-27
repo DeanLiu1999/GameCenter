@@ -30,8 +30,11 @@
         <activity android:name=".PerGameRecord" />
         <activity android:name=".BlackjackGameActivity" />
         <activity android:name=".HangmanActivity" />
-        <activity android:name=".EndingScore" >
-        </activity>
+        <activity android:name=".EndingScore" />
+        <activity android:name=".LoadHangman" />
+        <activity android:name=".HangmanModes" />
+        <activity android:name=".LoadBlackjack" />
+        <activity android:name=".HangmanBattle"></activity>
     </application>
 
 </manifest>

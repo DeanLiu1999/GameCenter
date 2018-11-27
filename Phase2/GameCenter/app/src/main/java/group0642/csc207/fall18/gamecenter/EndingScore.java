@@ -108,11 +108,11 @@ public class EndingScore extends AppCompatActivity {
 
     /**
      * @param lst  is an ArrayList of Object arrays of size 2
-     * @param flag is a marker of where is user position in this list
+     * @param position is a marker of where is user position in this list
      *             This is the method that displays a segment of the scoreboard that contains tht user's last
      *             game's score and the this score's rank in the scoreboard for the game.
      */
-    private void display_score(ArrayList lst, int flag) {
+    private void display_score(ArrayList lst, int position) {
         // The size of the ArrayList should be less than 10
         final TextView slot_1 = findViewById(R.id.one);
         final TextView slot_2 = findViewById(R.id.two);
@@ -137,7 +137,7 @@ public class EndingScore extends AppCompatActivity {
             String username = (String) arr[1];
             String Score = arr[2].toString();
             String rank = arr[0].toString();
-            if (i == flag) {
+            if (i == position) {
                 String tmp = "Your Score:";
                 slots[i].setText(String.format("%-4s%-20s  %-10s", rank + ".", tmp, Score));
             } else {

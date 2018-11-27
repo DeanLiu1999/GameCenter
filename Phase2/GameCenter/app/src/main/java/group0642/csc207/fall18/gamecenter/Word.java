@@ -1,6 +1,8 @@
 package group0642.csc207.fall18.gamecenter;
-import java.io.Serializable;
+
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
 
 public class Word implements Serializable {
     private String word;
@@ -9,8 +11,12 @@ public class Word implements Serializable {
     private int health;
 
     Word(String word) {
-        this.word = word;
-        this.length = word.length();
+        if (word != null) {
+            this.word = word;
+        } else {
+            this.word = "young";
+        }
+        this.length = this.word.length();
         this.display = StringUtils.repeat("_", this.length);
         this.health = 10;
     }
@@ -35,11 +41,11 @@ public class Word implements Serializable {
 
     String getDisplay() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < display.length(); i++) {
+        for (int i = 0; i < display.length() - 1; i++) {
             sb.append(display.charAt(i));
             sb.append(" ");
         }
-        return sb.toString();
+        return sb.toString() + display.charAt(display.length() - 1);
     }
 
     boolean enter(String entered) {
@@ -55,7 +61,9 @@ public class Word implements Serializable {
         }
         return found;
     }
-    void setFinalDisplay(){
+
+    void setFinalDisplay() {
         display = word;
     }
 }
+

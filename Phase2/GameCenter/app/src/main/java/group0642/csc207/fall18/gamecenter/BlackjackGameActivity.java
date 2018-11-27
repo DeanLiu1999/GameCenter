@@ -113,91 +113,93 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private void refreshMoney(ArrayList<Animator> animators) {
         final TextView wager = findViewById(R.id.textView21);
         final TextView bank = findViewById(R.id.bank2);
-
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(bank, "alpha", 1f, 0f);
-        animator1.setDuration(d);
-        animator1.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                String b = bankManager.getBank().toString();
-                bank.setText(b);
-            }
-        });
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(bank, "alpha", 0f, 1f);
-        animator2.setDuration(d);
-        animators.add(animator1);
-        animators.add(animator2);
-
-        ObjectAnimator animator3 = ObjectAnimator.ofFloat(wager, "alpha", 1f, 0f);
-        animator3.setDuration(d);
-        animator3.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                String w = bankManager.getWager().toString();
-                wager.setText(w);
-            }
-        });
-        ObjectAnimator animator4 = ObjectAnimator.ofFloat(wager, "alpha", 0f, 1f);
-        animator4.setDuration(d);
-        animators.add(animator3);
-        animators.add(animator4);
+        fade(animators, bank, 1f, 0f);
+        changeTextOnAnimationEnd(animators.get(animators.size() - 1), bank, bankManager.getBank().toString());
+        fade(animators, bank, 0f, 1f);
+        fade(animators, wager, 1f, 0f);
+        changeTextOnAnimationEnd(animators.get(animators.size() - 1), wager, bankManager.getWager().toString());
+        fade(animators, wager, 0f, 1f);
     }
 
     private void showImage(ArrayList<Animator> animators, int id) {
         toast = findViewById(R.id.toast);
-        final int imageId = id;
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(toast, "alpha", 0f, 1f);
+        fade(animators, toast, 0f, 1f);
+        changeImageOnAnimationStart(animators.get(animators.size() - 1), toast, id);
+        fade(animators, toast, 1f, 1f);
+        fade(animators, toast, 1f, 0f);
+    }
+
+    private void changeImageOnAnimationStart(Animator animator, final ImageView iv, final int imageId) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                iv.setImageResource(imageId);
+                iv.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void changeImageOnAnimationEnd(Animator animator, final ImageView iv, final int imageId) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                iv.setImageResource(imageId);
+            }
+        });
+    }
+
+    private void changeTextOnAnimationEnd(Animator animator, final TextView tv, final String text) {
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                tv.setText(text);
+            }
+        });
+    }
+
+    private void fade(ArrayList<Animator> animators, View iv, float start, float end) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "alpha", start, end);
+        animator.setDuration(d);
+        animators.add(animator);
+    }
+
+    private void setGameOver(ArrayList<Animator> animators) {
+        gameOver = findViewById(R.id.gameover);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(gameOver, "alpha", 0f, 1f);
         animator1.setDuration(d);
         animator1.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                toast.setImageResource(imageId);
-                toast.setVisibility(View.VISIBLE);
+                gameOver.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                String leave = "Leave";
+                cashOut.setText(leave);
+                cashOut.setEnabled(true);
             }
         });
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(toast, "alpha", 1f, 1f);
-        animator2.setDuration(d);
-        ObjectAnimator animator3 = ObjectAnimator.ofFloat(toast, "alpha", 1f, 0f);
-        animator3.setDuration(d);
         animators.add(animator1);
-        animators.add(animator2);
-        animators.add(animator3);
-    }
-
-    private void setGameOver(ArrayList<Animator> animators){
-            gameOver = findViewById(R.id.gameover);
-            ObjectAnimator animator1 = ObjectAnimator.ofFloat(gameOver, "alpha", 0f, 1f);
-            animator1.setDuration(d);
-            animator1.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    gameOver.setVisibility(View.VISIBLE);
-                }
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    String leave = "Leave";
-                    cashOut.setText(leave);
-                    cashOut.setEnabled(true);
-                }
-            });
-            animators.add(animator1);
 
     }
 
-    private void gameLose(ArrayList<Animator> animators){
-        if(bankManager.getBank().equals(0) && bankManager.getWager().equals(0)) {
+
+    private void gameFinish(ArrayList<Animator> animators, final boolean inGame) {
+        if (bankManager.getBank().equals(0) && bankManager.getWager().equals(0)) {
             setGameOver(animators);
-        }else{
+        } else {
             animators.get(animators.size() - 1).addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    setInGameButton(false);
+                    setInGameButton(inGame);
+                    save();
                 }
             });
         }
@@ -209,19 +211,51 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 R.drawable.s11, R.drawable.s12, R.drawable.s13, R.drawable.s14, R.drawable.s15, R.drawable.s16,
                 R.drawable.s17, R.drawable.s18, R.drawable.s19, R.drawable.s20, R.drawable.s21};
         final ImageView score = findViewById(Id);
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(score, "alpha", 1f, 0f);
+        fade(animators, score, 1f, 0f);
+        changeImageOnAnimationEnd(animators.get(animators.size() - 1), score, scoreImageId[s]);
+        fade(animators, score, 0f, 1f);
+    }
+
+    private void playAnimations(ArrayList<Animator> animators) {
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(animators);
+        animatorSet.start();
+    }
+
+    private void moveCard(ArrayList<Animator> animators, int viewId, int imageId, float x, float y) {
+        ImageView card = findViewById(viewId);
+        card.setImageResource(imageId);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(card, "y", y);
         animator1.setDuration(d);
-        animator1.addListener(new AnimatorListenerAdapter() {
+        animators.add(animator1);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(card, "x", x);
+        animator2.setDuration(d);
+        animators.add(animator2);
+    }
+
+    private void enableButtonOnAnimationEnd(Animator animator, final Button button1, final Button button2) {
+        animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                score.setImageResource(scoreImageId[s]);
+                button1.setEnabled(true);
+                button2.setEnabled(true);
             }
         });
-        ObjectAnimator animator2 = ObjectAnimator.ofFloat(score, "alpha", 0f, 1f);
-        animator2.setDuration(d);
-        animators.add(animator1);
-        animators.add(animator2);
+    }
+
+    private void animationBugFixer(ArrayList<Animator> animators) {
+        ImageView deck = findViewById(R.id.deck15);
+        deck.setVisibility(View.INVISIBLE);
+        ObjectAnimator animator0 = ObjectAnimator.ofFloat(d, "alpha", 1f, 0f);
+        animators.add(animator0);
+    }
+
+    private void save() {
+        String saveFileName = name + "_" + game + ".ser";
+        saveToFile(stateManager, "stateManager" + saveFileName);
+        saveToFile(bankManager, "bankManager" + saveFileName);
+        makeToastText("Game Saved");
     }
 
     private void deal() {
@@ -234,63 +268,16 @@ public class BlackjackGameActivity extends AppCompatActivity {
             playerCards = strToCards(stateManager.getPlayerCardsStr());
             computerCards = strToCards(stateManager.getComputerCardsStr());
             ArrayList<Animator> animations = new ArrayList<>();
-            setInGameButton(true);
-            hit.setEnabled(false);
-            stand.setEnabled(false);
-            ImageView c1 = findViewById(computerCardsId[0]);
-            c1.setImageResource(computerCards[0]);
-            ObjectAnimator animator1 = ObjectAnimator.ofFloat(c1, "y", 200f);
-            animator1.setDuration(d);
-            ObjectAnimator animator2 = ObjectAnimator.ofFloat(c1, "x", 0f);
-            animator2.setDuration(d);
-
-            ImageView c2 = findViewById(computerCardsId[1]);
-            ObjectAnimator animator12 = ObjectAnimator.ofFloat(c2, "y", 200f);
-            animator12.setDuration(d);
-            ObjectAnimator animator22 = ObjectAnimator.ofFloat(c2, "x", 130f);
-            animator22.setDuration(d);
-
-            ImageView p1 = findViewById(playerCardsId[0]);
-            p1.setImageResource(playerCards[0]);
-            ImageView p2 = findViewById(playerCardsId[1]);
-            p2.setImageResource(playerCards[1]);
-
-            ObjectAnimator animator3 = ObjectAnimator.ofFloat(p1, "y", 700f);
-            animator3.setDuration(d);
-            ObjectAnimator animator4 = ObjectAnimator.ofFloat(p1, "x", 0f);
-            animator4.setDuration(d);
-            ObjectAnimator animator5 = ObjectAnimator.ofFloat(p2, "y", 700f);
-            animator5.setDuration(d);
-            ObjectAnimator animator6 = ObjectAnimator.ofFloat(p2, "x", 130f);
-            animator6.setDuration(d);
-
-            ImageView d = findViewById(R.id.deck15);
-            d.setVisibility(View.INVISIBLE);
-            ObjectAnimator animator0 = ObjectAnimator.ofFloat(d, "alpha", 1f, 0f);
-            animations.add(animator0);
-            animations.add(animator1);
-            animations.add(animator2);
+            disableAllButton();
+            animationBugFixer(animations);
+            moveCard(animations, computerCardsId[0], computerCards[0], 0f, 200f);
             refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
-            animations.add(animator12);
-            animations.add(animator22);
-            animations.add(animator3);
-            animations.add(animator4);
-            animations.add(animator5);
-            animations.add(animator6);
+            moveCard(animations, computerCardsId[1], R.drawable.cardback, 130f, 200f);
+            moveCard(animations, playerCardsId[0], playerCards[0], 0f, 700f);
+            moveCard(animations, playerCardsId[1], playerCards[1], 130f, 700f);
             refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
-            animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    hit.setEnabled(true);
-                    stand.setEnabled(true);
-                }
-            });
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playSequentially(animations);
-            animatorSet.start();
-
-
+            enableButtonOnAnimationEnd(animations.get(animations.size() - 1), hit, stand);
+            playAnimations(animations);
         }
     }
 
@@ -298,70 +285,27 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private void loadGame() {
         String FileName = name + "_" + game + ".ser";
         loadFromFile("stateManager" + FileName, "bankManager" + FileName);
-//        stateManager = (StateManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser");
-//        stateManager = new StateManager();
-//        bankManager = (BankManager) SaveManager.loadFromFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser");
         playerCards = strToCards(stateManager.getPlayerCardsStr());
         computerCards = strToCards(stateManager.getComputerCardsStr());
         setUp();
         ArrayList<Animator> animations = new ArrayList<>();
         disableAllButton();
         undo.setEnabled(false);
-        ImageView deck = findViewById(R.id.deck15);
-        deck.setVisibility(View.INVISIBLE);
-        ObjectAnimator animator0 = ObjectAnimator.ofFloat(d, "alpha", 1f, 0f);
-        animations.add(animator0);
+        animationBugFixer(animations);
         for (int i = 0; i <= stateManager.getStageC(); i++) {
-            ImageView p = findViewById(computerCardsId[i]);
-            p.setImageResource(computerCards[i]);
-            ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 200f);
-            animator1.setDuration(d);
-            ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", i * 130f);
-            animator2.setDuration(d);
-            animations.add(animator1);
-            animations.add(animator2);
+            moveCard(animations, computerCardsId[i], computerCards[i], i * 130f, 200f);
         }
         if (stateManager.getStageC() == 0) {
-            ImageView p = findViewById(computerCardsId[1]);
-            p.setImageResource(R.drawable.cardback);
-            ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 200f);
-            animator1.setDuration(d);
-            ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", 130f);
-            animator2.setDuration(d);
-            animations.add(animator1);
-            animations.add(animator2);
+            moveCard(animations, computerCardsId[1], R.drawable.cardback, 130f, 200f);
         }
         refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
         for (int i = 0; i <= stateManager.getStageP(); i++) {
-            ImageView p = findViewById(playerCardsId[i]);
-            p.setImageResource(playerCards[i]);
-            ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 700f);
-            animator1.setDuration(d);
-            ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", i * 130f);
-            animator2.setDuration(d);
-            animations.add(animator1);
-            animations.add(animator2);
+            moveCard(animations, playerCardsId[i], playerCards[i], i * 130f, 700f);
         }
         refreshScore(animations, R.id.p_score, stateManager.getPlayerScore());
         refreshMoney();
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        if(bankManager.getBank().equals(0) && bankManager.getWager().equals(0)) {
-            setGameOver(animations);
-        }else{
-            animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    setInGameButton(!(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0));
-                }
-            });
-        }
-
-        animatorSet.playSequentially(animations);
-        animatorSet.start();
-
-
+        gameFinish(animations, !(stateManager.getPlayerScore() == 0 || stateManager.getStageC() > 0));
+        playAnimations(animations);
         undo.setEnabled(stateManager.getStageP() == 1 && stateManager.getStageC() == 0);
     }
 
@@ -440,14 +384,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String saveFileName = name + "_" + game + ".ser";
-                saveToFile(stateManager, "stateManager" + saveFileName);
-                saveToFile(bankManager, "bankManager" + saveFileName);
-//                saveToFile(stateManager, "statemanager.ser");
-//                saveToFile(bankManager, "bankmanager.ser");
-                makeToastText("Game Saved!");
-//                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/state.ser", stateManager);
-//                SaveManager.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/bank.ser", bankManager);
+                save();
             }
         });
     }
@@ -461,35 +398,21 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 stateManager.hit();
                 undo.setEnabled(false);
                 disableAllButton();
-                ImageView p = findViewById(playerCardsId[stateManager.getStageP()]);
-                p.setImageResource(playerCards[stateManager.getStageP()]);
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 700f);
-                animator1.setDuration(d);
-                ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", stateManager.getStageP() * 130f);
-                animator1.setDuration(d);
-                AnimatorSet animatorSet = new AnimatorSet();
                 ArrayList<Animator> animations = new ArrayList<>();
-                animations.add(animator1);
-                animations.add(animator2);
+                moveCard(animations, playerCardsId[stateManager.getStageP()],
+                        playerCards[stateManager.getStageP()],
+                        stateManager.getStageP() * 130f, 700f);
                 int p_s = stateManager.getPlayerScore();
                 refreshScore(animations, R.id.p_score, p_s);
                 if (p_s == 0) {
                     bankManager.checkOut(false);
                     showImage(animations, R.drawable.game_lose);
                     refreshMoney(animations);
-                    gameLose(animations);
+                    gameFinish(animations, false);
                 } else {
-                    animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            hit.setEnabled(true);
-                            stand.setEnabled(true);
-                        }
-                    });
+                    enableButtonOnAnimationEnd(animations.get(animations.size() - 1), hit, stand);
                 }
-                animatorSet.playSequentially(animations);
-                animatorSet.start();
+                playAnimations(animations);
             }
         });
     }
@@ -507,51 +430,26 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     stateManager.stand();
                     if (i == 1) {
                         final ImageView c0 = findViewById(computerCardsId[1]);
-                        ObjectAnimator animator01 = ObjectAnimator.ofFloat(c0, "alpha", 1f, 0f);
-                        animator01.setDuration(d);
-                        animator01.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                c0.setImageResource(computerCards[1]);
-                            }
-                        });
-                        ObjectAnimator animator02 = ObjectAnimator.ofFloat(c0, "alpha", 0f, 1f);
-                        animator02.setDuration(d);
-                        animations.add(animator01);
-                        animations.add(animator02);
+                        fade(animations, c0, 1f, 0f);
+                        changeImageOnAnimationEnd(animations.get(animations.size() - 1), c0, computerCards[1]);
+                        fade(animations, c0, 0f, 1f);
                         refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
                     } else {
-                        ImageView p = findViewById(computerCardsId[i]);
-                        p.setImageResource(computerCards[i]);
-                        ObjectAnimator animator1 = ObjectAnimator.ofFloat(p, "y", 200f);
-                        animator1.setDuration(d);
-                        ObjectAnimator animator2 = ObjectAnimator.ofFloat(p, "x", i * 130f);
-                        animator2.setDuration(d);
-                        animations.add(animator1);
-                        animations.add(animator2);
+                        moveCard(animations, computerCardsId[i], computerCards[i], i * 130f, 200f);
                         refreshScore(animations, R.id.c_score, stateManager.getComputerScore());
                     }
                     i++;
                 }
-
-
-                Integer c_s = stateManager.getComputerScore();
-                Integer p_s = stateManager.getPlayerScore();
-
-                if (p_s >= c_s) {
+                if (stateManager.gameWin()) {
                     showImage(animations, R.drawable.game_win);
                 } else {
                     showImage(animations, R.drawable.game_lose);
                 }
-                bankManager.checkOut(p_s >= c_s);
+                bankManager.checkOut(stateManager.gameWin());
                 refreshMoney(animations);
-
                 undo.setEnabled(false);
-                AnimatorSet animatorSet = new AnimatorSet();
-                gameLose(animations);
-                animatorSet.playSequentially(animations);
-                animatorSet.start();
+                gameFinish(animations, false);
+                playAnimations(animations);
             }
         });
     }
@@ -561,48 +459,39 @@ public class BlackjackGameActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add.setEnabled(false);
-                allin.setEnabled(false);
                 EditText w = findViewById(R.id.guess);
-                if (!w.getText().toString().equals("")) {
+                if (w.getText().toString().matches("\\d+")) {
+                    add.setEnabled(false);
+                    allin.setEnabled(false);
                     ArrayList<Animator> animations = new ArrayList<>();
                     if (!bankManager.addWager(Integer.parseInt(w.getText().toString()))) {
                         makeToastText("Not Enough Money");
                     }
                     refreshMoney(animations);
-                    animations.get(animations.size() - 1).addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            add.setEnabled(true);
-                            allin.setEnabled(true);
-                        }
-                    });
-                    if (bankManager.getWager() > 0) {
-                        deal.setEnabled(true);
-                    }
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playSequentially(animations);
-                    animatorSet.start();
+                    enableButtonOnAnimationEnd(animations.get(animations.size() - 1), add, allin);
+                    deal.setEnabled(bankManager.getWager() > 0);
+                    playAnimations(animations);
+                }else {
+                    makeToastText("Please Enter an Integer");
                 }
             }
         });
     }
+
 
     private void allinClickListener() {
         allin = findViewById(R.id.allin);
         allin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                add.setEnabled(false);
+                allin.setEnabled(false);
                 ArrayList<Animator> animations = new ArrayList<>();
                 bankManager.allIn();
                 refreshMoney(animations);
-                if (bankManager.getWager() > 0) {
-                    deal.setEnabled(true);
-                }
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playSequentially(animations);
-                animatorSet.start();
+                enableButtonOnAnimationEnd(animations.get(animations.size() - 1), add, allin);
+                deal.setEnabled(bankManager.getWager() > 0);
+                playAnimations(animations);
             }
         });
     }
@@ -616,9 +505,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 ScoreBoard.updateScoreBoard(game, name, score);
                 Intent goToScore = new Intent(BlackjackGameActivity.this, EndingScore.class);
                 goToScore.putExtra("name", name);
-               goToScore.putExtra("game", game);
-               goToScore.putExtra("score", score);
-              BlackjackGameActivity.this.startActivity(goToScore);
+                goToScore.putExtra("game", game);
+                goToScore.putExtra("score", score);
+                BlackjackGameActivity.this.startActivity(goToScore);
             }
         });
     }
@@ -645,8 +534,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         return cards;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        save();
+    }
+
     private void makeToastText(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
-
 }
