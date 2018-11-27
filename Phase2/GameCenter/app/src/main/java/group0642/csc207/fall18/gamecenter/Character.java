@@ -1,16 +1,14 @@
 package group0642.csc207.fall18.gamecenter;
 
 public class Character {
-    private String name;
 
     private int health;
 
     private int attackDamage;
 
-    Character(String name, int health, int attackDamage) {
-        this.name = name;
+    Character(int health, int attackDamage) {
         this.setHealth(health);
-        this.setAttackDamage(attackDamage);
+        this.attackDamage = attackDamage;
     }
 
     boolean isAlive() {
@@ -19,14 +17,6 @@ public class Character {
 
     int getAttackDamage() {
         return attackDamage;
-    }
-
-    void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
-    }
-
-    String getName() {
-        return name;
     }
 
     int getHealth() {
