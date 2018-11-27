@@ -1,5 +1,7 @@
 package group0642.csc207.fall18.gamecenter;
 
+import static java.lang.Math.max;
+
 public class Battle {
 
     private Character computer;
@@ -20,9 +22,9 @@ public class Battle {
 
     boolean makeMove(boolean correctness) {
         if (correctness)
-            computer.setHealth(computer.getHealth() - player.getAttackDamage());
-        else
-            player.setHealth(player.getHealth() - computer.getAttackDamage());
+            computer.setHealth(max(0, (computer.getHealth() - player.getAttackDamage())));
+        else player.setHealth(max(0, (player.getHealth() - computer.getAttackDamage())));
+
         return player.isAlive() && computer.isAlive();
     }
 
@@ -32,7 +34,7 @@ public class Battle {
                 player.getAttackDamage()};
         if (info[0] + info[2] > 0)
             return info;
-        return  singleIndicator;
+        return singleIndicator;
     }
 
     String[] getNames() {
