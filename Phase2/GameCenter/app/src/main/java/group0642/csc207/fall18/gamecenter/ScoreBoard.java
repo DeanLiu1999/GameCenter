@@ -26,7 +26,7 @@ class ScoreBoard {
      * corresponding list of scores.
      */
     private HashMap getScorePerUser(String userId) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) SaveManager.loadFromFile(sc);
+        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
         if (scoreBoard == null || !scoreBoard.containsKey(userId)) {
             return null;
         }
@@ -64,7 +64,7 @@ class ScoreBoard {
      * If the user has the same score, they will be sorted alphabetically.
      */
     ArrayList<Object[]> getScorePerGame(String game) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) SaveManager.loadFromFile(sc);
+        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
         if (scoreBoard == null) {
             return null;
         }
@@ -153,7 +153,7 @@ class ScoreBoard {
      * @param score  score
      */
     void updateScoreBoard(String game, String userId, int score) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) SaveManager.loadFromFile(sc);
+        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
         if (scoreBoard == null) {
             scoreBoard = new HashMap<String, HashMap<String, ArrayList>>();
         }
@@ -170,6 +170,6 @@ class ScoreBoard {
         } else {
             scoreBoard.get(userId).get(game).add(score);
         }
-        SaveManager.writeToFile(sc, scoreBoard);
+        new SaveManager().writeToFile(sc, scoreBoard);
     }
 }

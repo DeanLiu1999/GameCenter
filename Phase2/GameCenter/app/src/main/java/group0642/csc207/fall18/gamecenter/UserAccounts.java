@@ -24,7 +24,7 @@ class UserAccounts {
      * for the given userId. Return false otherwise.
      */
     boolean signIn(String userId, String password) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
         if (userAccounts == null || !userAccounts.containsKey(userId)) {
             return false;
         }
@@ -39,12 +39,12 @@ class UserAccounts {
      * @return return false if the userId does not exist. Return true otherwise.
      */
     boolean resetPassword(String userId, String newPassword) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
         if (userAccounts == null || !userAccounts.containsKey(userId)) {
             return false;
         }
         userAccounts.replace(userId, newPassword);
-        SaveManager.writeToFile(ua, userAccounts);
+        new SaveManager().writeToFile(ua, userAccounts);
         return true;
     }
 
@@ -56,14 +56,14 @@ class UserAccounts {
      * @return return false if the userId already existed. Return true otherwise.
      */
     boolean signUp(String userId, String password) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
         if (userAccounts == null) {
             userAccounts = new HashMap();
         } else if (userAccounts.containsKey(userId)) {
             return false;
         }
         userAccounts.put(userId, password);
-        SaveManager.writeToFile(ua, userAccounts);
+        new SaveManager().writeToFile(ua, userAccounts);
         return true;
     }
 }
