@@ -9,14 +9,14 @@ public class Battle {
     private Character player;
 
     Battle() {
-        this.computer = new Character("Monster", 1000, 200);
-        this.player = new Character("You", 1400, 200);
+        this.computer = new Character(1000, 200);
+        this.player = new Character(1400, 200);
     }
 
     Battle(int playerLevel, int boss) {
-        this.computer = new Character("Monster", 1000 + 200 * boss,
+        this.computer = new Character(1000 + 200 * boss,
                 200 + 50 * boss);
-        this.player = new Character("You", 1400 + 150 * playerLevel,
+        this.player = new Character(1400 + 150 * playerLevel,
                 200 + 50 * playerLevel);
     }
 
@@ -35,11 +35,5 @@ public class Battle {
         if (info[0] + info[2] > 0)
             return info;
         return singleIndicator;
-    }
-
-    String[] getNames() {
-        String[] s;
-        s = new String[]{computer.getName(), player.getName()};
-        return s;
     }
 }

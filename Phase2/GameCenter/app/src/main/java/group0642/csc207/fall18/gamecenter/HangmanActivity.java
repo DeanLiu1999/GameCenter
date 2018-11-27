@@ -69,14 +69,38 @@ public class HangmanActivity extends AppCompatActivity {
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
 
+        setShowScoreboard_1Listener();
+        buttonListActions(entries, alphabet);
+
+    }
+
+    public void setShowScoreboard_1Listener() {
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToScore(name, game, score);
+                if (answer.getHealth() == 0) {
+                    showScoreboard_1.setText("Show scoreboard");
+                    switchToScore(name, game, score);
+                } else {
+                    switchToStart(name, game);
+                }
             }
         });
-        buttonListActions(entries, alphabet);
+    }
 
+    public void switchToScore(String s, String t, int x) {
+        Intent goToScore = new Intent(HangmanActivity.this, EndingScore.class);
+        goToScore.putExtra("name", s);
+        goToScore.putExtra("game", t);
+        goToScore.putExtra("score", x);
+        HangmanActivity.this.startActivity(goToScore);
+    }
+
+    public void switchToStart(String s, String t) {
+        Intent startOver = new Intent(HangmanActivity.this, StartingActivity.class);
+        startOver.putExtra("name", s);
+        startOver.putExtra("game", t);
+        HangmanActivity.this.startActivity(startOver);
     }
 
     public void buttonListActions(Button[] lst, String[] lstOfStrings) {
@@ -102,14 +126,6 @@ public class HangmanActivity extends AppCompatActivity {
             aLst.setEnabled(enabled);
         }
 
-    }
-
-    public void switchToScore(String s, String t, int x) {
-        Intent goToScore = new Intent(HangmanActivity.this, EndingScore.class);
-        goToScore.putExtra("name", s);
-        goToScore.putExtra("game", t);
-        goToScore.putExtra("score", x);
-        HangmanActivity.this.startActivity(goToScore);
     }
 
 
@@ -140,8 +156,6 @@ public class HangmanActivity extends AppCompatActivity {
         } else if (answer.getHealth() == 0) {
             makeToastEntryText("Game Over");
             updateScoreBoard(game, name, score);
-            showScoreboard_1.setEnabled(true);
-
         }
     }
 

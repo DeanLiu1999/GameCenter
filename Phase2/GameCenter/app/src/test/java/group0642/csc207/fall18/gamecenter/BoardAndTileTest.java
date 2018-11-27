@@ -20,14 +20,14 @@ public class BoardAndTileTest {
         Board.setGameSize(3);
         Tile.setImages(1);
         Tile t = new Tile(5);
-        Tile t2 = new Tile(4);
+        Tile t2 = new Tile(4, 4);
         assertEquals(t.getBackground(), R.drawable.ftile_8);
         assertEquals(t.getId(), 6);
-        assertEquals(t.compareTo(t2), -1);
+        assertEquals(t.compareTo(t2), -2);
     }
 
     @Test
-    public void testGettersAndSettersAndRegularInitialization() {
+    public void testGettersAndSettersAndRegularInitializationAndIterators() {
         Tile.setImages(0);
         Tile t = new Tile(0);
         ArrayList<Tile> tiles = new ArrayList<Tile>();
@@ -40,14 +40,26 @@ public class BoardAndTileTest {
         b.setScore(80);
         assertEquals(b.getScore(), 80);
         assertEquals(b.numTiles(), 1);
+        for (Tile tile: b)
+            assertEquals(tile, t);
     }
 
     @Test
-    public void testMakeMoveAndUndo() {
+    public void testSwapTileAndUndo() {
         Tile.setImages(0);
-        Board.setGameSize(4);
-
+        Board.setGameSize(2);
+        Tile t0 = new Tile(0);
+        Tile t1 = new Tile(1);
+        Tile t2 = new Tile(2);
+        Tile t3 = new Tile(3);
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        tiles.add(t0);
+        tiles.add(t1);
+        tiles.add(t2);
+        tiles.add(t3);
+        b = new Board(tiles);
+        b.swapTiles(0, 0, 1, 1);
+        assertEquals(b.getTile(0, 0), t3);
+        assertEquals(b.getTile(1, 1), t0);
     }
-
-
 }

@@ -39,13 +39,6 @@ class StateManager implements Serializable {
             ++stageC;
     }
 
-    int[] getComputerScores() {
-        int[] scores = new int[6];
-        for (int i = 0; i < 6; i++)
-            scores[i] = d.calculateScore(i, computerCards);
-        return scores;
-    }
-
     int getStageC() {
         return stageC;
     }
