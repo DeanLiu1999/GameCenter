@@ -53,7 +53,6 @@ public class BlackjackGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUp();
-//        stateManager = new StateManager();
         bankManager = new BankManager();
         Intent i = getIntent();
         name = i.getStringExtra("name");
@@ -551,16 +550,22 @@ public class BlackjackGameActivity extends AppCompatActivity {
                 R.drawable.club_k,};
         Integer[] cards = new Integer[6];
         for (int i = 0; i < 6; i++) {
-            if (cardStr[i].equals("A")) {
-                cards[i] = cardsId[0];
-            } else if (cardStr[i].equals("J")) {
-                cards[i] = cardsId[10];
-            } else if (cardStr[i].equals("Q")) {
-                cards[i] = cardsId[11];
-            } else if (cardStr[i].equals("K")) {
-                cards[i] = cardsId[12];
-            } else {
-                cards[i] = cardsId[Integer.parseInt(cardStr[i]) - 1];
+            switch (cardStr[i]) {
+                case "A":
+                    cards[i] = cardsId[0];
+                    break;
+                case "J":
+                    cards[i] = cardsId[10];
+                    break;
+                case "Q":
+                    cards[i] = cardsId[11];
+                    break;
+                case "K":
+                    cards[i] = cardsId[12];
+                    break;
+                default:
+                    cards[i] = cardsId[Integer.parseInt(cardStr[i]) - 1];
+                    break;
             }
         }
         return cards;
