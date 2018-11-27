@@ -46,4 +46,18 @@ public class WordTest {
         assertEquals(w.getHealth(), 0);
     }
 
+    @Test
+    public void testWordInitializedWithNull() {
+        w = new Word(null);
+        assertEquals(w.getDisplay(), "_ _ _ _ _");
+        w.enter("y");
+        assertEquals(w.getDisplay(), "y _ _ _ _");
+        w.enter("o");
+        w.enter("u");
+        assertFalse(w.win());
+        w.enter("n");
+        w.enter("g");
+        assertEquals(w.getDisplay(), "y o u n g");
+        assertTrue(w.win());
+    }
 }
