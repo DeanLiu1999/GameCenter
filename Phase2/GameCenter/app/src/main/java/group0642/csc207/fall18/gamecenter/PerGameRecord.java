@@ -29,6 +29,8 @@ public class PerGameRecord extends AppCompatActivity {
         String gameName = intent.getStringExtra("gameName");
 
         ArrayList<Object[]> lstScore = getScorePerGame(gameName);
+        TextView title = findViewById(R.id.Title);
+        title.setText(gameName + " top scores");
 
         final ArrayList<ArrayList> pages_1 = divBy10(lstScore);
         final int limit = pages_1.size();

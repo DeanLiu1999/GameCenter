@@ -17,8 +17,7 @@ public class PerPersonRecord extends AppCompatActivity {
 
 
     /**
-     * @param savedInstanceState
-     * Implemented the functionality of the displays
+     * @param savedInstanceState Implemented the functionality of the displays
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,9 @@ public class PerPersonRecord extends AppCompatActivity {
         Intent intent = getIntent();
         String ID = intent.getStringExtra("userId");
         String gameName = intent.getStringExtra("gameName_1");
+
+        TextView title = findViewById(R.id.title_2);
+        title.setText("Your score in " + gameName);
 
         ArrayList score_list = getScoreGameUser(gameName, ID);
 
@@ -114,7 +116,7 @@ public class PerPersonRecord extends AppCompatActivity {
 
     /**
      * @param lst an ArrayList of Objects
-     * take in an ArrayList and display them on the score board.
+     *            take in an ArrayList and display them on the score board.
      */
     private void display_score(ArrayList lst) {
         // The size of the ArrayList should be less than or equal to 10
