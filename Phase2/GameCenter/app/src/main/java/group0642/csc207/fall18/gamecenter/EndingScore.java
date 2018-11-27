@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static group0642.csc207.fall18.gamecenter.ScoreBoard.getAfterGameScore;
 
 public class EndingScore extends AppCompatActivity {
 
@@ -26,7 +25,7 @@ public class EndingScore extends AppCompatActivity {
         String gameCall = intent.getStringExtra("game");
         int score = intent.getIntExtra("score", 0);
 
-        ArrayList<Object[]> userRanks = getAfterGameScore(gameCall, user, score);
+        ArrayList<Object[]> userRanks = new ScoreBoard().getAfterGameScore(gameCall, user, score);
         int mark = marker(userRanks, score, user);
 
         anotherGameButtonListener(user);
@@ -107,10 +106,10 @@ public class EndingScore extends AppCompatActivity {
 
 
     /**
-     * @param lst  is an ArrayList of Object arrays of size 2
+     * @param lst      is an ArrayList of Object arrays of size 2
      * @param position is a marker of where is user position in this list
-     *             This is the method that displays a segment of the scoreboard that contains tht user's last
-     *             game's score and the this score's rank in the scoreboard for the game.
+     *                 This is the method that displays a segment of the scoreboard that contains tht user's last
+     *                 game's score and the this score's rank in the scoreboard for the game.
      */
     private void display_score(ArrayList lst, int position) {
         // The size of the ArrayList should be less than 10

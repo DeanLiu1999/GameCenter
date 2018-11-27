@@ -306,7 +306,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
      */
     public static void addToScoreBoard(int score) {
         s = score;
-        ScoreBoard.updateScoreBoard(GameActivity.game, GameActivity.name, score);
+        new ScoreBoard().updateScoreBoard(GameActivity.game, GameActivity.name, score);
     }
 
     /**

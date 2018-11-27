@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static group0642.csc207.fall18.gamecenter.ScoreBoard.getScoreGameUser;
-
 
 public class PerPersonRecord extends AppCompatActivity {
     private int counter = 0;
@@ -32,7 +30,7 @@ public class PerPersonRecord extends AppCompatActivity {
         TextView title = findViewById(R.id.title_2);
         title.setText("Your score in " + gameName);
 
-        ArrayList score_list = getScoreGameUser(gameName, ID);
+        ArrayList score_list = new ScoreBoard().getScoreGameUser(gameName, ID);
 
         final ArrayList<ArrayList> pages = divideBy10(score_list);
         final int limit = pages.size();

@@ -535,7 +535,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     }
 
     private void switchToScore(final int score) {
-        ScoreBoard.updateScoreBoard(game, name, score);
+        new ScoreBoard().updateScoreBoard(game, name, score);
         Intent goToScore = new Intent(BlackjackGameActivity.this, EndingScore.class);
         goToScore.putExtra("name", name);
         goToScore.putExtra("game", game);
