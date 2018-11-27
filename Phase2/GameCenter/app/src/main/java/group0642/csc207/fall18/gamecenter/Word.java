@@ -9,8 +9,12 @@ public class Word implements Serializable {
     private int health;
 
     Word(String word) {
-        this.word = word;
-        this.length = word.length();
+        if (word != null) {
+            this.word = word;
+        } else {
+            this.word = "young";
+        }
+        this.length = this.word.length();
         this.display = StringUtils.repeat("_", this.length);
         this.health = 10;
     }
