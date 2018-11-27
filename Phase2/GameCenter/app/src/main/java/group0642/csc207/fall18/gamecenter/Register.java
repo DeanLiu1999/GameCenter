@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import static group0642.csc207.fall18.gamecenter.UserAccounts.signUp;
 
 public class Register extends AppCompatActivity {
 
@@ -44,7 +43,7 @@ public class Register extends AppCompatActivity {
                 String pass = newPassword.getText().toString();
                 String confirmation = confirm.getText().toString();
                 if (pass.equals(confirmation) && newName.length() <= 29) {
-                    boolean reading = signUp(newName, pass);
+                    boolean reading = new UserAccounts().signUp(newName, pass);
                     if (reading) {
                         Intent loginIntent = new Intent(Register.this,
                                 LoginActivity.class);

@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import static group0642.csc207.fall18.gamecenter.UserAccounts.signIn;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -45,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = username.getText().toString();
                 String pass = password.getText().toString();
-                boolean match = signIn(name, pass);
+                boolean match = new UserAccounts().signIn(name, pass);
                 if (match) {
                     Intent loginIntent = new Intent(LoginActivity.this, Preface.class);
                     loginIntent.putExtra("name", name);
