@@ -485,7 +485,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
                     enableButtonOnAnimationEnd(animations.get(animations.size() - 1), add, allin);
                     deal.setEnabled(!bankManager.wagerIsZero());
                     playAnimations(animations);
-                }else {
+                } else {
                     makeToastText("Please Enter an Integer");
                 }
             }
@@ -515,15 +515,30 @@ public class BlackjackGameActivity extends AppCompatActivity {
         cashOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final int score = bankManager.getBank();
-                ScoreBoard.updateScoreBoard(game, name, score);
-                Intent goToScore = new Intent(BlackjackGameActivity.this, EndingScore.class);
-                goToScore.putExtra("name", name);
-                goToScore.putExtra("game", game);
-                goToScore.putExtra("score", score);
-                BlackjackGameActivity.this.startActivity(goToScore);
+                if (bankManager.gameOver()) {
+                    switchToStart();
+                } else {
+                    final int score = bankManager.getBank();
+                    switchToScore(score);
+                }
             }
         });
+    }
+
+    private void switchToStart() {
+        Intent startOver = new Intent(BlackjackGameActivity.this, StartingActivity.class);
+        startOver.putExtra("name", name);
+        startOver.putExtra("game", game);
+        BlackjackGameActivity.this.startActivity(startOver);
+    }
+
+    private void switchToScore(final int score) {
+        ScoreBoard.updateScoreBoard(game, name, score);
+        Intent goToScore = new Intent(BlackjackGameActivity.this, EndingScore.class);
+        goToScore.putExtra("name", name);
+        goToScore.putExtra("game", game);
+        goToScore.putExtra("score", score);
+        BlackjackGameActivity.this.startActivity(goToScore);
     }
 
     private Integer[] strToCards(String[] cardStr) {
