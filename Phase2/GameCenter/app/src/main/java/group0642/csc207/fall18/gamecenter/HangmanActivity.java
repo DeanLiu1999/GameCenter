@@ -29,7 +29,6 @@ public class HangmanActivity extends AppCompatActivity {
      */
     private static String game;
     private static String name;
-    private int mode;
     private TextView view;
     private TextView healthBar;
     private int score = 0;
@@ -69,7 +68,6 @@ public class HangmanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
-        mode = intent.getIntExtra("mode", 2);
 
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +99,7 @@ public class HangmanActivity extends AppCompatActivity {
 
     public void disableAllButton(Button[] lst, boolean enabled) {
         for (Button aLst : lst) {
-            aLst.setEnabled(false);
+            aLst.setEnabled(enabled);
         }
 
     }
@@ -132,29 +130,18 @@ public class HangmanActivity extends AppCompatActivity {
         update();
 
         if (answer.win()) {
-            if (mode == 1) {
-                int health = answer.getHealth();
-                answer = new Word(chooseTheAnswer());
-                answer.setHealth(health + 1);
-                update();
-                score++;
-                disableAllButton(lst, true);
-            } else {
-                makeToastEntryText("You win");
-                score = answer.getHealth();
-                showScoreboard_1.setEnabled(true);
-                updateScoreBoard(game, name, score);
-                disableAllButton(lst, false);
-            }
+            int health = answer.getHealth();
+            answer = new Word(chooseTheAnswer());
+            answer.setHealth(health + 1);
+            update();
+            score++;
+            disableAllButton(lst, true);
+
         } else if (answer.getHealth() == 0) {
-            if (mode == 1) {
-                makeToastEntryText("Game Over");
-                updateScoreBoard(game, name, score);
-                showScoreboard_1.setEnabled(true);
-            } else {
-                makeToastEntryText("You lose ");
-                disableAllButton(lst, true);
-            }
+            makeToastEntryText("Game Over");
+            updateScoreBoard(game, name, score);
+            showScoreboard_1.setEnabled(true);
+
         }
     }
 
