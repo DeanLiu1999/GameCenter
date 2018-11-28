@@ -205,6 +205,10 @@ public class BoardManagerTest {
         assertEquals(blank.getId(), 16);
     }
 
+    // The undo feature in our implementation always allows one more undo than the default one to
+    // provide extra functionality. We handled this discrepancy by disabling the undo button in the
+    // single case of the user should not undo but BoardManager allows undo
+
     /**
      * Test undo functionality whilst setting the undo count with a positive number.
      */
@@ -229,7 +233,6 @@ public class BoardManagerTest {
         assertEquals(blank.getId(), 16);
 
         boardManager.undoStep();
-        // TODO: blank tile should be at (2,2)
         blank = boardManager.getBoard().getTile(3,2);
         assertEquals(blank.getId(), 16);
 
@@ -263,7 +266,6 @@ public class BoardManagerTest {
         assertEquals(blank.getId(), 16);
 
         boardManager.undoStep();
-        // TODO: blank tile should be at (1,1)
         blank = boardManager.getBoard().getTile(0,1);
         assertEquals(blank.getId(), 16);
 
