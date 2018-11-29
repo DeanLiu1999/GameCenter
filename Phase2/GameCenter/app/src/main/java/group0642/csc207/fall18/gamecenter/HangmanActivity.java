@@ -173,6 +173,7 @@ public class HangmanActivity extends AppCompatActivity {
             makeToastEntryText("Game Over");
             new ScoreBoard().updateScoreBoard(game, name, score);
             saveButton.setEnabled(false);
+            disableAllButton(lst, false);
             showScoreboard_1.setText("Show scoreboard");
         }
     }
