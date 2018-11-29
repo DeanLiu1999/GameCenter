@@ -29,3 +29,13 @@ Hangman has two modes: the standard mode and the infinite mode. In standard mode
 lives and the regular hangman rule applied. In infinite mode the user can keep guessing the next
 word as long as his number of lives is positive, and his score will be the number of words guessed
 correctly.
+
+## Images citation
+club_a.png, club_2.png, club_3.png, club_4.png, club_5.png, club_6.png, club_7.png, club_8.png,
+club_9.png, club_10.png, club_j.png, club_j.png, club_q.png
+are from http://www.4399.com/
+
+level1.jpg, level2.jpg, level3.jpg, level4.jpg, level5.jpg, level6.jpg
+are from kingdom rush
+
+cardback.png is from Hearthstone
