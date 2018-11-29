@@ -33,7 +33,7 @@ public class EndingScore extends AppCompatActivity {
         exitButtonListener();
         TextView title = findViewById(R.id.title_4);
         title.setText(String.format("%s\'s Score", user));
-        display_score(userRanks, mark);
+        displayScore(userRanks, mark);
     }
 
     /**
@@ -111,7 +111,7 @@ public class EndingScore extends AppCompatActivity {
      *                 This is the method that displays a segment of the scoreboard that contains tht user's last
      *                 game's score and the this score's rank in the scoreboard for the game.
      */
-    private void display_score(ArrayList lst, int position) {
+    private void displayScore(ArrayList lst, int position) {
         // The size of the ArrayList should be less than 10
         final TextView slot_1 = findViewById(R.id.one);
         final TextView slot_2 = findViewById(R.id.two);
