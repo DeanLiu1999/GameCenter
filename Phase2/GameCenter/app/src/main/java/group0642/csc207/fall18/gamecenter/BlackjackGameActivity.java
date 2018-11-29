@@ -121,7 +121,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
      * refresh money without animation.
      */
     private void refreshMoney() {
-        TextView wager = findViewById(R.id.textView21);
+        TextView wager = findViewById(R.id.wager);
         String w = bankManager.getWager().toString();
         wager.setText(w);
         TextView bank = findViewById(R.id.bank2);
@@ -135,7 +135,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
      * @param animators a list of animators
      */
     private void refreshMoney(ArrayList<Animator> animators) {
-        final TextView wager = findViewById(R.id.textView21);
+        final TextView wager = findViewById(R.id.wager);
         final TextView bank = findViewById(R.id.bank2);
         fade(animators, bank, 1f, 0f);
         changeTextOnAnimationEnd(animators.get(animators.size() - 1), bank, bankManager.getBank().toString());
