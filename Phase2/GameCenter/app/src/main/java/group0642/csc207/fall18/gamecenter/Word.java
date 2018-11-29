@@ -21,7 +21,7 @@ public class Word implements Serializable {
         this.health = 10;
     }
 
-    private boolean check(int position, String letter) {
+    boolean check(int position, String letter) {
         if (this.word.length() >= position)
             return String.valueOf(this.word.charAt(position)).equals(letter);
         return false;
