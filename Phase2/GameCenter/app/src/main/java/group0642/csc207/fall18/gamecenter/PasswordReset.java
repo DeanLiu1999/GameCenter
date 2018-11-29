@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import static group0642.csc207.fall18.gamecenter.UserAccounts.resetPassword;
 
 public class PasswordReset extends AppCompatActivity {
 
@@ -40,7 +39,7 @@ public class PasswordReset extends AppCompatActivity {
                 String pw1 = matching.getText().toString();
                 String nm = userId.getText().toString();
                 if (pw.equals(pw1)) {
-                    boolean running = resetPassword(nm, pw);
+                    boolean running = new UserAccounts().resetPassword(nm, pw);
                     if (running) {
                         Intent loginIntent = new Intent(PasswordReset.this
                                 , LoginActivity.class);

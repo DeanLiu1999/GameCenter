@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static group0642.csc207.fall18.gamecenter.ScoreBoard.getScorePerGame;
 
 public class PerGameRecord extends AppCompatActivity {
 
@@ -18,7 +17,7 @@ public class PerGameRecord extends AppCompatActivity {
 
     /**
      * @param savedInstanceState is given
-     * Implemented the functionality of the displays
+     *                           Implemented the functionality of the displays
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class PerGameRecord extends AppCompatActivity {
         Intent intent = getIntent();
         String gameName = intent.getStringExtra("gameName");
 
-        ArrayList<Object[]> lstScore = getScorePerGame(gameName);
+        ArrayList<Object[]> lstScore = new ScoreBoard().getScorePerGame(gameName);
         TextView title = findViewById(R.id.Title);
         title.setText(gameName + " top scores");
 

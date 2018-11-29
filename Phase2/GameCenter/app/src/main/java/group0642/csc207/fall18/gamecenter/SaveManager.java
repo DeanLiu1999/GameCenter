@@ -6,25 +6,31 @@ import java.io.*;
 
 class SaveManager {
 
+    SaveManager(){}
+
     /**
      * The log tag of this class.
      */
     private static final String TAG = "SaveManager";
 
     /**
-     * Check if the specified directory and file exist, creating any that do not yet exist.
+     * Serialize an Object to a file at the given file path, creating non-existent files and
+     * directories in the process. Will overwrite files with duplicate file name.
      *
-     * @param filePath the file path to be checked
+     * @param filePath the path to the file that will be written to
+     * @param o        the object that will be serialized and written to the file at filePath
      */
-    private static void check(String filePath) {
+    void writeToFile(String filePath, Object o) {
+        new SaveManager().check(filePath);
         try {
-            File f = new File(filePath);
-            f.getParentFile().mkdirs();
-            f.createNewFile();
+            ObjectOutputStream objectOutputStream =
+                    new ObjectOutputStream(new FileOutputStream(filePath));
+            objectOutputStream.writeObject(o);
+            objectOutputStream.close();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e(TAG, "Can not access file: " + e.toString());
+            Log.e(TAG, "File write failed: " + e.toString());
         }
     }
 
@@ -35,8 +41,8 @@ class SaveManager {
      * @return de-serialized object contained in the file specified by filePath;
      * null if file is empty
      */
-    static Object loadFromFile(String filePath) {
-        check(filePath);
+    Object loadFromFile(String filePath) {
+        new SaveManager().check(filePath);
         Object o = null;
         try {
             File f = new File(filePath);
@@ -57,23 +63,19 @@ class SaveManager {
     }
 
     /**
-     * Serialize an Object to a file at the given file path, creating non-existent files and
-     * directories in the process. Will overwrite files with duplicate file name.
+     * Check if the specified directory and file exist, creating any that do not yet exist.
      *
-     * @param filePath the path to the file that will be written to
-     * @param o        the object that will be serialized and written to the file at filePath
+     * @param filePath the file path to be checked
      */
-    static void writeToFile(String filePath, Object o) {
-        check(filePath);
+    private void check(String filePath) {
         try {
-            ObjectOutputStream objectOutputStream =
-                    new ObjectOutputStream(new FileOutputStream(filePath));
-            objectOutputStream.writeObject(o);
-            objectOutputStream.close();
+            File f = new File(filePath);
+            f.getParentFile().mkdirs();
+            f.createNewFile();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
+            Log.e(TAG, "Can not access file: " + e.toString());
         }
     }
 }

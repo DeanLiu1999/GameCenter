@@ -13,10 +13,12 @@ public class BankManagerTest {
         b = new BankManager();
         assertEquals((int) b.getBank(), 800);
         assertEquals((int) b.getWager(), 0);
+        assertFalse(b.gameOver());
+        assertTrue(b.wagerIsZero());
     }
 
     @Test
-    public void testAddWagerAndAllIn() {
+    public void testAddWagerAndAllInAndUndo() {
         b = new BankManager();
         b.addWager(500);
         assertEquals((int) b.getBank(), 300);
@@ -27,6 +29,10 @@ public class BankManagerTest {
         b.allIn();
         assertEquals((int) b.getBank(), 0);
         assertEquals((int) b.getWager(), 800);
+        b.undo();
+        assertTrue(b.wagerIsZero());
+        assertEquals((int) b.getBank(), 800);
+
     }
 
     @Test

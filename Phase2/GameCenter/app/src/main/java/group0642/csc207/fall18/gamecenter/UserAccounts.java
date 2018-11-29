@@ -12,24 +12,8 @@ class UserAccounts {
      */
     private static final String ua = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/useraccounts.txt";
 
-    /**
-     * Store the userId and password into a text file. If the userId already existed, return false.
-     *
-     * @param userId   userId
-     * @param password password
-     * @return return false if the userId already existed. Return true otherwise.
-     */
-    static boolean signUp(String userId, String password) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
-        if (userAccounts == null) {
-            userAccounts = new HashMap();
-        } else if (userAccounts.containsKey(userId)) {
-            return false;
-        }
-        userAccounts.put(userId, password);
-        SaveManager.writeToFile(ua, userAccounts);
-        return true;
-    }
+
+    UserAccounts(){}
 
     /**
      * return whether the password is correct for the given userId.
@@ -39,8 +23,8 @@ class UserAccounts {
      * @return return true if the the password is the same as the one stored in user accounts
      * for the given userId. Return false otherwise.
      */
-    static boolean signIn(String userId, String password) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
+    boolean signIn(String userId, String password) {
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
         if (userAccounts == null || !userAccounts.containsKey(userId)) {
             return false;
         }
@@ -54,13 +38,32 @@ class UserAccounts {
      * @param newPassword a new password
      * @return return false if the userId does not exist. Return true otherwise.
      */
-    static boolean resetPassword(String userId, String newPassword) {
-        HashMap userAccounts = (HashMap) SaveManager.loadFromFile(ua);
+    boolean resetPassword(String userId, String newPassword) {
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
         if (userAccounts == null || !userAccounts.containsKey(userId)) {
             return false;
         }
         userAccounts.replace(userId, newPassword);
-        SaveManager.writeToFile(ua, userAccounts);
+        new SaveManager().writeToFile(ua, userAccounts);
+        return true;
+    }
+
+    /**
+     * Store the userId and password into a text file. If the userId already existed, return false.
+     *
+     * @param userId   userId
+     * @param password password
+     * @return return false if the userId already existed. Return true otherwise.
+     */
+    boolean signUp(String userId, String password) {
+        HashMap userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
+        if (userAccounts == null) {
+            userAccounts = new HashMap();
+        } else if (userAccounts.containsKey(userId)) {
+            return false;
+        }
+        userAccounts.put(userId, password);
+        new SaveManager().writeToFile(ua, userAccounts);
         return true;
     }
 }

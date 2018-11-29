@@ -19,7 +19,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static group0642.csc207.fall18.gamecenter.ScoreBoard.updateScoreBoard;
 
 public class HangmanActivity extends AppCompatActivity {
 
@@ -172,7 +171,7 @@ public class HangmanActivity extends AppCompatActivity {
             save();
         } else if (answer.getHealth() == 0) {
             makeToastEntryText("Game Over");
-            updateScoreBoard(game, name, score);
+            new ScoreBoard().updateScoreBoard(game, name, score);
             saveButton.setEnabled(false);
             showScoreboard_1.setText("Show scoreboard");
         }

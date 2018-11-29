@@ -18,7 +18,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static group0642.csc207.fall18.gamecenter.ScoreBoard.updateScoreBoard;
 
 public class HangmanBattle extends AppCompatActivity {
 
@@ -213,7 +212,7 @@ public class HangmanBattle extends AppCompatActivity {
             } else {
                 makeToastEntryText("You win");
                 score = level;
-                updateScoreBoard(game, name, score);
+                new ScoreBoard().updateScoreBoard(game, name, score);
                 disableAllButton(lst, false);
                 result = true;
                 showScoreboard_1.setText("Show scoreboard");

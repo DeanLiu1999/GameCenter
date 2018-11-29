@@ -60,4 +60,11 @@ public class WordTest {
         assertEquals(w.getDisplay(), "y o u n g");
         assertTrue(w.win());
     }
+
+    @Test
+    public void testFinalDisplay() {
+        w = new Word("apple");
+        w.setFinalDisplay();
+        assertEquals(w.getDisplay(), "a p p l e");
+    }
 }
