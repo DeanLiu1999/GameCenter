@@ -11,12 +11,16 @@ class ScoreBoard {
     /**
      * Directory and file name for saving and writing scoreboard.
      */
-    private static final String sc = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/scoreboard.txt";
+    private static final String sc = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/scoreboard.ser";
 
+    private HashMap<String, HashMap<String, ArrayList<Integer>>> scoreBoard;
+
+    /**
+     * read the scoreBoard from file.
+     */
     public ScoreBoard() {
+        scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
     }
-
-    ;
 
     /**
      * Get the scores of all the games that the user played before.
@@ -25,8 +29,7 @@ class ScoreBoard {
      * @return return a HashMap where the key is the game name and value is the a
      * corresponding list of scores.
      */
-    private HashMap getScorePerUser(String userId) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
+    private HashMap<String, ArrayList<Integer>> getScorePerUser(String userId) {
         if (scoreBoard == null || !scoreBoard.containsKey(userId)) {
             return null;
         }
@@ -44,8 +47,8 @@ class ScoreBoard {
      * @param userId userId
      * @return return an ArrayList of all the scores of a particular user of the given game.
      */
-    ArrayList getScoreGameUser(String game, String userId) {
-        HashMap<String, ArrayList> userScoreBoard = getScorePerUser(userId);
+    ArrayList<Integer> getScoreGameUser(String game, String userId) {
+        HashMap<String, ArrayList<Integer>> userScoreBoard = getScorePerUser(userId);
         if (userScoreBoard == null) {
             return null;
         } else if (!userScoreBoard.containsKey(game)) {
@@ -64,7 +67,6 @@ class ScoreBoard {
      * If the user has the same score, they will be sorted alphabetically.
      */
     ArrayList<Object[]> getScorePerGame(String game) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
         if (scoreBoard == null) {
             return null;
         }
@@ -153,18 +155,17 @@ class ScoreBoard {
      * @param score  score
      */
     void updateScoreBoard(String game, String userId, int score) {
-        HashMap<String, HashMap<String, ArrayList>> scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
         if (scoreBoard == null) {
-            scoreBoard = new HashMap<String, HashMap<String, ArrayList>>();
+            scoreBoard = new HashMap<>();
         }
         if (!scoreBoard.containsKey(userId)) {
-            HashMap gameToScores = new HashMap();
-            ArrayList scores = new ArrayList();
+            HashMap<String, ArrayList<Integer>> gameToScores = new HashMap<>();
+            ArrayList<Integer> scores = new ArrayList<>();
             scores.add(score);
             gameToScores.put(game, scores);
             scoreBoard.put(userId, gameToScores);
         } else if (!scoreBoard.get(userId).containsKey(game)) {
-            ArrayList scores = new ArrayList();
+            ArrayList<Integer> scores = new ArrayList<>();
             scores.add(score);
             scoreBoard.get(userId).put(game, scores);
         } else {
