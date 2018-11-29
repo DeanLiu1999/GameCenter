@@ -67,4 +67,10 @@ public class WordTest {
         w.setFinalDisplay();
         assertEquals(w.getDisplay(), "a p p l e");
     }
+
+    @Test
+    public void testOutOfRangeInCheck() {
+        w = new Word("apple");
+        assertFalse(w.check(10, "p"));
+    }
 }

@@ -28,7 +28,7 @@ public class CardTest {
 
     @Test
     public void testSpecialCardData() {
-        c = new Card("A");
-        assertEquals(c.getData(), "A");
+        c = new Card("J");
+        assertEquals(c.getData(), "J");
     }
 }

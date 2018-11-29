@@ -13,10 +13,10 @@ import java.util.*;
  */
 public class BoardAndTileTest {
 
-    Board b;
+    private Board b;
 
     @Test
-    public void testSpecialTile() {
+    public void testSpecialTileSpecialSize() {
         Board.setGameSize(3);
         Tile.setImages(1);
         Tile t = new Tile(5);
@@ -24,6 +24,30 @@ public class BoardAndTileTest {
         assertEquals(t.getBackground(), R.drawable.ftile_8);
         assertEquals(t.getId(), 6);
         assertEquals(t.compareTo(t2), -2);
+    }
+
+    @Test
+    public void testSpecialTileRegularSize() {
+        Board.setGameSize(4);
+        Tile.setImages(1);
+        Tile t = new Tile(5);
+        assertEquals(t.getBackground(), R.drawable.ftile_7);
+    }
+
+    @Test
+    public void testImageCodeOutOfRange() {
+        Board.setGameSize(4);
+        Tile.setImages(100);
+        Tile t = new Tile(5);
+        assertEquals(t.getBackground(), R.drawable.elftile_7);
+    }
+
+    @Test
+    public void testNegativeImageCode() {
+        Board.setGameSize(4);
+        Tile.setImages(-100);
+        Tile t = new Tile(5);
+        assertEquals(t.getBackground(), R.drawable.tile_6);
     }
 
     @Test
@@ -52,7 +76,7 @@ public class BoardAndTileTest {
         Tile t1 = new Tile(1);
         Tile t2 = new Tile(2);
         Tile t3 = new Tile(3);
-        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        ArrayList<Tile> tiles = new ArrayList<>();
         tiles.add(t0);
         tiles.add(t1);
         tiles.add(t2);
