@@ -1,8 +1,10 @@
 package group0642.csc207.fall18.gamecenter;
 
+import java.io.Serializable;
+
 import static java.lang.Math.max;
 
-public class Battle {
+public class Battle implements Serializable {
 
     private Character computer;
 
