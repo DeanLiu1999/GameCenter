@@ -1,6 +1,8 @@
 package group0642.csc207.fall18.gamecenter;
 
-public class Character {
+import java.io.Serializable;
+
+public class Character  implements Serializable {
 
     private int health;
 
