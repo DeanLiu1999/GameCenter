@@ -20,6 +20,9 @@ class StateManager implements Serializable {
             R.drawable.club_8, R.drawable.club_9, R.drawable.club_10, R.drawable.club_j,
             R.drawable.club_q, R.drawable.club_k,};
 
+    /**
+     * Manage a new black jack game state.
+     */
     StateManager() {
         stageP = 1;
         stageC = 0;
@@ -27,39 +30,80 @@ class StateManager implements Serializable {
         this.computerCards = Arrays.copyOfRange(d.getCardsTop(), 6, 12);
     }
 
+    /**
+     * Return the current score for player.
+     *
+     * @return the player score
+     */
     int getPlayerScore() {
         return d.calculateScore(stageP, playerCards);
     }
 
+    /**
+     * Return the current score for computer.
+     *
+     * @return the computer score
+     */
     int getComputerScore() {
         return d.calculateScore(stageC, computerCards);
     }
 
+    /**
+     * Process a hit request.
+     */
     void hit() {
         if (stageP < 5)
             stageP += 1;
     }
 
+    /**
+     * Process a stand request.
+     */
     void stand() {
         ++stageC;
     }
 
+    /**
+     * Return stageC, 1 less than the number of cards displayed for computer.
+     *
+     * @return stageC
+     */
     int getStageC() {
         return stageC;
     }
 
+    /**
+     * Return stageP, 1 less than the number of cards displayed for player.
+     *
+     * @return stageP
+     */
     int getStageP() {
         return stageP;
     }
 
+    /**
+     * Return true iff the game ends
+     *
+     * @return gameEnd
+     */
     boolean gameEnd() {
         return stageC >= 1 || getPlayerScore() == 0;
     }
 
+    /**
+     * Return true iff the player wins
+     *
+     * @return playerWin
+     */
     boolean gameWin() {
         return getPlayerScore() >= getComputerScore();
     }
 
+    /**
+     * Return the computer cards type
+     *
+     * @return the computer cards in String
+     */
     String[] getComputerCardsStr() {
         String[] s = new String[6];
         for (int i = 0; i < 6; i++) {
@@ -68,6 +112,11 @@ class StateManager implements Serializable {
         return s;
     }
 
+    /**
+     * Return the player cards type
+     *
+     * @return the player cards in String
+     */
     String[] getPlayerCardsStr() {
         String[] s = new String[6];
         for (int i = 0; i < 6; i++) {
@@ -76,10 +125,22 @@ class StateManager implements Serializable {
         return s;
     }
 
+    /**
+     * Return true iff the game is at its initial stage
+     *
+     * @return true iff the game is at its initial stage
+     */
     boolean initialStage() {
         return getStageP() == 1 && getStageC() == 0;
     }
 
+
+    /**
+     * Return the cards id  based on cards type
+     *
+     * @param cardStr the cards type in String
+     * @return the cards id
+     */
     private Integer[] strToCardsId(String[] cardStr) {
         Integer[] cards = new Integer[6];
         for (int i = 0; i < 6; i++) {
@@ -104,10 +165,20 @@ class StateManager implements Serializable {
         return cards;
     }
 
+    /**
+     * Return the computer cards id
+     *
+     * @return the computer cards id
+     */
     Integer[] getComputerCardsId() {
         return strToCardsId(getComputerCardsStr());
     }
 
+    /**
+     * Return the player cards id
+     *
+     * @return the player cards id
+     */
     Integer[] getPlayerCardsId() {
         return strToCardsId(getPlayerCardsStr());
     }

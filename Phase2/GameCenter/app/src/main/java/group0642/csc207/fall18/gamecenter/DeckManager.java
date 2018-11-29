@@ -12,6 +12,9 @@ public class DeckManager implements Serializable {
             "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2",
             "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"};
 
+    /**
+     * A new deck manager with randomly shuffled cards.
+     */
     DeckManager() {
         Card[] cardsTemp = new Card[52];
         for (int i = 0; i < 52; i++) {
@@ -24,10 +27,22 @@ public class DeckManager implements Serializable {
         }
     }
 
+    /**
+     * Return the top 12 cards of the deck
+     *
+     * @return cardsTop
+     */
     Card[] getCardsTop() {
         return cardsTop;
     }
 
+    /**
+     * Return the score following blackjack rule
+     *
+     * @param stage the state corresponded to the player
+     * @param sixCards the potential cards
+     * @return the tile at (row, col)
+     */
     int calculateScore(int stage, Card[] sixCards) {
         int result = 0;
         int numAce = 0;
