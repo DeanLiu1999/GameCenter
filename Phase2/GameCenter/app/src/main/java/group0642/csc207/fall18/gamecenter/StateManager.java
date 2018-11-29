@@ -15,6 +15,11 @@ class StateManager implements Serializable {
 
     private DeckManager d = new DeckManager();
 
+    static final Integer[] cardsId = {R.drawable.club_a, R.drawable.club_2, R.drawable.club_3,
+            R.drawable.club_4, R.drawable.club_5, R.drawable.club_6, R.drawable.club_7,
+            R.drawable.club_8, R.drawable.club_9, R.drawable.club_10, R.drawable.club_j,
+            R.drawable.club_q, R.drawable.club_k,};
+
     StateManager() {
         stageP = 1;
         stageC = 0;
@@ -76,10 +81,6 @@ class StateManager implements Serializable {
     }
 
     private Integer[] strToCardsId(String[] cardStr) {
-        Integer[] cardsId = {R.drawable.club_a, R.drawable.club_2, R.drawable.club_3, R.drawable.club_4,
-                R.drawable.club_5, R.drawable.club_6, R.drawable.club_7, R.drawable.club_8,
-                R.drawable.club_9, R.drawable.club_10, R.drawable.club_j, R.drawable.club_q,
-                R.drawable.club_k,};
         Integer[] cards = new Integer[6];
         for (int i = 0; i < 6; i++) {
             switch (cardStr[i]) {
