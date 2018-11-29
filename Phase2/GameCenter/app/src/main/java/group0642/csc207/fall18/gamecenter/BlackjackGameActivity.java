@@ -22,6 +22,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for calling methods of other classes to do the game logic of Blackjack,
+ * and displaying the information got from other classes.
+ */
 public class BlackjackGameActivity extends AppCompatActivity {
 
     private static final String TAG = "GameActivity_Blackjack";
@@ -65,6 +69,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * set up the content view and buttons.
+     */
     private void setUp() {
         setContentView(R.layout.activity_blackjack_game);
         dealClickListener();
@@ -84,6 +91,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
         stand.setEnabled(false);
     }
 
+    /**
+     * enable/disable buttons according to whether it's in game or not
+     *
+     * @param inGame the current state is in game or not
+     */
     private void setInGameButton(boolean inGame) {
         deal.setEnabled(!inGame);
         hit.setEnabled(inGame);
@@ -93,6 +105,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         cashOut.setEnabled(!inGame);
     }
 
+    /**
+     * disable (almost) all buttons, including deal, hit, stand, add, allIn, cashOut
+     */
     private void disableAllButton() {
         deal.setEnabled(false);
         hit.setEnabled(false);
@@ -102,6 +117,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         cashOut.setEnabled(false);
     }
 
+    /**
+     * refresh money without animation.
+     */
     private void refreshMoney() {
         TextView wager = findViewById(R.id.textView21);
         String w = bankManager.getWager().toString();
@@ -111,6 +129,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
         bank.setText(b);
     }
 
+    /**
+     * refresh money with animation by adding the corresponding animators to the list of animations.
+     *
+     * @param animators a list of animators
+     */
     private void refreshMoney(ArrayList<Animator> animators) {
         final TextView wager = findViewById(R.id.textView21);
         final TextView bank = findViewById(R.id.bank2);
@@ -122,6 +145,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         fade(animators, wager, 0f, 1f);
     }
 
+    /**
+     * show image of the input image id (fade in, stay one second , fade out) by adding the
+     * corresponding animators to the list of animations.
+     *
+     * @param animators a list of animators
+     * @param id        the id of the image you want to show
+     */
     private void showImage(ArrayList<Animator> animators, int id) {
         toast = findViewById(R.id.toast);
         fade(animators, toast, 0f, 1f);
@@ -130,6 +160,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         fade(animators, toast, 1f, 0f);
     }
 
+    /**
+     * change the image before the animation start
+     *
+     * @param animator the animator that you want to change image on animation start
+     * @param iv       the ImageView you want to change
+     * @param imageId  the id of the image you want to change to
+     */
     private void changeImageOnAnimationStart(Animator animator, final ImageView iv, final int imageId) {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -141,6 +178,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * change the image at the end of the animation
+     *
+     * @param animator the animator that you want to change image on animation end
+     * @param iv       the ImageView you want to change
+     * @param imageId  the id of the image you want to change to
+     */
     private void changeImageOnAnimationEnd(Animator animator, final ImageView iv, final int imageId) {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -151,6 +195,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * change the text at the end of the animation
+     *
+     * @param animator the animator that you want to change text on animation end
+     * @param tv       the TextView you want to change
+     * @param text     the text you want to change to
+     */
     private void changeTextOnAnimationEnd(Animator animator, final TextView tv, final String text) {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -161,12 +212,30 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * fade in, stay or fade out according to the input value by adding the
+     * corresponding animators to the list of animations.
+     * 1f and 0f for fading out
+     * 1f and 1 f for staying the same
+     * 0f and 1f for fading in
+     *
+     * @param animators a list of animators
+     * @param iv        the ImageView you want to change
+     * @param start     value1
+     * @param end       value2
+     */
     private void fade(ArrayList<Animator> animators, View iv, float start, float end) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "alpha", start, end);
         animator.setDuration(d);
         animators.add(animator);
     }
 
+    /**
+     * display game over by adding the corresponding animators to the list of animations.
+     * disable all buttons except save and cashOut, which text will be change to "leave".
+     *
+     * @param animators a list of animators
+     */
     private void setGameOver(ArrayList<Animator> animators) {
         gameOver = findViewById(R.id.gameover);
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(gameOver, "alpha", 0f, 1f);
@@ -190,7 +259,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * check whether the whole game is finished or not by calling method from class BankManager.
+     * set game over if the game is over , else set the buttons according to the current state.
+     *
+     * @param animators a list of animators
+     * @param inGame    whether the it's in a single game or not
+     */
     private void gameFinish(ArrayList<Animator> animators, final boolean inGame) {
         if (bankManager.gameOver()) {
             setGameOver(animators);
@@ -206,6 +281,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * refresh score with animation by adding the corresponding animators to the list of animations.
+     *
+     * @param animators a list of animators
+     * @param Id        the id of the ImageView of the score
+     * @param s         score
+     */
     private void refreshScore(ArrayList<Animator> animators, int Id, final int s) {
         final int[] scoreImageId = {R.drawable.s00, R.drawable.s01, R.drawable.s02, R.drawable.s03, R.drawable.s04,
                 R.drawable.s05, R.drawable.s06, R.drawable.s07, R.drawable.s08, R.drawable.s09, R.drawable.s10,
@@ -217,12 +299,27 @@ public class BlackjackGameActivity extends AppCompatActivity {
         fade(animators, score, 0f, 1f);
     }
 
+    /**
+     * play the list of animators
+     *
+     * @param animators a list of animators
+     */
     private void playAnimations(ArrayList<Animator> animators) {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(animators);
         animatorSet.start();
     }
 
+    /**
+     * move card to the input position by adding the corresponding animators to the
+     * list of animations.
+     *
+     * @param animators a list of animators
+     * @param viewId    the id of the ImageView of the card
+     * @param imageId   the id of the image of the card
+     * @param x         x coordinate
+     * @param y         y coordinate
+     */
     private void moveCard(ArrayList<Animator> animators, int viewId, int imageId, float x, float y) {
         ImageView card = findViewById(viewId);
         card.setImageResource(imageId);
@@ -234,6 +331,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         animators.add(animator2);
     }
 
+    /**
+     * enable the input buttons at the end of the animation
+     *
+     * @param animator the animator that you want to enable button on animation end
+     * @param button1  button1
+     * @param button2  button2
+     */
     private void enableButtonOnAnimationEnd(Animator animator, final Button button1, final Button button2) {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -245,6 +349,15 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * fix a animation bug. There is a strange bug that will cause the card(a ImageView) flying from
+     * the top instead of coming out of the deck as expected. This bug only happens to the first
+     * animation after resetting the content view and the bug is not caused by any of my methods. So
+     * by adding this method, which literally displays nothing, to the first index of the list of
+     * animators, the actual animations I want to display won't be affected by this bug.
+     *
+     * @param animators a list of animators
+     */
     private void animationBugFixer(ArrayList<Animator> animators) {
         ImageView deck = findViewById(R.id.deck15);
         deck.setVisibility(View.INVISIBLE);
@@ -252,6 +365,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         animators.add(animator0);
     }
 
+    /**
+     * save the game
+     */
     private void save() {
         String saveFileName = name + "_" + game + ".ser";
         saveToFile(stateManager, "stateManager" + saveFileName);
@@ -259,6 +375,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         makeToastText("Game Saved");
     }
 
+    /**
+     * deal the cards
+     */
     private void deal() {
         if (bankManager.wagerIsZero()) {
             makeToastText("Please Add Wager Before Deal");
@@ -282,7 +401,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * load the game
+     */
     private void loadGame() {
         String FileName = name + "_" + game + ".ser";
         loadFromFile("stateManager" + FileName, "bankManager" + FileName);
@@ -312,6 +433,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * save stateManager to a file
+     *
+     * @param s        stateManager
+     * @param fileName the filename you want to save to
+     */
     public void saveToFile(StateManager s, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -323,6 +450,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * save bankManager to a file
+     *
+     * @param b        stateManager
+     * @param fileName the filename you want to save to
+     */
     public void saveToFile(BankManager b, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -334,6 +467,12 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * load stateManager and bankManager from file
+     *
+     * @param fileName1 the file that store stateManager
+     * @param fileName2 the file that store bankManager
+     */
     private void loadFromFile(String fileName1, String fileName2) {
 
         try {
@@ -358,7 +497,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * when the deal button is clicked, deal the cards by calling methods of StateManager.
+     * Then play a set of animations.
+     */
     private void dealClickListener() {
         deal = findViewById(R.id.deal);
         deal.setOnClickListener(new View.OnClickListener() {
@@ -370,7 +512,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * when the undo button is clicked, reset the board and give back the player's money by
+     * calling the methods of BankManager.Then play the corresponding set of animations.
+     */
     private void undoClickListener() {
         undo = findViewById(R.id.undo);
         undo.setOnClickListener(new View.OnClickListener() {
@@ -395,6 +540,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the save button is clicked, save the game.
+     */
     private void saveClickListener() {
         Button save = findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
@@ -405,7 +553,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * when the hit button is clicked, draw a card by calling the methods of StateManager.
+     * Then playing the corresponding set of animations. Auto-save if a single game ends.
+     */
     private void hitClickListener() {
         hit = findViewById(R.id.hit);
         hit.setOnClickListener(new View.OnClickListener() {
@@ -433,6 +584,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the stand button is clicked, computer draws cards by calling the methods of StateManager.
+     * Then play the corresponding set of animations. Auto-save if a single game ends.
+     */
     private void standClickListener() {
         stand = findViewById(R.id.stand);
         stand.setOnClickListener(new View.OnClickListener() {
@@ -470,6 +625,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the add button is clicked, add the input amount of money from bank to wager by calling
+     * methods of BankManager.Then play the corresponding set of animations.
+     */
     private void addClickListener() {
         add = findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
@@ -494,7 +653,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * when the add button is clicked, add all money from bank to wager by calling
+     * methods of BankManager.Then play the corresponding set of animations.
+     */
     private void allinClickListener() {
         allin = findViewById(R.id.allin);
         allin.setOnClickListener(new View.OnClickListener() {
@@ -512,6 +674,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the add button is clicked, end the game with the current amount of money in the bank as
+     * score and then show scoreboard. If the amount of money is zero, switch to starting activity
+     * of Blackjack instead.
+     */
     private void cashOutClickListener() {
         cashOut = findViewById(R.id.cashout);
         cashOut.setOnClickListener(new View.OnClickListener() {
@@ -527,6 +694,9 @@ public class BlackjackGameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * switch to starting activity of Blackjack
+     */
     private void switchToStart() {
         Intent startOver = new Intent(BlackjackGameActivity.this, StartingActivity.class);
         startOver.putExtra("name", name);
@@ -534,6 +704,11 @@ public class BlackjackGameActivity extends AppCompatActivity {
         BlackjackGameActivity.this.startActivity(startOver);
     }
 
+    /**
+     * switch to ending score
+     *
+     * @param score the score of the game
+     */
     private void switchToScore(final int score) {
         new ScoreBoard().updateScoreBoard(game, name, score);
         Intent goToScore = new Intent(BlackjackGameActivity.this, EndingScore.class);
@@ -546,9 +721,15 @@ public class BlackjackGameActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        // Auto-save when the app is closed during the game.
         save();
     }
 
+    /**
+     * make toast
+     *
+     * @param text text you want to toast
+     */
     private void makeToastText(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
