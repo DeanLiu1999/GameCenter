@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 public class HangmanModes extends AppCompatActivity {
-    private Boolean loadOrNot;
+    private boolean loadOrNot;
     private String name;
     private String game;
 
@@ -35,7 +35,11 @@ public class HangmanModes extends AppCompatActivity {
         launchNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToBattle(name, game);
+                if (loadOrNot) {
+                    loadBattle(name, game);
+                } else {
+                    switchToBattle(name, game);
+                }
             }
         });
     }
@@ -80,6 +84,23 @@ public class HangmanModes extends AppCompatActivity {
             goToInfinity.putExtra("game", t);
             HangmanActivity.load = loadOrNot;
             HangmanModes.this.startActivity(goToInfinity);
+        } else {
+            Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void loadBattle(String s, String t) {
+        String FileName = name + "_" + game + "Battle" + ".ser";
+        if (loadFromFile("answer" + FileName) != null &&
+                loadFromFile("score" + FileName) != null &&
+                loadFromFile("entered" + FileName) != null &&
+                loadFromFile("battle" + FileName) != null) {
+            Intent goToBattle = new Intent(this, HangmanBattle.class);
+            goToBattle.putExtra("name", s);
+            goToBattle.putExtra("game", t);
+            HangmanBattle.load = loadOrNot;
+            HangmanModes.this.startActivity(goToBattle);
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
         }
