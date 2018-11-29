@@ -22,7 +22,7 @@ public class Preface extends AppCompatActivity {
         slideTilesClickListener(nameCopy);
         blackjackClickListener(nameCopy);
         hangmanClickListener(nameCopy);
-        perGameListener();
+        perGameListener(nameCopy);
         perPerson(nameCopy);
     }
 
@@ -72,14 +72,12 @@ public class Preface extends AppCompatActivity {
     /**
      * Proceed to scoreboard per game
      */
-    private void perGameListener() {
+    private void perGameListener(final String s) {
         final Button perGame = findViewById(R.id.perGame);
         perGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent accessScorePerGame = new Intent(Preface.this,
-                        GameScoreActivity.class);
-                Preface.this.startActivity(accessScorePerGame);
+                switchToScore(s, 1);
             }
         });
 
@@ -94,11 +92,16 @@ public class Preface extends AppCompatActivity {
         perPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent accessScorePerPerson = new Intent(Preface.this,
-                        PersonalScoreActivity.class);
-                accessScorePerPerson.putExtra("name", s);
-                Preface.this.startActivity(accessScorePerPerson);
+                switchToScore(s, 2);
             }
         });
+    }
+
+    void switchToScore(final String s, final int i) {
+        Intent accessScore = new Intent(Preface.this,
+                ScorePerGame.class);
+        accessScore.putExtra("name", s);
+        accessScore.putExtra("mode", i);
+        Preface.this.startActivity(accessScore);
     }
 }
