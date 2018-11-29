@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 public class UserAccountsTest {
     @Test
-    public void testResetPassword(){
+    public void testUserAccounts(){
         SaveManager s = new SaveManager();
         s.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/useraccounts.ser", null);
         UserAccounts u = new UserAccounts();
