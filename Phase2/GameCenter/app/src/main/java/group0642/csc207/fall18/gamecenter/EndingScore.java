@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 public class EndingScore extends AppCompatActivity {
+    private String user, gameCall;
 
     /**
      * @param savedInstanceState is given
@@ -21,15 +22,15 @@ public class EndingScore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ending_score);
         Intent intent = getIntent();
-        String user = intent.getStringExtra("name");
-        String gameCall = intent.getStringExtra("game");
+        user = intent.getStringExtra("name");
+        gameCall = intent.getStringExtra("game");
         int score = intent.getIntExtra("score", 0);
 
         ArrayList<Object[]> userRanks = new ScoreBoard().getAfterGameScore(gameCall, user, score);
         int mark = marker(userRanks, score, user);
 
-        anotherGameButtonListener(user);
-        showButtonListener(gameCall);
+        anotherGameButtonListener();
+        showButtonListener();
         exitButtonListener();
         TextView title = findViewById(R.id.title_4);
         title.setText(String.format("%s\'s Score", user));
@@ -37,16 +38,17 @@ public class EndingScore extends AppCompatActivity {
     }
 
     /**
-     * @param game is the name of a game
-     *             Show the PerGameRecord page.
+     * Show the PerGameRecord page.
      */
-    private void showButtonListener(final String game) {
+    private void showButtonListener() {
         Button showScore = findViewById(R.id.showScoreboard);
         showScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent moreScore = new Intent(EndingScore.this, PerGameRecord.class);
-                moreScore.putExtra("gameName", game);
+                Intent moreScore = new Intent(EndingScore.this, ScoreDisplay.class);
+                moreScore.putExtra("gameName_1", gameCall);
+                moreScore.putExtra("userId", user);
+                ScoreDisplay.scoreboardMode = 1;
                 EndingScore.this.startActivity(moreScore);
             }
         });
@@ -67,17 +69,16 @@ public class EndingScore extends AppCompatActivity {
     }
 
     /**
-     * @param name This is where users can go back to the interface that allows them to choose games. It shows
-     *             the Preface page
+     *
      */
-    private void anotherGameButtonListener(final String name) {
+    private void anotherGameButtonListener() {
 
         final Button anotherGame = findViewById(R.id.newGame);
         anotherGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent back = new Intent(EndingScore.this, Preface.class);
-                back.putExtra("name", name);
+                back.putExtra("name", user);
                 EndingScore.this.startActivity(back);
             }
         });

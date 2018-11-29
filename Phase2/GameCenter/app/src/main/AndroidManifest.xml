@@ -24,16 +24,12 @@
         <activity android:name=".Register" />
         <activity android:name=".PasswordReset" />
         <activity android:name=".Preface" />
-        <activity android:name=".PersonalScoreActivity" />
-        <activity android:name=".GameScoreActivity" />
-        <activity android:name=".PerPersonRecord" />
-        <activity android:name=".PerGameRecord" />
+        <activity android:name=".ScorePerGame" />
+        <activity android:name=".ScoreDisplay" />
         <activity android:name=".BlackjackGameActivity" />
         <activity android:name=".HangmanActivity" />
         <activity android:name=".EndingScore" />
-        <activity android:name=".LoadHangman" />
         <activity android:name=".HangmanModes" />
-        <activity android:name=".LoadBlackjack" />
         <activity android:name=".HangmanBattle"></activity>
     </application>
 
