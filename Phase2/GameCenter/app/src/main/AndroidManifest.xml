@@ -17,8 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameActivity" />
-        <activity android:name=".DifficultySetting" />
-        <activity android:name=".BackgroundSetting" />
+        <activity android:name=".SlidingTileSetting" />
         <activity android:name=".StartingActivity" />
         <activity android:name=".LoadActivity" />
         <activity android:name=".Register" />
