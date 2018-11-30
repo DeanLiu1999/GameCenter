@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 
 public class SlidingTileSetting extends AppCompatActivity {
     private BoardManager boardManager;
+    private SaveManagerNew saveManager;
     private static final String[] paths = {"4 * 4", "3 * 3", "5 * 5"};
     private static final String[] paths2 = {"number", "flower", "deathwing", "illidan", "jaina",
             "leader", "malfurion", "medivh", "thrall", "tyrande", "velen", "arthas", "car", "elf"};
@@ -24,10 +25,15 @@ public class SlidingTileSetting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sliding_tile_setting);
+
         Intent i = getIntent();
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
 
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
 
         boardManager = new BoardManager();
         int size = 4;
@@ -43,7 +49,8 @@ public class SlidingTileSetting extends AppCompatActivity {
                 String max = maxUndo.getText().toString();
                 boardManager.setUndo(Integer.parseInt(max));
                 boardManager.refresh_board_manager();
-                saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
+                saveManager.newObject(boardManager);
+                saveManager.saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
                 switchToGame(name, game);
             }
         });
@@ -88,26 +95,24 @@ public class SlidingTileSetting extends AppCompatActivity {
 
     }
 
+    /**
+     * Return ArrayAdapter for spinner.
+     *
+     * @param path the choices on spinner
+     * @return ArrayAdapter initialized with path
+     */
     public ArrayAdapter<String> createAdapter(String[] path){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, path);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapter;
     }
+
     /**
-     * Save the board manager to fileName.
+     * Switch to the GameActivity to play sliding tiles.
      *
-     * @param fileName the name of the file
+     * @param s the username of the current active user
+     * @param t the currently selected game
      */
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(boardManager);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
     private void switchToGame(String s, String t) {
         Intent tmp = new Intent(this, GameActivity.class);
         tmp.putExtra("name", s);

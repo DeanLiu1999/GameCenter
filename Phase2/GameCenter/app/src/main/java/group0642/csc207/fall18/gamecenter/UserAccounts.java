@@ -8,17 +8,27 @@ import java.util.HashMap;
  */
 class UserAccounts {
     /**
-     * Directory and file name for saving and writing user accounts.
+     * The name of the file that stores this UserAccounts.
      */
-    private static final String ua = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/useraccounts.ser";
-
+    private final String userAccountsFileName = "user_accounts.ser";
+    /**
+     * The save manager.
+     */
+    private SaveManagerNew saveManager;
+    /**
+     * HashMap mapping users their respective passwords.
+     */
     private HashMap<String, String> userAccounts;
 
     /**
-     * read user accounts from file
+     * A UserAccounts containing all locally registered users and their corresponding passwords.
      */
     UserAccounts() {
-        userAccounts = (HashMap) new SaveManager().loadFromFile(ua);
+        String userAccountsDir = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
+        saveManager = new SaveManagerNew.Builder()
+                .saveDirectory(userAccountsDir)
+                .build();
+        userAccounts = (HashMap) saveManager.loadFromFile(userAccountsFileName);
     }
 
     /**
@@ -48,7 +58,8 @@ class UserAccounts {
             return false;
         }
         userAccounts.replace(userId, newPassword);
-        new SaveManager().writeToFile(ua, userAccounts);
+        saveManager.newObject(userAccounts);
+        saveManager.saveToFile(userAccountsFileName);
         return true;
     }
 
@@ -66,7 +77,8 @@ class UserAccounts {
             return false;
         }
         userAccounts.put(userId, password);
-        new SaveManager().writeToFile(ua, userAccounts);
+        saveManager.newObject(userAccounts);
+        saveManager.saveToFile(userAccountsFileName);
         return true;
     }
 }
