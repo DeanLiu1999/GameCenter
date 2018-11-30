@@ -8,6 +8,8 @@ import android.widget.Button;
 
 public class Preface extends AppCompatActivity {
 
+    // the name of the user
+    private String nameCopy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,36 +18,41 @@ public class Preface extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        final String nameId = intent.getStringExtra("name");
-        String nameCopy = nameId;
+        nameCopy = intent.getStringExtra("name");
 
-        slideTilesClickListener(nameCopy);
-        blackjackClickListener(nameCopy);
-        hangmanClickListener(nameCopy);
-        perGameListener(nameCopy);
-        perPerson(nameCopy);
+        slideTilesClickListener();
+        blackjackClickListener();
+        hangmanClickListener();
+        perGameListener();
+        perPerson();
     }
 
-    private void blackjackClickListener(final String names) {
+    /**
+     * the user switch to the game of blackjack by pressing this button
+     */
+    private void blackjackClickListener() {
         Button game1 = findViewById(R.id.blackjack);
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent playGame1 = new Intent(Preface.this, StartingActivity.class);
-                playGame1.putExtra("name", names);
+                playGame1.putExtra("name", nameCopy);
                 playGame1.putExtra("game", "Blackjack");
                 Preface.this.startActivity(playGame1);
             }
         });
     }
 
-    private void hangmanClickListener(final String names) {
+    /**
+     * the user switch to the game of hangman by pressing this button
+     */
+    private void hangmanClickListener() {
         Button game1 = findViewById(R.id.hangman);
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent playGame1 = new Intent(Preface.this, StartingActivity.class);
-                playGame1.putExtra("name", names);
+                playGame1.putExtra("name", nameCopy);
                 playGame1.putExtra("game", "Hangman");
                 Preface.this.startActivity(playGame1);
             }
@@ -53,16 +60,15 @@ public class Preface extends AppCompatActivity {
     }
 
     /**
-     * @param names for username
-     *              Proceed to game 1: Sliding Tiles
+     * Proceed to game 1: Sliding Tiles
      */
-    private void slideTilesClickListener(final String names) {
+    private void slideTilesClickListener() {
         Button game1 = findViewById(R.id.slidingtiles);
         game1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent playGame1 = new Intent(Preface.this, StartingActivity.class);
-                playGame1.putExtra("name", names);
+                playGame1.putExtra("name", nameCopy);
                 playGame1.putExtra("game", "Sliding Tiles");
                 Preface.this.startActivity(playGame1);
             }
@@ -72,35 +78,38 @@ public class Preface extends AppCompatActivity {
     /**
      * Proceed to scoreboard per game
      */
-    private void perGameListener(final String s) {
+    private void perGameListener() {
         final Button perGame = findViewById(R.id.perGame);
         perGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToScore(s, 1);
+                switchToScore(1);
             }
         });
 
     }
 
     /**
-     * @param s for name
-     *          Proceed to scoreboard per person
+     * Proceed to scoreboard per person
      */
-    private void perPerson(final String s) {
+    private void perPerson() {
         final Button perPerson = findViewById(R.id.perPerson);
         perPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchToScore(s, 2);
+                switchToScore(2);
             }
         });
     }
 
-    void switchToScore(final String s, final int i) {
+    /**
+     * @param i where 1 means score per game and 2 means score per person
+     *          it switches to the activity that display all the scores
+     */
+    void switchToScore(final int i) {
         Intent accessScore = new Intent(Preface.this,
                 ScorePerGame.class);
-        accessScore.putExtra("name", s);
+        accessScore.putExtra("name", nameCopy);
         accessScore.putExtra("mode", i);
         Preface.this.startActivity(accessScore);
     }
