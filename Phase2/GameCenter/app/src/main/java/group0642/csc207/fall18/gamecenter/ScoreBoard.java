@@ -1,5 +1,7 @@
 package group0642.csc207.fall18.gamecenter;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,15 +13,25 @@ class ScoreBoard {
     /**
      * Directory and file name for saving and writing scoreboard.
      */
-    private static final String sc = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/scoreboard.ser";
-
+    private final String scoreboardFileName = "scoreboard.ser";
+    /**
+     * The save manager.
+     */
+    private SaveManagerNew saveManager;
+    /**
+     * HashMap mapping users to all of their game-specific scores.
+     */
     private HashMap<String, HashMap<String, ArrayList<Integer>>> scoreBoard;
 
     /**
-     * read the scoreBoard from file.
+     * A ScoreBoard containing all the game-specific scores for all users.
      */
     public ScoreBoard() {
-        scoreBoard = (HashMap) new SaveManager().loadFromFile(sc);
+        String scoreboardDir = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
+        saveManager = new SaveManagerNew.Builder()
+                .saveDirectory(scoreboardDir)
+                .build();
+        scoreBoard = (HashMap) saveManager.loadFromFile(scoreboardFileName);
     }
 
     /**
@@ -171,6 +183,7 @@ class ScoreBoard {
         } else {
             scoreBoard.get(userId).get(game).add(score);
         }
-        new SaveManager().writeToFile(sc, scoreBoard);
+        saveManager.newObject(scoreBoard);
+        saveManager.saveToFile(scoreboardFileName);
     }
 }

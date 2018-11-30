@@ -43,11 +43,18 @@ public class GameActivity extends AppCompatActivity implements Observer {
     /**
      * The log tag of this class.
      */
-    private static final String TAG = "GameActivity_SlidingTiles";
+    private final String tag = "GameActivity_SlidingTiles";
     /**
      * The board manager.
      */
     private BoardManager boardManager;
+
+    /**
+     *
+     */
+    // TODO
+    private SaveManagerNew saveManager;
+    private String saveFileName;
     /**
      * The buttons for undo and scoreboard.
      */
@@ -67,16 +74,19 @@ public class GameActivity extends AppCompatActivity implements Observer {
      */
     private GestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
-    /**
+    /*
      * Tracker and preset interval for auto-saving.
      */
+    /*
+    // TODO
     private static int autoSaveTracker;
     private static final int AUTO_SAVE_INTERVAL = 5;
+    */
     /**
      * Name of current game, username of current active user, and score.
      */
-    private static String game;
     private static String name;
+    private static String game;
     private static int s;
 
     /**
@@ -117,18 +127,25 @@ public class GameActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * @param savedInstanceState
+     * @param savedInstanceState the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(TEMP_SAVE_FILENAME);
-        createTileButtons(this);
-        setContentView(R.layout.activity_main);
 
         Intent i = getIntent();
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
+
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+        boardManager = (BoardManager) saveManager.loadFromFile(TEMP_SAVE_FILENAME);
+        saveFileName = "save_file_" + Board.NUM_ROWS + ".ser";
+
+        createTileButtons(this);
+        setContentView(R.layout.activity_main);
 
         undo = findViewById(R.id.undo);
         scoreboard = findViewById(R.id.scoreboard);
@@ -136,7 +153,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
 
         addSaveButtonListener(name, game);
         // Give an initial value to begin tracking the interval for auto-saving.
-        autoSaveTracker = 0;
+        // TODO autoSaveTracker = 0;
 
         showImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +195,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
         undo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Auto-save tracker is reset on undo.
-                autoSaveTracker = -1;
+                saveManager.resetAutoSave();
                 boardManager.undoStep();
             }
         });
@@ -242,9 +259,8 @@ public class GameActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String saveFileName = user + "_" + game + "_" + Board.NUM_ROWS + ".ser";
-                saveToFile(saveFileName);
-                saveToFile(TEMP_SAVE_FILENAME);
+                saveManager.saveToFile(saveFileName);
+                saveManager.saveToFile(TEMP_SAVE_FILENAME);
                 makeToastSavedText();
             }
         });
@@ -257,14 +273,16 @@ public class GameActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        saveToFile(TEMP_SAVE_FILENAME);
+        saveManager.saveToFile(TEMP_SAVE_FILENAME);
     }
 
-    /**
+    /*
      * Load the board manager from fileName.
      *
      * @param fileName the name of the file
      */
+    // TODO
+    /*
     private void loadFromFile(String fileName) {
 
         try {
@@ -282,12 +300,15 @@ public class GameActivity extends AppCompatActivity implements Observer {
             Log.e(TAG, "File contained unexpected data type: " + e.toString());
         }
     }
+    */
 
-    /**
+    /*
      * Save the board manager to fileName.
      *
      * @param fileName the name of the file
      */
+    // TODO
+    /*
     public void saveToFile(String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -298,6 +319,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
             Log.e(TAG, "File write failed: " + e.toString());
         }
     }
+    */
 
     /**
      * Add a new score to the ScoreBoard.
@@ -309,19 +331,22 @@ public class GameActivity extends AppCompatActivity implements Observer {
         new ScoreBoard().updateScoreBoard(GameActivity.game, GameActivity.name, score);
     }
 
-    /**
+    /*
      * Tick autoSaveTracker forward and save the game at predefined AUTO_SAVE_INTERVAL.
      */
+    // TODO
+    /*
     private void tickAutoSave() {
-        Log.d(TAG, Integer.toString(autoSaveTracker));
+        Log.d(tag, Integer.toString(autoSaveTracker));
         if (!(++autoSaveTracker < AUTO_SAVE_INTERVAL)) {
-            Log.d(TAG, "Auto-saving");
+            Log.d(tag, "Auto-saving");
             String saveFileName = name + "_" + game + "_" + Board.NUM_ROWS + ".ser";
             saveToFile(saveFileName);
             makeToastSavedText();
             autoSaveTracker = 0;
         }
     }
+    */
 
     /**
      * Display that a game was saved successfully.
@@ -333,18 +358,17 @@ public class GameActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        String saveFileName = name + "_" + game + "_" + Board.NUM_ROWS + ".ser";
-        saveToFile(saveFileName);
+        saveManager.saveToFile(saveFileName);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        Log.d(TAG, "State updated");
+        Log.d(tag, "State updated");
         if (boardManager.puzzleSolved()) {
             undo.setEnabled(false);
             scoreboard.setEnabled(true);
         }
-        tickAutoSave();
+        saveManager.tickAutoSave(saveFileName);
         display();
     }
 }
