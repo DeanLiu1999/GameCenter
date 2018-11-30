@@ -3,16 +3,12 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class SlidingTileSetting extends AppCompatActivity {
 
@@ -51,9 +47,8 @@ public class SlidingTileSetting extends AppCompatActivity {
 
         final EditText maxUndo = findViewById(R.id.maxundo);
         final Button go = findViewById(R.id.gobutton);
-        go.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick (View v){
+        go.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 String max = maxUndo.getText().toString();
                 boardManager.setUndo(Integer.parseInt(max));
                 boardManager.refresh_board_manager();
@@ -109,7 +104,7 @@ public class SlidingTileSetting extends AppCompatActivity {
      * @param path the choices on spinner
      * @return ArrayAdapter initialized with path
      */
-    public ArrayAdapter<String> createAdapter(String[] path){
+    public ArrayAdapter<String> createAdapter(String[] path) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, path);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapter;
