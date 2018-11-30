@@ -21,9 +21,10 @@ We have three games now: SlidingTile, BlackJack and Hangman.
 SlidingTile is the same as Phase 1, except we now avoid unsolvable boards when user starts new game.
 
 We implement BlackJack using the regular rule. The user can add wagers and then press Deal to start
-a new game. The user can save the current game state and load it later. Moreover, the user can undo
-in order to get the wagers back when his bank value is less than 1000. The user can checkout to
-record their current bank value as the score in ScoreBoard.
+a new game. The user can save the current game state and load it later.The game will also be
+automatically saved at save points and at the moment that the app is closed during the game.
+Moreover, the user can undo in order to get the wagers back before the user make any move after
+dealing. The user can cash out to record their current bank value as the score in ScoreBoard.
 
 Hangman has two modes: the standard mode and the infinite mode. In standard mode the user get 10 
 lives and the regular hangman rule applied. In infinite mode the user can keep guessing the next
