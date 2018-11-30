@@ -52,9 +52,13 @@ public class HangmanBattle extends AppCompatActivity {
     private int[] monsters;
     private int[] info = battle.getInfo();
     private int charHlth;
+    //the health of the charater
     private int monHlth;
+    // the health of the monster
     private int monDmg;
+    // the attack damage of the monster
     private int charDmg;
+    // the attack damage of the character
     private int level = 0;
     private int score = 0;
     private boolean result = false;
@@ -110,6 +114,9 @@ public class HangmanBattle extends AppCompatActivity {
         }
     }
 
+    /**
+     * the action of the save button happens here
+     */
     public void setSaveButton() {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +126,10 @@ public class HangmanBattle extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the game has ended the user is able to see the scoreboard when it has not ended, the
+     * user can leave this activity and proceed to the starting activity of this game
+     */
     void setShowScoreboard_1Listener() {
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +144,9 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
+    /**
+     * This is the intent to switch to scoreboard
+     */
     public void switchToScore() {
         Intent goToScore = new Intent(HangmanBattle.this, EndingScore.class);
         goToScore.putExtra("name", name);
@@ -141,6 +155,9 @@ public class HangmanBattle extends AppCompatActivity {
         HangmanBattle.this.startActivity(goToScore);
     }
 
+    /**
+     * This is the intent to switch back to the starting activity
+     */
     public void switchToStart() {
         Intent goToScore = new Intent(HangmanBattle.this, StartingActivity.class);
         goToScore.putExtra("name", name);
@@ -148,6 +165,10 @@ public class HangmanBattle extends AppCompatActivity {
         HangmanBattle.this.startActivity(goToScore);
     }
 
+    /**
+     * Each of the 26 letter button corresponds to the same letter in the alphabet. This method is
+     * to make sure of when the button is pressed the correct letter is entered.
+     */
     public void buttonListActions() {
         int i = 0;
         while (i < entries.length) {
@@ -156,6 +177,11 @@ public class HangmanBattle extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param b     is the button corresponding to the letter
+     * @param entry is the letter entered.
+     *              this method enter the correct letter when the corresponding button is pressed
+     */
     public void buttonListListener(final Button b, final char entry) {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +191,18 @@ public class HangmanBattle extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * @param button is the button corresponding to the letter
+     * @param entry  is the letter entered.
+     *               this method determines what happens when the user entered a letter:
+     *               if the user is incorrect, the character's health decreases by the amount of the
+     *               monster's attack damage; otherwise, the display will show his guess and the
+     *               monster's health will decrease by the attack damage from the character. Also,
+     *               if the user completed the whole word, a new word will be generated, and the
+     *               user enters the next round automatically. If the user loses the game or
+     *               completes the entire 6 levels of games, he/she will be able to see his score
+     *               and the game would end there.
+     */
     public void letterEntryListener(Button button, char entry) {
         entered.add(entry);
         String str = String.valueOf(entry);
@@ -193,6 +230,10 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
+    /**
+     * This is used to determine the ending of each round and whether the ending of this round
+     * results in the ending of the entire game
+     */
     private void endingDetermination() {
         answer.setFinalDisplay();
         if (charHlth > 0) {
@@ -231,6 +272,12 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
+    /**
+     * @param enabled for whether the buttons are enabled or not
+     *                this method enable or disable all the buttons used to enter letters.
+     *                If the parameter is true, all buttons are enabled; otherwise, they are all
+     *                disabled.
+     */
     public void disableAllButton(boolean enabled) {
         for (Button aLst : entries) {
             aLst.setEnabled(enabled);
@@ -238,17 +285,29 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
+    /**
+     * @return the word from the word list from vocabulary_list
+     */
     public String chooseTheAnswer() {
         int index = randomGenerator.nextInt(wordList.size());
         return wordList.get(index);
     }
 
+    /**
+     * @param i   is the current level
+     * @param lst is the list of the pictures
+     *            update the picture of the monster of current level with the corresponding picture
+     *            and display the picture of the character as well
+     */
     void updatePicture(int i, int[] lst) {
         monster.setImageResource(lst[i]);
         character.setImageResource(R.drawable.hero);
 
     }
 
+    /**
+     * update and display the character and monster's health and damage
+     */
     void update() {
         info = battle.getInfo();
         charHlth = info[2];
@@ -263,10 +322,18 @@ public class HangmanBattle extends AppCompatActivity {
         monsterHealth.setText(String.valueOf(monHlth));
     }
 
+    /**
+     * @param s is the message
+     *          let the user know the when the game ended or saved, or he/she loses or wins
+     */
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * @param fileName is the file of the vocabulary list
+     * @return an ArrayList of the word in that file
+     */
     private ArrayList<String> readFromFile(String fileName) {
         BufferedReader reader;
         ArrayList<String> wordList = new ArrayList<>();
@@ -289,6 +356,10 @@ public class HangmanBattle extends AppCompatActivity {
         return wordList;
     }
 
+    /**
+     * load the game the answer, score, battle state,  and the letters the user entered so the user
+     * can resume playing his saved state of game
+     */
     private void loadGame() {
         String FileName = name + "_" + game + "Battle" + ".ser";
         answer = (Word) loadFromFile("answer" + FileName);
@@ -305,6 +376,9 @@ public class HangmanBattle extends AppCompatActivity {
 
     }
 
+    /**
+     * save the game by saving the answer, score, the letters the user entered, and the battle state
+     */
     private void save() {
         String saveFileName = name + "_" + game + "Battle" + ".ser";
         saveToFile(answer, "answer" + saveFileName);
@@ -313,6 +387,12 @@ public class HangmanBattle extends AppCompatActivity {
         saveToFile(entered, "entered" + saveFileName);
     }
 
+    /**
+     * @param object   is the object we want to save: usually the score, answer of the game, and the
+     *                 letters the user has entered
+     * @param fileName the name of the file we want to save over
+     *                 save the object under the file name given
+     */
     public void saveToFile(Object object, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -324,6 +404,11 @@ public class HangmanBattle extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param fileName the name of the file we want to load from
+     * @return the object we read from the file: usually the score, answer of the game, and the
+     * letters the user has entered
+     */
     private Object loadFromFile(String fileName) {
 
         try {
