@@ -103,7 +103,7 @@ public class StartingActivity extends AppCompatActivity {
      * Switch to the BackgroundSetting to configure the tile background.
      */
     private void switchToSlidingTilesSetting() {
-        Intent GameSettingIntent = new Intent(this, BackgroundSetting.class);
+        Intent GameSettingIntent = new Intent(this, SlidingTileSetting.class);
         GameSettingIntent.putExtra("name", name);
         GameSettingIntent.putExtra("game", game
         );
