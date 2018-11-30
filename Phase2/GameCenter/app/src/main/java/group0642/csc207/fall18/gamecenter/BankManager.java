@@ -1,7 +1,6 @@
 package group0642.csc207.fall18.gamecenter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * manage money during the game

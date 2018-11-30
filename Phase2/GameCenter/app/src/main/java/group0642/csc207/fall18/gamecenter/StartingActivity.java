@@ -121,7 +121,7 @@ public class StartingActivity extends AppCompatActivity {
         Intent BlackjackGameIntent = new Intent(this, BlackjackGameActivity.class);
         BlackjackGameIntent.putExtra("name", name);
         BlackjackGameIntent.putExtra("game", game);
-        BlackjackGameActivity.load = loadOrNot;
+        BlackjackGameIntent.putExtra("load", loadOrNot);
         StartingActivity.this.startActivity(BlackjackGameIntent);
     }
 

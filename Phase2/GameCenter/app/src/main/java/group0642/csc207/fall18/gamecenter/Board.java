@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import java.util.Observable;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -95,8 +94,10 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
             return tile;
         }
     }
+
     /**
      * Return the number of tiles on the board.
+     *
      * @return the number of tiles on the board
      */
     int numTiles() {

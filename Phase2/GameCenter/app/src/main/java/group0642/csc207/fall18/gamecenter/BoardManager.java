@@ -2,7 +2,6 @@ package group0642.csc207.fall18.gamecenter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -28,6 +27,7 @@ class BoardManager implements Serializable {
 
     /**
      * Manage a board that has been pre-populated.
+     *
      * @param board the board
      */
     BoardManager(Board board) {
@@ -68,7 +68,7 @@ class BoardManager implements Serializable {
     /**
      * Refresh the board manager.
      */
-    void refresh_board_manager(){
+    void refresh_board_manager() {
         List<Tile> tiles = new ArrayList<>();
         final int numTiles = Board.NUM_ROWS * Board.NUM_COLS;
         for (int tileNum = 0; tileNum != numTiles; tileNum++) {
@@ -83,7 +83,7 @@ class BoardManager implements Serializable {
             touchMove(r.nextInt(Board.NUM_ROWS * Board.NUM_COLS));
         }
         this.board.setScore(1000);
-        p =  current_state = max_state_reached = 0;
+        p = current_state = max_state_reached = 0;
     }
 
     /**
@@ -111,20 +111,16 @@ class BoardManager implements Serializable {
         if (situation == 1) {
             board.swapTiles(row, col, row - 1, col);
             p -= Board.NUM_ROWS;
-        }
-        else if (situation == 2) {
+        } else if (situation == 2) {
             board.swapTiles(row, col, row + 1, col);
             p += Board.NUM_ROWS;
-        }
-        else if (situation == 3) {
+        } else if (situation == 3) {
             board.swapTiles(row, col, row, col - 1);
             p--;
-        }
-        else if (situation == 4) {
+        } else if (situation == 4) {
             board.swapTiles(row, col, row, col + 1);
             p++;
-        }
-        else
+        } else
             return;
         allMoves[getCurrent_state()] = p;
         current_state = getCurrent_state() + 1;
@@ -186,7 +182,7 @@ class BoardManager implements Serializable {
         return board.getScore();
     }
 
-    private int returnRemainingUndo(){
+    private int returnRemainingUndo() {
         return undo - (max_state_reached - getCurrent_state());
     }
 
@@ -210,14 +206,11 @@ class BoardManager implements Serializable {
         int situation = generateCase(row, col);
         if (situation == 1) {
             board.swapTiles(row, col, row - 1, col);
-        }
-        else if (situation == 2) {
+        } else if (situation == 2) {
             board.swapTiles(row, col, row + 1, col);
-        }
-        else if (situation == 3) {
+        } else if (situation == 3) {
             board.swapTiles(row, col, row, col - 1);
-        }
-        else if (situation == 4) {
+        } else if (situation == 4) {
             board.swapTiles(row, col, row, col + 1);
         }
     }
