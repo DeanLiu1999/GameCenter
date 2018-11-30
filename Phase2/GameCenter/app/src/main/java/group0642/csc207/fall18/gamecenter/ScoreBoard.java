@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 class ScoreBoard {
     /**
-     * Directory and file name for saving and writing scoreboard.
+     * The name of the file that stores this ScoreBoard.
      */
     private final String scoreboardFileName = "scoreboard.ser";
     /**
