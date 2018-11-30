@@ -283,6 +283,7 @@ public class HangmanActivity extends AppCompatActivity {
      * Collects all objects intended to be saved.
      */
     private void collectObjectsToSave() {
+        objectsToSave = new ArrayList<>();
         objectsToSave.add(answer);
         objectsToSave.add(entered);
         objectsToSave.add(score);

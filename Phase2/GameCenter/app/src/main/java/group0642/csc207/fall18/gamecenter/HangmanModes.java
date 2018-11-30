@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class HangmanModes extends AppCompatActivity {
     private boolean loadOrNot;
     private String name;
@@ -81,9 +83,7 @@ public class HangmanModes extends AppCompatActivity {
      * load the saved game for infinity mode of hangman. Show the user if there is no existing file.
      */
     private void loadInfinity() {
-        if (saveManager.loadFromFile("answer_" + saveFileNameInf) != null &&
-                saveManager.loadFromFile("entered_" + saveFileNameInf) != null &&
-                saveManager.loadFromFile("score_" + saveFileNameInf) != null) {
+        if (hasAllInfinityFiles()) {
             switchToInfinity();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
@@ -95,10 +95,7 @@ public class HangmanModes extends AppCompatActivity {
      * load the saved game for battle mode of hangman. Show the user if there is no existing file.
      */
     private void loadBattle() {
-        if (saveManager.loadFromFile("answer_" + saveFileNameBat) != null &&
-                saveManager.loadFromFile("battle_" + saveFileNameBat) != null &&
-                saveManager.loadFromFile("entered_" + saveFileNameBat) != null &&
-                saveManager.loadFromFile("score_" + saveFileNameBat) != null) {
+        if (hasAllBattleFiles()) {
             switchToBattle();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
@@ -126,5 +123,26 @@ public class HangmanModes extends AppCompatActivity {
         goToInfinity.putExtra("game", game);
         HangmanActivity.load = loadOrNot;
         HangmanModes.this.startActivity(goToInfinity);
+    }
+
+    // TODO
+    private boolean hasAllBattleFiles(){
+        String[] battleFilePrefixes = new String[]{"answer_", "battle_", "entered_", "score_"};
+        ArrayList<String> saveFileNames = makeFileNames(battleFilePrefixes, saveFileNameBat);
+        return saveManager.hasAllFiles(saveFileNames);
+    }
+
+    private boolean hasAllInfinityFiles(){
+        String[] infinityFilePrefixes = new String[]{"answer_", "entered_", "score_"};
+        ArrayList<String> saveFileNames = makeFileNames(infinityFilePrefixes, saveFileNameInf);
+        return saveManager.hasAllFiles(saveFileNames);
+    }
+
+    private ArrayList<String> makeFileNames(String[] prefixes, String baseName){
+        ArrayList<String> saveFileNames = new ArrayList<>();
+        for (String prefix : prefixes) {
+            saveFileNames.add(prefix + baseName);
+        }
+        return saveFileNames;
     }
 }

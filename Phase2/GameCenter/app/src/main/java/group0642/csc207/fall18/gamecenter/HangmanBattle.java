@@ -3,6 +3,7 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,7 +63,7 @@ public class HangmanBattle extends AppCompatActivity {
     /**
      *
      */
-    private ArrayList<Object> objectsToSave = new ArrayList<>();
+    private ArrayList<Object> objectsToSave;
     /**
      *
      */
@@ -347,6 +348,15 @@ public class HangmanBattle extends AppCompatActivity {
      * can resume playing his saved state of game
      */
     private void loadGame() {
+        ArrayList<String> saveFileNames = new ArrayList<>();
+        for (String prefix : saveFilePrefixes) {
+            saveFileNames.add(prefix + saveFileName);
+        }
+        for (String fileName : saveFileNames){
+            Log.d("HMBattle", "Checking " + fileName);
+            saveManager.hasFile(fileName);
+        }
+
         answer = (Word) saveManager.loadFromFile("answer_" + saveFileName);
         battle = (Battle) saveManager.loadFromFile("battle_" + saveFileName);
         entered = (ArrayList) saveManager.loadFromFile("entered_" + saveFileName);
@@ -380,6 +390,7 @@ public class HangmanBattle extends AppCompatActivity {
      * Collects all objects intended to be saved.
      */
     private void collectObjectsToSave() {
+        objectsToSave = new ArrayList<>();
         objectsToSave.add(answer);
         objectsToSave.add(battle);
         objectsToSave.add(entered);

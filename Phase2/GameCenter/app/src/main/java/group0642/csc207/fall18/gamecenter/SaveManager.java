@@ -99,7 +99,9 @@ class SaveManager {
                 OutputStream bufferStream = new BufferedOutputStream(fileStream);
                 ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
 
-                outputStream.writeObject(objects.get(i));
+                if (objects.get(i) != null){
+                    outputStream.writeObject(objects.get(i));
+                }
                 outputStream.close();
             } catch (IOException e) {
                 Log.e(tag, "File write failed: " + e.toString());
@@ -175,11 +177,28 @@ class SaveManager {
         File saveDir = new File(saveDirectory);
         String[] saveList = saveDir.list();
         for (String save : saveList) {
+            Log.d(tag, save);
             if (fileName.equals(save)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Returns whether the current save directory has all the files specified by the given
+     * ArrayList of file names.
+     *
+     * @param fileNames the names of the files
+     * @return whether the current save directory has all the files specified
+     */
+    boolean hasAllFiles(ArrayList<String> fileNames){
+        for (String file : fileNames) {
+            if (!(hasFile(file)) || loadFromFile(file) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
