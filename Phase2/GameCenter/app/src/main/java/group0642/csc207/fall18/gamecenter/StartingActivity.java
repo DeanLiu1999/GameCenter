@@ -3,16 +3,10 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 
 /**
  * The initial activity for the sliding puzzle tile game.
@@ -23,8 +17,6 @@ public class StartingActivity extends AppCompatActivity {
      * A temporary save file.
      */
     public static final String TEMP_SAVE_FILENAME = "save_file_temp.ser";
-    private static final String TAG = "StartingActivity";
-
     private String name;
     private String game;
 
@@ -104,8 +96,7 @@ public class StartingActivity extends AppCompatActivity {
     private void switchToSlidingTilesSetting() {
         Intent GameSettingIntent = new Intent(this, SlidingTileSetting.class);
         GameSettingIntent.putExtra("name", name);
-        GameSettingIntent.putExtra("game", game
-        );
+        GameSettingIntent.putExtra("game", game);
 
         StartingActivity.this.startActivity(GameSettingIntent);
     }
