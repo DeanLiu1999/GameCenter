@@ -28,7 +28,6 @@ public class StartingActivity extends AppCompatActivity {
     private String name;
     private String game;
 
-    private boolean loadIndicator = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +53,13 @@ public class StartingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (game.equals("Blackjack")) {
-                    switchToBlackjack();
+                    switchToBlackjack(false);
 
                 } else if (game.equals("Sliding Tiles")) {
 
                     switchToSlidingTilesSetting();
                 } else if (game.equals("Hangman")) {
-                    switchToHangman();
+                    switchToHangman(false);
                 }
             }
         });
@@ -78,11 +77,11 @@ public class StartingActivity extends AppCompatActivity {
                 if (game.equals("Sliding Tiles")) {
                     LoadSlidingTiles();
                 } else if (game.equals("Blackjack")) {
-                    loadIndicator = true;
                     LoadBlackjack();
+
                 } else if (game.equals("Hangman")) {
-                    loadIndicator = true;
-                    switchToHangman();
+                    switchToHangman(true);
+
                 }
 
             }
@@ -111,6 +110,9 @@ public class StartingActivity extends AppCompatActivity {
         StartingActivity.this.startActivity(GameSettingIntent);
     }
 
+    /**
+     * go to the activity to load the sliding tile
+     */
     private void LoadSlidingTiles() {
         Intent goToSaved = new Intent(StartingActivity.this, LoadActivity.class);
         goToSaved.putExtra("name", name);
@@ -119,34 +121,50 @@ public class StartingActivity extends AppCompatActivity {
 
     }
 
-    private void switchToBlackjack() {
+    /**
+     * @param loadOrNot is whether to load or not
+     *                  this intent goes to the blackjack game activity: if loadOrNot is true, this
+     *                  intent load the game otherwise it starts a new game
+     */
+    private void switchToBlackjack(boolean loadOrNot) {
         Intent BlackjackGameIntent = new Intent(this, BlackjackGameActivity.class);
         BlackjackGameIntent.putExtra("name", name);
         BlackjackGameIntent.putExtra("game", game);
-        BlackjackGameActivity.load = loadIndicator;
+        BlackjackGameActivity.load = loadOrNot;
         StartingActivity.this.startActivity(BlackjackGameIntent);
-
-    }
-
-    private void switchToHangman() {
-        Intent HangmanGameIntent = new Intent(this, HangmanModes.class);
-        HangmanGameIntent.putExtra("name", name);
-        HangmanGameIntent.putExtra("game", game);
-        HangmanGameIntent.putExtra("load", loadIndicator);
-        StartingActivity.this.startActivity(HangmanGameIntent);
     }
 
 
+    /**
+     * this method load the blackjack activity
+     */
     private void LoadBlackjack() {
         String FileName = name + "_" + game + ".ser";
-        if (loadFromFile("stateManager" + FileName) != null &&
-                loadFromFile("bankManager" + FileName) != null) {
-            switchToBlackjack();
+        if (loadFromFile("bankManager" + FileName) != null) {
+            switchToBlackjack(true);
         } else {
             Toast.makeText(this, "No Existing Save", Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * @param loadOrNot is whether to load or not
+     *                  this intent goes to the hangman mode activity: if loadOrNot is true, this
+     *                  intent load the game of either two modes in HangmanMode otherwise it means
+     *                  to start a new game of either two modes in the mode selection
+     */
+    private void switchToHangman(boolean loadOrNot) {
+        Intent HangmanGameIntent = new Intent(this, HangmanModes.class);
+        HangmanGameIntent.putExtra("name", name);
+        HangmanGameIntent.putExtra("game", game);
+        HangmanGameIntent.putExtra("load", loadOrNot);
+        StartingActivity.this.startActivity(HangmanGameIntent);
+    }
+
+    /**
+     * @param fileName the file name under which we may have our object saved
+     * @return the object loaded from the file(possibly null)
+     */
     private Object loadFromFile(String fileName) {
 
         try {
