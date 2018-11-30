@@ -103,7 +103,6 @@ class SaveManager {
                 ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
 
                 outputStream.writeObject(objects.get(i));
-                Log.d(tag, "saved " + fileName + " to " + filePath);
                 outputStream.close();
             } catch (IOException e) {
                 Log.e(tag, "File write failed: " + e.toString());
@@ -120,10 +119,8 @@ class SaveManager {
      * null if file is empty
      */
     Object loadFromFile(String fileName) {
-        Log.d(tag, "loading from:" + saveDirectory);
         String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
         verifyDir(saveDirectory);
-        Log.d(tag, "loading from:" + filePath);
         File saveFile = new File(filePath);
         try {
             InputStream fileStream = new FileInputStream(saveFile);
@@ -157,7 +154,6 @@ class SaveManager {
             reader = new BufferedReader(new InputStreamReader(file));
             String line = reader.readLine();
             while (line != null) {
-                // Log.d(tag, line);
                 wordList.add(line.toLowerCase());
                 line = reader.readLine();
             }
@@ -179,11 +175,9 @@ class SaveManager {
      */
     boolean hasFile(String fileName){
         File saveDir = new File(saveDirectory);
-        Log.d(tag, "checking directory:" + saveDirectory);
         String[] saveList = saveDir.list();
         if (saveList != null) {
             for (String save : saveList) {
-                Log.d(tag, save);
                 if (fileName.equals(save)) {
                     return true;
                 }
