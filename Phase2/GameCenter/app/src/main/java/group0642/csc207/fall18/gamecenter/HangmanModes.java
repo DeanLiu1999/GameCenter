@@ -30,9 +30,12 @@ public class HangmanModes extends AppCompatActivity {
         launchInfinityMode();
     }
 
+    /**
+     * launch the battle mode of hangman
+     */
     private void launchBattleMode() {
-        Button launchNormal = findViewById(R.id.normalButton);
-        launchNormal.setOnClickListener(new View.OnClickListener() {
+        Button launchBattle = findViewById(R.id.normalButton);
+        launchBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (loadOrNot) {
@@ -44,6 +47,9 @@ public class HangmanModes extends AppCompatActivity {
         });
     }
 
+    /**
+     * launch the infinity mode of hangman
+     */
     private void launchInfinityMode() {
         Button launchInfinity = findViewById(R.id.infinityButton);
         launchInfinity.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +64,9 @@ public class HangmanModes extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * load the saved game for infinity mode of hangman. Show the user if there is no existing file.
+     */
     private void loadInfinity() {
         String FileName = name + "_" + game + "Infinity" + ".ser";
         if (loadFromFile("answer" + FileName) != null &&
@@ -71,6 +79,9 @@ public class HangmanModes extends AppCompatActivity {
 
     }
 
+    /**
+     * load the saved game for battle mode of hangman. Show the user if there is no existing file.
+     */
     private void loadBattle() {
         String FileName = name + "_" + game + "Battle" + ".ser";
         if (loadFromFile("answer" + FileName) != null &&
@@ -84,6 +95,9 @@ public class HangmanModes extends AppCompatActivity {
 
     }
 
+    /**
+     * This is the intent to go to battle mode
+     */
     private void switchToBattle() {
         Intent goToNormal = new Intent(this, HangmanBattle.class);
         goToNormal.putExtra("name", name);
@@ -92,6 +106,9 @@ public class HangmanModes extends AppCompatActivity {
         HangmanModes.this.startActivity(goToNormal);
     }
 
+    /**
+     * This is the intent to go to infinity mode
+     */
     private void switchToInfinity() {
         Intent goToInfinity = new Intent(this, HangmanActivity.class);
         goToInfinity.putExtra("name", name);
@@ -100,7 +117,11 @@ public class HangmanModes extends AppCompatActivity {
         HangmanModes.this.startActivity(goToInfinity);
 
     }
-
+    /**
+     * @param fileName the name of the file we want to load from
+     * @return the object we read from the file: usually the score, answer of the game, and the
+     * letters the user has entered (as well as the battle state for battle mode only)
+     */
     private Object loadFromFile(String fileName) {
 
         try {

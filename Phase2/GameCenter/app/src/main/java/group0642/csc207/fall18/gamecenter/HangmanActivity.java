@@ -164,7 +164,7 @@ public class HangmanActivity extends AppCompatActivity {
      * this method determines what happens when the user entered a letter:
      *               if the user is incorrect, his health decreases; otherwise, the display will
      *               show his guess. Also, if the user completed the whole word, a new word will
-     *               be generated, and the user enters the net round automatically. If the user
+     *               be generated, and the user enters the next round automatically. If the user
      *               loses the game, he will be able to see his score and the game would end there.
      */
     public void letterEntryListener(Button button, char letter) {
