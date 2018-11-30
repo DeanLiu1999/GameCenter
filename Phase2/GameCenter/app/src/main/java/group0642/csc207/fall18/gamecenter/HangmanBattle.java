@@ -59,6 +59,8 @@ public class HangmanBattle extends AppCompatActivity {
     private int score = 0;
     private boolean result = false;
 
+    private static final String TAG = "HangmanBattle";
+
 
     @Override
 
@@ -99,7 +101,7 @@ public class HangmanBattle extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
-        buttonListActions(entries, alphabet);
+        buttonListActions();
         setShowScoreboard_1Listener();
         setSaveButton();
         if (load) {
@@ -122,55 +124,119 @@ public class HangmanBattle extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!result) {
-                    switchToStart(name, game);
+                    switchToStart();
                 } else {
-
-                    switchToScore(name, game, score);
+                    switchToScore();
                 }
             }
         });
 
     }
 
-    public void switchToScore(String s, String t, int x) {
+    public void switchToScore() {
         Intent goToScore = new Intent(HangmanBattle.this, EndingScore.class);
-        goToScore.putExtra("name", s);
-        goToScore.putExtra("game", t);
-        goToScore.putExtra("score", x);
+        goToScore.putExtra("name", name);
+        goToScore.putExtra("game", game);
+        goToScore.putExtra("score", score);
         HangmanBattle.this.startActivity(goToScore);
     }
 
-    public void switchToStart(String s, String t) {
+    public void switchToStart() {
         Intent goToScore = new Intent(HangmanBattle.this, StartingActivity.class);
-        goToScore.putExtra("name", s);
-        goToScore.putExtra("game", t);
+        goToScore.putExtra("name", name);
+        goToScore.putExtra("game", game);
         HangmanBattle.this.startActivity(goToScore);
     }
 
-    public void buttonListActions(Button[] lst, String str) {
+    public void buttonListActions() {
         int i = 0;
-        while (i < lst.length) {
-            buttonListListener(lst[i], lst, str.charAt(i));
+        while (i < entries.length) {
+            buttonListListener(entries[i], alphabet.charAt(i));
             i++;
         }
     }
 
-    public void buttonListListener(final Button b, final Button[] lst, final char entry) {
+    public void buttonListListener(final Button b, final char entry) {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                letterEntryListener(lst, b, entry);
+                letterEntryListener(b, entry);
             }
         });
     }
 
-    public void disableAllButton(Button[] lst, boolean enabled) {
-        for (Button aLst : lst) {
-            aLst.setEnabled(enabled);
+
+    public void letterEntryListener(Button button, char entry) {
+        entered.add(entry);
+        String str = String.valueOf(entry);
+        boolean correctness = answer.enter(str);
+        button.setEnabled(false);
+        boolean notOver = battle.makeMove(correctness);
+        if (answer.win()) {
+            notOver = false;
+        }
+        update();
+        String s;
+        if (correctness) {
+            s = "You attacked the monster";
+            makeToastEntryText(s);
+        } else {
+            s = "The monster attacked you";
+            makeToastEntryText(s);
+        }
+        if (!notOver) {
+            endingDetermination();
+        } else {
+            save();
+            makeToastEntryText("Game Saved");
         }
 
     }
 
+    private void endingDetermination() {
+        answer.setFinalDisplay();
+        if (charHlth > 0) {
+            if (level <= 4) {
+                level++;
+                score = level;
+                entered = new ArrayList();
+                makeToastEntryText("Level " + level);
+
+                battle = new Battle(level, level);
+                answer = new Word(chooseTheAnswer());
+
+                disableAllButton(true);
+                update();
+                updatePicture(level, monsters);
+                save();
+                makeToastEntryText("Game Saved");
+            } else {
+                makeToastEntryText("You win");
+                score = level;
+                new ScoreBoard().updateScoreBoard(game, name, score);
+                disableAllButton(false);
+                result = true;
+                showScoreboard_1.setText("Show scoreboard");
+                saveButton.setEnabled(false);
+            }
+        } else {
+            makeToastEntryText("You lose ");
+            disableAllButton(false);
+            score = level;
+            new ScoreBoard().updateScoreBoard(game, name, score);
+            result = true;
+            showScoreboard_1.setText("Show scoreboard");
+            saveButton.setEnabled(false);
+        }
+
+    }
+
+    public void disableAllButton(boolean enabled) {
+        for (Button aLst : entries) {
+            aLst.setEnabled(enabled);
+        }
+
+    }
 
     public String chooseTheAnswer() {
         int index = randomGenerator.nextInt(wordList.size());
@@ -196,69 +262,6 @@ public class HangmanBattle extends AppCompatActivity {
         characterDamage.setText(String.valueOf(charDmg));
         monsterHealth.setText(String.valueOf(monHlth));
     }
-
-
-    public void letterEntryListener(Button[] lst, Button button, char entry) {
-        entered.add(entry);
-        String str = String.valueOf(entry);
-        boolean correctness = answer.enter(str);
-        button.setEnabled(false);
-        boolean notOver = battle.makeMove(correctness);
-        if (answer.win()) {
-            notOver = false;
-        }
-        update();
-        String s;
-        if (correctness) {
-            s = "You attacked the monster";
-            makeToastEntryText(s);
-        } else {
-            s = "The monster attacked you";
-            makeToastEntryText(s);
-        }
-        if (!notOver) {
-            endingDetermination(lst);
-        } else {
-            save();
-        }
-
-    }
-
-    private void endingDetermination(Button[] lst) {
-        answer.setFinalDisplay();
-        if (charHlth > 0) {
-            if (level <= 4) {
-                level++;
-                score = level;
-                entered = new ArrayList();
-                makeToastEntryText("Level " + level);
-                battle = new Battle(level, level);
-                answer = new Word(chooseTheAnswer());
-                disableAllButton(lst, true);
-                update();
-                updatePicture(level, monsters);
-                save();
-            } else {
-                makeToastEntryText("You win");
-                score = level;
-                new ScoreBoard().updateScoreBoard(game, name, score);
-                disableAllButton(lst, false);
-                result = true;
-                showScoreboard_1.setText("Show scoreboard");
-                saveButton.setEnabled(false);
-            }
-        } else {
-            makeToastEntryText("You lose ");
-            disableAllButton(lst, false);
-            score = level;
-            new ScoreBoard().updateScoreBoard(game, name, score);
-            result = true;
-            showScoreboard_1.setText("Show scoreboard");
-            saveButton.setEnabled(false);
-        }
-
-    }
-
 
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
@@ -288,8 +291,10 @@ public class HangmanBattle extends AppCompatActivity {
 
     private void loadGame() {
         String FileName = name + "_" + game + "Battle" + ".ser";
-        loadFromFile("answer" + FileName, "score" + FileName, "entered" + FileName, "battle" + FileName);
-
+        answer = (Word) loadFromFile("answer" + FileName);
+        score = (int) loadFromFile("score" + FileName);
+        entered = (ArrayList) loadFromFile("entered" + FileName);
+        battle = (Battle) loadFromFile("battle" + FileName);
         update();
         updatePicture(score, monsters);
         int index;
@@ -306,8 +311,6 @@ public class HangmanBattle extends AppCompatActivity {
         saveToFile(score, "score" + saveFileName);
         saveToFile(battle, "battle" + saveFileName);
         saveToFile(entered, "entered" + saveFileName);
-
-        makeToastEntryText("Game Saved");
     }
 
     public void saveToFile(Object object, String fileName) {
@@ -321,39 +324,24 @@ public class HangmanBattle extends AppCompatActivity {
         }
     }
 
-    private void loadFromFile(String fileName1, String fileName2, String fileName3, String fileName4) {
+    private Object loadFromFile(String fileName) {
 
         try {
-            InputStream inputStream = this.openFileInput(fileName1);
+            Object object;
+            InputStream inputStream = this.openFileInput(fileName);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
-                answer = (Word) input.readObject();
+                object = input.readObject();
                 inputStream.close();
-            }
-            InputStream inputStream2 = this.openFileInput(fileName2);
-            if (inputStream2 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream2);
-                score = (int) input.readObject();
-                inputStream2.close();
-            }
-            InputStream inputStream3 = this.openFileInput(fileName3);
-            if (inputStream3 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream3);
-                entered = (ArrayList) input.readObject();
-                inputStream3.close();
-            }
-            InputStream inputStream4 = this.openFileInput(fileName4);
-            if (inputStream4 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream4);
-                battle = (Battle) input.readObject();
-                inputStream4.close();
+                return object;
             }
         } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
+            Log.e(TAG, "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
+            Log.e(TAG, "File contained unexpected data type: " + e.toString());
         }
+        return null;
     }
 }

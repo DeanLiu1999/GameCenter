@@ -26,84 +26,78 @@ public class HangmanModes extends AppCompatActivity {
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
         loadOrNot = inherit.getBooleanExtra("load", false);
-        launchBattleMode(name, game);
-        launchInfinityMode(name, game);
+        launchBattleMode();
+        launchInfinityMode();
     }
 
-    private void launchBattleMode(final String name, final String game) {
+    private void launchBattleMode() {
         Button launchNormal = findViewById(R.id.normalButton);
         launchNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (loadOrNot) {
-                    loadBattle(name, game);
+                    loadBattle();
                 } else {
-                    switchToBattle(name, game);
+                    switchToBattle();
                 }
             }
         });
     }
 
-    private void launchInfinityMode(final String name, final String game) {
+    private void launchInfinityMode() {
         Button launchInfinity = findViewById(R.id.infinityButton);
         launchInfinity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!loadOrNot) {
-                    switchToInfinity(name, game);
+                if (loadOrNot) {
+                    loadInfinity();
                 } else {
-                    loadInfinity(name, game);
+                    switchToInfinity();
                 }
             }
         });
     }
 
-    private void switchToBattle(String s, String t) {
-        Intent goToNormal = new Intent(this, HangmanBattle.class);
-        goToNormal.putExtra("name", s);
-        goToNormal.putExtra("game", t);
-        HangmanModes.this.startActivity(goToNormal);
-    }
 
-    private void switchToInfinity(String s, String t) {
-        Intent goToInfinity = new Intent(this, HangmanActivity.class);
-        goToInfinity.putExtra("name", s);
-        goToInfinity.putExtra("game", t);
-        HangmanModes.this.startActivity(goToInfinity);
-
-
-    }
-
-    private void loadInfinity(String s, String t) {
+    private void loadInfinity() {
         String FileName = name + "_" + game + "Infinity" + ".ser";
         if (loadFromFile("answer" + FileName) != null &&
                 loadFromFile("score" + FileName) != null &&
                 loadFromFile("entered" + FileName) != null) {
-            Intent goToInfinity = new Intent(this, HangmanActivity.class);
-            goToInfinity.putExtra("name", s);
-            goToInfinity.putExtra("game", t);
-            HangmanActivity.load = loadOrNot;
-            HangmanModes.this.startActivity(goToInfinity);
+            switchToInfinity();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private void loadBattle(String s, String t) {
+    private void loadBattle() {
         String FileName = name + "_" + game + "Battle" + ".ser";
         if (loadFromFile("answer" + FileName) != null &&
                 loadFromFile("score" + FileName) != null &&
                 loadFromFile("entered" + FileName) != null &&
                 loadFromFile("battle" + FileName) != null) {
-            Intent goToBattle = new Intent(this, HangmanBattle.class);
-            goToBattle.putExtra("name", s);
-            goToBattle.putExtra("game", t);
-            HangmanBattle.load = loadOrNot;
-            HangmanModes.this.startActivity(goToBattle);
+            switchToBattle();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    private void switchToBattle() {
+        Intent goToNormal = new Intent(this, HangmanBattle.class);
+        goToNormal.putExtra("name", name);
+        goToNormal.putExtra("game", game);
+        HangmanBattle.load = loadOrNot;
+        HangmanModes.this.startActivity(goToNormal);
+    }
+
+    private void switchToInfinity() {
+        Intent goToInfinity = new Intent(this, HangmanActivity.class);
+        goToInfinity.putExtra("name", name);
+        goToInfinity.putExtra("game", game);
+        HangmanActivity.load = loadOrNot;
+        HangmanModes.this.startActivity(goToInfinity);
 
     }
 

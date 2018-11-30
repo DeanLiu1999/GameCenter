@@ -41,6 +41,8 @@ public class HangmanActivity extends AppCompatActivity {
 
     public static boolean load = false;
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
+    private static final String TAG = "HangmanActivity";
+
 
     @Override
 
@@ -72,7 +74,7 @@ public class HangmanActivity extends AppCompatActivity {
         game = intent.getStringExtra("game");
         setSaveButton();
         setShowScoreboard_1Listener();
-        buttonListActions(entries, alphabet);
+        buttonListActions();
         if (load) {
             loadGame();
             load = false;
@@ -80,6 +82,9 @@ public class HangmanActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * The game is saved when the user presses the save button
+     */
     public void setSaveButton() {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,71 +94,80 @@ public class HangmanActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * when the game has ended the user is able to see the scoreboard when it has not ended, the
+     * user can leave this activity and proceed to the starting activity of this game
+     */
     public void setShowScoreboard_1Listener() {
         showScoreboard_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (answer.getHealth() == 0) {
-                    switchToScore(name, game, score);
+                    switchToScore();
                 } else {
-                    switchToStart(name, game);
+                    switchToStart();
                 }
             }
         });
     }
 
-    public void switchToScore(String s, String t, int x) {
+    /**
+     * This is the intent to switch to scoreboard
+     */
+    public void switchToScore() {
         Intent goToScore = new Intent(HangmanActivity.this, EndingScore.class);
-        goToScore.putExtra("name", s);
-        goToScore.putExtra("game", t);
-        goToScore.putExtra("score", x);
+        goToScore.putExtra("name", name);
+        goToScore.putExtra("game", game);
+        goToScore.putExtra("score", score);
         HangmanActivity.this.startActivity(goToScore);
     }
 
-    public void switchToStart(String s, String t) {
+    /**
+     * This is the intent to switch back to the starting activity
+     * */
+    public void switchToStart() {
         Intent startOver = new Intent(HangmanActivity.this, StartingActivity.class);
-        startOver.putExtra("name", s);
-        startOver.putExtra("game", t);
+        startOver.putExtra("name", name);
+        startOver.putExtra("game", game);
         HangmanActivity.this.startActivity(startOver);
     }
 
-    public void buttonListActions(Button[] lst, String strings) {
+    /**
+     * Each of the 26 letter button corresponds to the same letter in the alphabet. This method is
+     * to make sure of when the button is pressed the correct letter is entered.
+     */
+    public void buttonListActions() {
         int i = 0;
-        while (i < lst.length) {
-
-            buttonListListener(lst[i], lst, strings.charAt(i));
+        while (i < entries.length) {
+            buttonListListener(entries[i], alphabet.charAt(i));
             i++;
         }
     }
 
-    public void buttonListListener(final Button b, final Button[] lst, final char letter) {
+    /**
+     * @param b is the button corresponding to the letter
+     * @param letter is the letter entered.
+     *               this method enter the correct letter when the corresponding button is pressed
+     */
+    public void buttonListListener(final Button b, final char letter) {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                letterEntryListener(lst, b, letter);
+                letterEntryListener(b, letter);
             }
         });
     }
 
-    public void disableAllButton(Button[] lst, boolean enabled) {
-        for (Button aLst : lst) {
-            aLst.setEnabled(enabled);
-        }
-
-    }
-
-    public String chooseTheAnswer() {
-        int index = randomGenerator.nextInt(wordList.size());
-        return wordList.get(index);
-    }
-
-    void update() {
-        view.setText(answer.getDisplay());
-        healthBar.setText(String.valueOf(answer.getHealth()));
-    }
-
-    public void letterEntryListener(Button[] lst, Button button, char letter) {
-
+    /**
+     * @param button is the button corresponding to the letter
+     * @param letter is the letter entered.
+     * this method determines what happens when the user entered a letter:
+     *               if the user is incorrect, his health decreases; otherwise, the display will
+     *               show his guess. Also, if the user completed the whole word, a new word will
+     *               be generated, and the user enters the net round automatically. If the user
+     *               loses the game, he will be able to see his score and the game would end there.
+     */
+    public void letterEntryListener(Button button, char letter) {
         entered.add(letter);
         String str = String.valueOf(letter);
         answer.enter(str);
@@ -166,23 +180,62 @@ public class HangmanActivity extends AppCompatActivity {
             answer.setHealth(health + 1);
             update();
             score++;
-            disableAllButton(lst, true);
+            disableAllButton(true);
             entered = new ArrayList();
             save();
+            makeToastEntryText("Game Saved");
         } else if (answer.getHealth() == 0) {
             makeToastEntryText("Game Over");
             new ScoreBoard().updateScoreBoard(game, name, score);
             saveButton.setEnabled(false);
-            disableAllButton(lst, false);
+            disableAllButton(false);
             showScoreboard_1.setText("Show scoreboard");
         }
     }
 
+    /**
+     * @param enabled for whether the buttons are enabled or not
+     *                this method enable or disable all the buttons used to enter letters.
+     *                If the parameter is true, all buttons are enabled; otherwise, they are all
+     *                disabled.
+     */
+    public void disableAllButton(boolean enabled) {
+        for (Button aLst : entries) {
+            aLst.setEnabled(enabled);
+        }
+    }
 
+    /**
+     * @return the word from the word list from vocabulary_list
+     */
+    public String chooseTheAnswer() {
+        int index = randomGenerator.nextInt(wordList.size());
+        return wordList.get(index);
+    }
+
+    /**
+     * update the display of the health bar when the user entered an guess: it decreases when the
+     * answer is wrong and it stays the same when the answer is the same
+     * update the word display with user's guess if the guess is valid.
+     */
+    void update() {
+        view.setText(answer.getDisplay());
+        healthBar.setText(String.valueOf(answer.getHealth()));
+    }
+
+
+    /**
+     * @param s is the message
+     *          let the user know the when the game ended or saved, or he/she loses or wins
+     */
     private void makeToastEntryText(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * @param fileName is the file of the vocabulary list
+     * @return an ArrayList of the word in that file
+     */
     private ArrayList<String> readFromFile(String fileName) {
         BufferedReader reader;
         ArrayList<String> wordList = new ArrayList<>();
@@ -205,9 +258,15 @@ public class HangmanActivity extends AppCompatActivity {
         return wordList;
     }
 
+    /**
+     * load the game the answer, score, and the letters the user entered so the user can resume
+     * playing his saved state of game
+     */
     private void loadGame() {
         String FileName = name + "_" + game + "Infinity" + ".ser";
-        loadFromFile("answer" + FileName, "score" + FileName, "entered" + FileName);
+        answer = (Word) loadFromFile("answer" + FileName);
+        score = (int) loadFromFile("score" + FileName);
+        entered = (ArrayList) loadFromFile("entered" + FileName);
 
         update();
         int index;
@@ -218,14 +277,23 @@ public class HangmanActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * save the game by saving the answer, score, and the letters the user entered
+     */
     private void save() {
         String saveFileName = name + "_" + game + "Infinity" + ".ser";
         saveToFile(answer, "answer" + saveFileName);
         saveToFile(score, "score" + saveFileName);
         saveToFile(entered, "entered" + saveFileName);
-        makeToastEntryText("Game Saved");
+
     }
 
+    /**
+     * @param object is the object we want to save: usually the score, answer of the game, and the
+     *               letters the user has entered
+     * @param fileName the name of the file we want to save over
+     * save the object under the file name given
+     */
     public void saveToFile(Object object, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -237,33 +305,29 @@ public class HangmanActivity extends AppCompatActivity {
         }
     }
 
-    private void loadFromFile(String fileName1, String fileName2, String fileName3) {
+    /**
+     * @param fileName the name of the file we want to load from
+     * @return the object we read from the file: usually the score, answer of the game, and the
+     * letters the user has entered
+     */
+    private Object loadFromFile(String fileName) {
 
         try {
-            InputStream inputStream = this.openFileInput(fileName1);
+            Object object;
+            InputStream inputStream = this.openFileInput(fileName);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
-                answer = (Word) input.readObject();
+                object = input.readObject();
                 inputStream.close();
-            }
-            InputStream inputStream2 = this.openFileInput(fileName2);
-            if (inputStream2 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream2);
-                score = (int) input.readObject();
-                inputStream2.close();
-            }
-            InputStream inputStream3 = this.openFileInput(fileName3);
-            if (inputStream3 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream3);
-                entered = (ArrayList) input.readObject();
-                inputStream3.close();
+                return object;
             }
         } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
+            Log.e(TAG, "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
+            Log.e(TAG, "File contained unexpected data type: " + e.toString());
         }
+        return null;
     }
 }

@@ -237,9 +237,6 @@ gabby
 galaxy
 galvanize
 gazebo
-giaour
-gizmo
-glowworm
 glyph
 gnarly
 gnostic
