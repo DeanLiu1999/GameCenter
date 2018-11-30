@@ -192,6 +192,17 @@ class SaveManager {
         private String saveDirectory = "";
 
         /**
+         * Assigns the object to be saved by a new SaveManager.
+         *
+         * @param object the object
+         * @return this Builder
+         */
+        Builder object(Object object) {
+            this.object = object;
+            return this;
+        }
+
+        /**
          * Assigns the context for a new SaveManager.
          *
          * @param context the context

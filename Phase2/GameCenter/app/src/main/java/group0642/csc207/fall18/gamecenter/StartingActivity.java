@@ -139,8 +139,11 @@ public class StartingActivity extends AppCompatActivity {
      * this method load the blackjack activity
      */
     private void LoadBlackjack() {
-        String FileName = name + "_" + game + ".ser";
-        if (loadFromFile("bankManager" + FileName) != null) {
+        SaveManager saveManager = new SaveManager.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+        if (saveManager.loadFromFile("bankManager_save_file.ser") != null) {
             switchToBlackjack(true);
         } else {
             Toast.makeText(this, "No Existing Save", Toast.LENGTH_SHORT).show();
@@ -160,30 +163,4 @@ public class StartingActivity extends AppCompatActivity {
         HangmanGameIntent.putExtra("load", loadOrNot);
         StartingActivity.this.startActivity(HangmanGameIntent);
     }
-
-    /**
-     * @param fileName the file name under which we may have our object saved
-     * @return the object loaded from the file(possibly null)
-     */
-    private Object loadFromFile(String fileName) {
-
-        try {
-            Object object;
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                object = input.readObject();
-                inputStream.close();
-                return object;
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
-        return null;
-    }
-
 }

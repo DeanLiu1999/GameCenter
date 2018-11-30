@@ -28,6 +28,7 @@ import java.util.ArrayList;
  */
 public class BlackjackGameActivity extends AppCompatActivity {
 
+    // TODO
     private static final String TAG = "GameActivity_Blackjack";
 
     private Button deal;
@@ -44,6 +45,18 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private Integer[] computerCards;
     private StateManager stateManager;
     private BankManager bankManager;
+    /**
+     * The save manager for bank.
+     */
+    private SaveManager bankSaveManager;
+    /**
+     * The save manager for game state.
+     */
+    private SaveManager stateSaveManager;
+    /**
+     * The name of the save file.
+     */
+    private String saveFileName = "save_file.ser";
     ImageView toast;
     ImageView gameOver;
 
@@ -57,10 +70,20 @@ public class BlackjackGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUp();
-        bankManager = new BankManager();
+
         Intent i = getIntent();
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
+
+        bankManager = new BankManager();
+        bankSaveManager = new SaveManager.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+        stateSaveManager = new SaveManager.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
 
         if (load) {
             loadGame();
@@ -369,9 +392,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
      * save the game
      */
     private void save() {
-        String saveFileName = name + "_" + game + ".ser";
-        saveToFile(stateManager, "stateManager" + saveFileName);
-        saveToFile(bankManager, "bankManager" + saveFileName);
+        bankSaveManager.newObject(bankManager);
+        stateSaveManager.newObject(stateManager);
+        bankSaveManager.saveToFile("bankManager_" + saveFileName);
+        stateSaveManager.saveToFile("stateManager_" + saveFileName);
         makeToastText("Game Saved");
     }
 
@@ -405,8 +429,10 @@ public class BlackjackGameActivity extends AppCompatActivity {
      * load the game
      */
     private void loadGame() {
-        String FileName = name + "_" + game + ".ser";
-        loadFromFile("stateManager" + FileName, "bankManager" + FileName);
+        bankManager = (BankManager) bankSaveManager.loadFromFile(
+                "bankManager_" + saveFileName);
+        stateManager = (StateManager) stateSaveManager.loadFromFile(
+                "stateManager_" + saveFileName);
         setUp();
         refreshMoney();
         if (!(stateManager == null)) {
@@ -433,12 +459,13 @@ public class BlackjackGameActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    /*
      * save stateManager to a file
      *
      * @param s        stateManager
      * @param fileName the filename you want to save to
      */
+    /*
     public void saveToFile(StateManager s, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -449,13 +476,15 @@ public class BlackjackGameActivity extends AppCompatActivity {
             Log.e(TAG, "File write failed: " + e.toString());
         }
     }
+    */
 
-    /**
+    /*
      * save bankManager to a file
      *
      * @param b        stateManager
      * @param fileName the filename you want to save to
      */
+    /*
     public void saveToFile(BankManager b, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -466,13 +495,15 @@ public class BlackjackGameActivity extends AppCompatActivity {
             Log.e(TAG, "File write failed: " + e.toString());
         }
     }
+    */
 
-    /**
+    /*
      * load stateManager and bankManager from file
      *
      * @param fileName1 the file that store stateManager
      * @param fileName2 the file that store bankManager
      */
+    /*
     private void loadFromFile(String fileName1, String fileName2) {
 
         try {
@@ -496,6 +527,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
             Log.e(TAG, "File contained unexpected data type: " + e.toString());
         }
     }
+    */
 
     /**
      * when the deal button is clicked, deal the cards by calling methods of StateManager.
