@@ -125,19 +125,37 @@ public class HangmanModes extends AppCompatActivity {
         HangmanModes.this.startActivity(goToInfinity);
     }
 
-    // TODO
+    /**
+     * Returns whether the current save directory has all the necessary save files for a game
+     * of Hangman Battle.
+     *
+     * @return whether the current save directory has all the Hangman Battle save files
+     */
     private boolean hasAllBattleFiles(){
         String[] battleFilePrefixes = new String[]{"answer_", "battle_", "entered_", "score_"};
         ArrayList<String> saveFileNames = makeFileNames(battleFilePrefixes, saveFileNameBat);
         return saveManager.hasAllFiles(saveFileNames);
     }
 
+    /**
+     * Returns whether the current save directory has all the necessary save files for a game
+     * of Hangman Infinity.
+     *
+     * @return whether the current save directory has all the Hangman Infinity save files
+     */
     private boolean hasAllInfinityFiles(){
         String[] infinityFilePrefixes = new String[]{"answer_", "entered_", "score_"};
         ArrayList<String> saveFileNames = makeFileNames(infinityFilePrefixes, saveFileNameInf);
         return saveManager.hasAllFiles(saveFileNames);
     }
 
+    /**
+     * Returns an ArrayList of complete file names based on given prefixes and base names.
+     *
+     * @param prefixes the prefixes of the complete file name.
+     * @param baseName the base name of the complete file name.
+     * @return an ArrayList of complete file names based on given prefixes and base names.
+     */
     private ArrayList<String> makeFileNames(String[] prefixes, String baseName){
         ArrayList<String> saveFileNames = new ArrayList<>();
         for (String prefix : prefixes) {
