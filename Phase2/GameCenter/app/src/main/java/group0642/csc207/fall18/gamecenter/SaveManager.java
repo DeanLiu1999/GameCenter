@@ -6,23 +6,40 @@ import android.widget.Toast;
 
 import java.io.*;
 
-// TODO
+
 class SaveManager {
 
     /**
      * The log tag of this class.
      */
     private final String tag = "SaveManager";
-
+    /**
+     * The object that is being saved/loaded.
+     */
     private Object object;
+    /**
+     * The context.
+     */
     private Context context;
+    /**
+     * The path to the save directory.
+     */
     private String saveDirectory;
-
+    /**
+     * The predefined interval to execute an auto-save.
+     */
     private int autoSaveInterval = 5;
+    /**
+     * The tracker for auto-saving.
+     */
     private int autoSaveTracker = 0;
 
     /**
      * A SaveManager with an Object to save/load, Context and a file directory to save to.
+     *
+     * Builder design pattern based on examples at:
+     * https://stackoverflow.com/questions/5007355/builder-pattern-in-effective-java
+     * Retrieved Nov. 24, 2018
      *
      * @param b the Builder for this SaveManager
      */
@@ -88,10 +105,10 @@ class SaveManager {
     }
 
     /**
+     * Returns whether the current save directory has a file of given name.
      *
-     *
-     * @param fileName
-     * @return
+     * @param fileName the name of the save file
+     * @return whether the current save directory has a file of given name
      */
     boolean hasFile(String fileName){
         File saveDir = new File(saveDirectory);
@@ -105,24 +122,18 @@ class SaveManager {
     }
 
     /**
+     * Reassigns a new object for SaveManager to interact with.
      *
-     *
-     * @param object
+     * @param object the object to be saved
      */
     void newObject(Object object) {
         this.object = object;
     }
 
-    /*
-    String getSaveDirectory() {
-        return saveDirectory;
-    }
-    */
-
     /**
+     * Tick autoSaveTracker forward and save the game at predefined autoSaveInterval.
      *
-     *
-     * @param fileName
+     * @param fileName the name of the save file
      */
     void tickAutoSave(String fileName) {
         Log.d(tag, Integer.toString(autoSaveTracker));
@@ -141,14 +152,14 @@ class SaveManager {
     */
 
     /**
-     *
+     * Resets the auto-save tracker.
      */
     void resetAutoSave() {
         autoSaveTracker = -1;
     }
 
     /**
-     *
+     * Checks whether the given files directory exists, creating new directories as necessary.
      *
      * @param path the file path to be checked
      */
@@ -162,57 +173,54 @@ class SaveManager {
     }
 
     /**
-     *
+     * Display that a game was saved successfully.
      */
     private void makeToastSavedText() {
         Toast.makeText(context, "Game Saved", Toast.LENGTH_SHORT).show();
     }
 
     /**
+     * A Builder for SaveManager.
      *
+     * Builder design pattern based on examples at:
+     * https://stackoverflow.com/questions/5007355/builder-pattern-in-effective-java
+     * Retrieved Nov. 24, 2018
      */
-    public static class Builder {
+    static class Builder {
         private Object object = null;
         private Context context = null;
         private String saveDirectory = "";
 
-        /*
-        public Builder object(Object object) {
-            this.object = object;
-            return this;
-        }
-        */
-
         /**
+         * Assigns the context for a new SaveManager.
          *
-         *
-         * @param context
-         * @return
+         * @param context the context
+         * @return this Builder
          */
-        public Builder context(Context context) {
+        Builder context(Context context) {
             this.context = context;
             return this;
         }
 
         /**
+         * Assigns the save directory for a new SaveManager using a given directory path.
          *
-         *
-         * @param saveDirectory
-         * @return
+         * @param saveDirectory the path to the save directory
+         * @return this Builder
          */
-        public Builder saveDirectory(String saveDirectory) {
+        Builder saveDirectory(String saveDirectory) {
             this.saveDirectory = saveDirectory;
             return this;
         }
 
         /**
+         * Assigns the save directory for a new SaveManager using given user and game names.
          *
-         *
-         * @param user
-         * @param game
-         * @return
+         * @param user the name of the user
+         * @param game the name of the game
+         * @return this Builder
          */
-        public Builder saveDirectory(String user, String game) {
+        Builder saveDirectory(String user, String game) {
             if (context != null) {
                 File filesDir = context.getFilesDir();
                 String filesDirStr = filesDir.getPath();
@@ -223,12 +231,11 @@ class SaveManager {
         }
 
         /**
+         * Builds a new instance of Save Manager.
          *
-         *
-         * @return
+         * @return a new instance of Save Manager
          */
-        // TODO
-        public SaveManager build() {
+        SaveManager build() {
             return new SaveManager(this);
         }
     }

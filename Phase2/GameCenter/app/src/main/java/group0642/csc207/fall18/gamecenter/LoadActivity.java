@@ -3,26 +3,19 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 public class LoadActivity extends AppCompatActivity {
 
     /**
-     * The log tag of this class.
+     * The board manager.
      */
-    private static final String tag = "LoadActivity_SlidingTiles";
-
-    // TODO
     private BoardManager boardManager;
+    /**
+     * The save manager.
+     */
     private SaveManager saveManager;
 
     @Override
@@ -92,54 +85,6 @@ public class LoadActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*
-     * Load the board manager from fileName.
-     *
-     * @param fileName the name of the file
-     */
-    // TODO
-    /*
-    private BoardManager loadFromFile(String fileName) {
-
-        try {
-            BoardManager boardManager;
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                boardManager = (BoardManager) input.readObject();
-                inputStream.close();
-                return boardManager;
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
-        return null;
-    }
-    */
-
-    /*
-     * Save the board manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    // TODO
-    /*
-    public void saveToFile(BoardManager boardManager, String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(boardManager);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }
-    }
-    */
 
     /**
      * Display that a game was loaded successfully.

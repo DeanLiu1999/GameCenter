@@ -7,6 +7,7 @@ import java.util.HashMap;
  * resetPassword.
  */
 class UserAccounts {
+
     /**
      * The name of the file that stores this UserAccounts.
      */

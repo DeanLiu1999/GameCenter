@@ -1,7 +1,5 @@
 package group0642.csc207.fall18.gamecenter;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +8,7 @@ import java.util.HashMap;
  * A ScoreBoard class for storing scores and reporting them as requested.
  */
 class ScoreBoard {
+
     /**
      * The name of the file that stores this ScoreBoard.
      */
@@ -26,7 +25,7 @@ class ScoreBoard {
     /**
      * A ScoreBoard containing all the game-specific scores for all users.
      */
-    public ScoreBoard() {
+    ScoreBoard() {
         String scoreboardDir = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
         saveManager = new SaveManager.Builder()
                 .saveDirectory(scoreboardDir)
