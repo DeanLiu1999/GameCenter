@@ -176,10 +176,12 @@ class SaveManager {
     boolean hasFile(String fileName){
         File saveDir = new File(saveDirectory);
         String[] saveList = saveDir.list();
-        for (String save : saveList) {
-            Log.d(tag, save);
-            if (fileName.equals(save)) {
-                return true;
+        if (saveList != null) {
+            for (String save : saveList) {
+                Log.d(tag, save);
+                if (fileName.equals(save)) {
+                    return true;
+                }
             }
         }
         return false;
