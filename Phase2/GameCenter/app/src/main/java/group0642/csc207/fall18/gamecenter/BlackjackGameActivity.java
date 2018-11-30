@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,11 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -27,9 +21,6 @@ import java.util.ArrayList;
  * and displaying the information got from other classes.
  */
 public class BlackjackGameActivity extends AppCompatActivity {
-
-    // TODO
-    private static final String TAG = "GameActivity_Blackjack";
 
     private Button deal;
     private Button undo;
@@ -458,76 +449,6 @@ public class BlackjackGameActivity extends AppCompatActivity {
             undo.setEnabled(stateManager.initialStage());
         }
     }
-
-    /*
-     * save stateManager to a file
-     *
-     * @param s        stateManager
-     * @param fileName the filename you want to save to
-     */
-    /*
-    public void saveToFile(StateManager s, String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(s);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }
-    }
-    */
-
-    /*
-     * save bankManager to a file
-     *
-     * @param b        stateManager
-     * @param fileName the filename you want to save to
-     */
-    /*
-    public void saveToFile(BankManager b, String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(b);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }
-    }
-    */
-
-    /*
-     * load stateManager and bankManager from file
-     *
-     * @param fileName1 the file that store stateManager
-     * @param fileName2 the file that store bankManager
-     */
-    /*
-    private void loadFromFile(String fileName1, String fileName2) {
-
-        try {
-            InputStream inputStream1 = this.openFileInput(fileName1);
-            if (inputStream1 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream1);
-                stateManager = (StateManager) input.readObject();
-                inputStream1.close();
-            }
-            InputStream inputStream2 = this.openFileInput(fileName2);
-            if (inputStream2 != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream2);
-                bankManager = (BankManager) input.readObject();
-                inputStream2.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
-    }
-    */
 
     /**
      * when the deal button is clicked, deal the cards by calling methods of StateManager.
