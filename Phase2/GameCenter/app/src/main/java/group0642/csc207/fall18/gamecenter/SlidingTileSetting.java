@@ -16,7 +16,7 @@ import java.io.ObjectOutputStream;
 
 public class SlidingTileSetting extends AppCompatActivity {
     private BoardManager boardManager;
-    private SaveManagerNew saveManager;
+    private SaveManager saveManager;
     private static final String[] paths = {"4 * 4", "3 * 3", "5 * 5"};
     private static final String[] paths2 = {"number", "flower", "deathwing", "illidan", "jaina",
             "leader", "malfurion", "medivh", "thrall", "tyrande", "velen", "arthas", "car", "elf"};
@@ -30,7 +30,7 @@ public class SlidingTileSetting extends AppCompatActivity {
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
 
-        saveManager = new SaveManagerNew.Builder()
+        saveManager = new SaveManager.Builder()
                 .context(this)
                 .saveDirectory(name, game)
                 .build();

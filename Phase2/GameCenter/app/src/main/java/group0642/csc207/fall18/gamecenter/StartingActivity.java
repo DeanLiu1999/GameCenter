@@ -26,7 +26,7 @@ public class StartingActivity extends AppCompatActivity {
     // private final String tag = "StartingActivity";
 
     // TODO
-    private SaveManagerNew saveManager;
+    private SaveManager saveManager;
 
     private String name;
     private String game;
@@ -42,7 +42,7 @@ public class StartingActivity extends AppCompatActivity {
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
 
-        saveManager = new SaveManagerNew.Builder()
+        saveManager = new SaveManager.Builder()
                 .context(this)
                 .build();
 
