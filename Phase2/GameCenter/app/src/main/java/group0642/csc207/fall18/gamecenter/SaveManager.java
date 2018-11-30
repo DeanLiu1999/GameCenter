@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.*;
+import java.util.ArrayList;
 
 
 class SaveManager {
@@ -17,6 +18,10 @@ class SaveManager {
      * The object that is being saved/loaded.
      */
     private Object object;
+    /**
+     * The objects that are being saved/loaded.
+     */
+    private ArrayList<Object> objects;
     /**
      * The context.
      */
@@ -50,7 +55,7 @@ class SaveManager {
     }
 
     /**
-     * Serialize an Object to a file with the given file name, creating non-existent files and
+     * Serializes an Object to a file with the given file name, creating non-existent files and
      * directories in the process. Will overwrite files with duplicate file name.
      *
      * @param fileName the name of the file that will be written to
@@ -74,7 +79,37 @@ class SaveManager {
     }
 
     /**
-     * Read and return the Object from a file specified by the given file name.
+     * Serializes an ArrayList of Objects to files of corresponding file name, creating non-existent
+     * files and directories in the process. Will overwrite files with duplicate file name.
+     *
+     * Precondition: the order of items in objects corresponds to the order of items in fileNames.
+     *
+     * @param fileNames the names of the files that will be written to
+     */
+    void saveToFiles(ArrayList<String> fileNames) {
+        int i = 0;
+        for (String fileName : fileNames) {
+            String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
+            verifyDir(saveDirectory);
+            File saveFile = new File(filePath);
+            try {
+                saveFile.createNewFile();
+
+                OutputStream fileStream = new FileOutputStream(saveFile);
+                OutputStream bufferStream = new BufferedOutputStream(fileStream);
+                ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
+
+                outputStream.writeObject(objects.get(i));
+                outputStream.close();
+            } catch (IOException e) {
+                Log.e(tag, "File write failed: " + e.toString());
+            }
+            i++;
+        }
+    }
+
+    /**
+     * Reads and returns the Object from a file specified by the given file name.
      *
      * @param fileName the name of the file that will be read
      * @return de-serialized object contained in the file specified by fileName;
@@ -100,6 +135,34 @@ class SaveManager {
             Log.e(tag, "File contained unexpected data type: " + e.toString());
         }
         return object;
+    }
+
+    /**
+     * Reads and returns an ArrayList of Strings from a file specified by the given file name.
+     *
+     * @param fileName the name of the text file
+     * @return an ArrayList of the word in that file
+     */
+    ArrayList<String> readTextFromFile(String fileName) {
+        BufferedReader reader;
+        ArrayList<String> wordList = new ArrayList<>();
+        try {
+            final InputStream file = context.getAssets().open(fileName);
+            reader = new BufferedReader(new InputStreamReader(file));
+            String line = reader.readLine();
+            while (line != null) {
+                Log.d(tag, line);
+                wordList.add(line.toLowerCase());
+                line = reader.readLine();
+            }
+            file.close();
+
+        } catch (FileNotFoundException e) {
+            Log.e(tag, "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e(tag, "Can not read file: " + e.toString());
+        }
+        return wordList;
     }
 
     /**
@@ -129,7 +192,16 @@ class SaveManager {
     }
 
     /**
-     * Tick autoSaveTracker forward and save the game at predefined autoSaveInterval.
+     * Reassigns a new array of objects for SaveManager to interact with.
+     *
+     * @param objects the objects to be saved
+     */
+    void newObjects(ArrayList<Object> objects) {
+        this.objects = objects;
+    }
+
+    /**
+     * Ticks autoSaveTracker forward and save the game at predefined autoSaveInterval.
      *
      * @param fileName the name of the save file
      */
@@ -165,7 +237,7 @@ class SaveManager {
     }
 
     /**
-     * Display that a game was saved successfully.
+     * Displays that a game was saved successfully.
      */
     private void makeToastSavedText() {
         Toast.makeText(context, "Game Saved", Toast.LENGTH_SHORT).show();
@@ -180,6 +252,7 @@ class SaveManager {
      */
     static class Builder {
         private Object object = null;
+        private ArrayList<Object> objects = null;
         private Context context = null;
         private String saveDirectory = "";
 
@@ -191,6 +264,17 @@ class SaveManager {
          */
         Builder object(Object object) {
             this.object = object;
+            return this;
+        }
+
+        /**
+         * Assigns the objects to be saved by a new SaveManager.
+         *
+         * @param objects the object
+         * @return this Builder
+         */
+        Builder objects(ArrayList<Object> objects) {
+            this.objects = objects;
             return this;
         }
 

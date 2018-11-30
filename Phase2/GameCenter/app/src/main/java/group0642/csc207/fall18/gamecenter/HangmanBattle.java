@@ -63,8 +63,22 @@ public class HangmanBattle extends AppCompatActivity {
     private int score = 0;
     private boolean result = false;
 
-    private static final String TAG = "HangmanBattle";
-
+    /**
+     * The save manager.
+     */
+    private SaveManager saveManager;
+    /**
+     *
+     */
+    private ArrayList<Object> objectsToSave = new ArrayList<>();
+    /**
+     *
+     */
+    private String[] saveFilePrefixes = new String[]{"answer_", "battle_", "entered_", "score_"};
+    /**
+     * The name of the save file.
+     */
+    private String saveFileName = "save_file_Battle.ser";
 
     @Override
 
@@ -89,22 +103,32 @@ public class HangmanBattle extends AppCompatActivity {
         monster = findViewById(R.id.monster);
         character = findViewById(R.id.character);
 
-        randomGenerator = new Random();
-        wordList = readFromFile("vocabulary_list.txt");
-        answer = new Word(chooseTheAnswer());
-
         view = findViewById(R.id.wordDisplay);
         monsterHealth = findViewById(R.id.monsterHealth);
         monsterDamage = findViewById(R.id.monsterDamage);
         characterHealth = findViewById(R.id.charaterHealth);
         characterDamage = findViewById(R.id.characterDamage);
 
-        update();
-        updatePicture(level, monsters);
-
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         game = intent.getStringExtra("game");
+
+        saveManager = new SaveManager.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+
+        wordList = saveManager.readTextFromFile("vocabulary_list.txt");
+        randomGenerator = new Random();
+        answer = new Word(chooseTheAnswer());
+        update();
+        updatePicture(level, monsters);
+
+        objectsToSave.add(answer);
+        objectsToSave.add(battle);
+        objectsToSave.add(entered);
+        objectsToSave.add(score);
+
         buttonListActions();
         setShowScoreboard_1Listener();
         setSaveButton();
@@ -225,7 +249,6 @@ public class HangmanBattle extends AppCompatActivity {
             endingDetermination();
         } else {
             save();
-            makeToastEntryText("Game Saved");
         }
 
     }
@@ -331,41 +354,15 @@ public class HangmanBattle extends AppCompatActivity {
     }
 
     /**
-     * @param fileName is the file of the vocabulary list
-     * @return an ArrayList of the word in that file
-     */
-    private ArrayList<String> readFromFile(String fileName) {
-        BufferedReader reader;
-        ArrayList<String> wordList = new ArrayList<>();
-        try {
-            final InputStream file = getAssets().open(fileName);
-            reader = new BufferedReader(new InputStreamReader(file));
-            String line = reader.readLine();
-            while (line != null) {
-                Log.d("StackOverflow", line);
-                wordList.add(line.toLowerCase());
-                line = reader.readLine();
-            }
-            file.close();
-
-        } catch (FileNotFoundException e) {
-            Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, "Error reading file", Toast.LENGTH_SHORT).show();
-        }
-        return wordList;
-    }
-
-    /**
      * load the game the answer, score, battle state,  and the letters the user entered so the user
      * can resume playing his saved state of game
      */
     private void loadGame() {
-        String FileName = name + "_" + game + "Battle" + ".ser";
-        answer = (Word) loadFromFile("answer" + FileName);
-        score = (int) loadFromFile("score" + FileName);
-        entered = (ArrayList) loadFromFile("entered" + FileName);
-        battle = (Battle) loadFromFile("battle" + FileName);
+        answer = (Word) saveManager.loadFromFile("answer_" + saveFileName);
+        battle = (Battle) saveManager.loadFromFile("battle_" + saveFileName);
+        entered = (ArrayList) saveManager.loadFromFile("entered_" + saveFileName);
+        score = (int) saveManager.loadFromFile("score_" + saveFileName);
+
         update();
         updatePicture(score, monsters);
         int index;
@@ -373,60 +370,18 @@ public class HangmanBattle extends AppCompatActivity {
             index = alphabet.indexOf((char) entered.get(i));
             entries[index].setEnabled(false);
         }
-
+        makeToastEntryText("Game Loaded");
     }
 
     /**
      * save the game by saving the answer, score, the letters the user entered, and the battle state
      */
     private void save() {
-        String saveFileName = name + "_" + game + "Battle" + ".ser";
-        saveToFile(answer, "answer" + saveFileName);
-        saveToFile(score, "score" + saveFileName);
-        saveToFile(battle, "battle" + saveFileName);
-        saveToFile(entered, "entered" + saveFileName);
-    }
-
-    /**
-     * @param object   is the object we want to save: usually the score, answer of the game, and the
-     *                 letters the user has entered
-     * @param fileName the name of the file we want to save over
-     *                 save the object under the file name given
-     */
-    public void saveToFile(Object object, String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(object);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+        ArrayList<String> saveFileNames = new ArrayList<>();
+        for (String prefix : saveFilePrefixes) {
+            saveFileNames.add(prefix + saveFileName);
         }
-    }
-
-    /**
-     * @param fileName the name of the file we want to load from
-     * @return the object we read from the file: usually the score, answer of the game, and the
-     * letters the user has entered
-     */
-    private Object loadFromFile(String fileName) {
-
-        try {
-            Object object;
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                object = input.readObject();
-                inputStream.close();
-                return object;
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
-        return null;
+        saveManager.newObjects(objectsToSave);
+        saveManager.saveToFiles(saveFileNames);
     }
 }

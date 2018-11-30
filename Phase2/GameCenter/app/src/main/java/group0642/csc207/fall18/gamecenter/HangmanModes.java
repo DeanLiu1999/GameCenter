@@ -17,14 +17,33 @@ public class HangmanModes extends AppCompatActivity {
     private boolean loadOrNot;
     private String name;
     private String game;
+    /**
+     * The save manager.
+     */
+    private SaveManager saveManager;
+    /**
+     * The name of the save file for Battle mode.
+     */
+    private final String saveFileNameBat = "save_file_Battle.ser";
+    /**
+     * The name of the save file for Infinity mode.
+     */
+    private final String saveFileNameInf = "save_file_Infinity.ser";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman_modes);
+
         Intent inherit = getIntent();
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
+
+        saveManager = new SaveManager.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+
         loadOrNot = inherit.getBooleanExtra("load", false);
         launchBattleMode();
         launchInfinityMode();
@@ -68,10 +87,9 @@ public class HangmanModes extends AppCompatActivity {
      * load the saved game for infinity mode of hangman. Show the user if there is no existing file.
      */
     private void loadInfinity() {
-        String FileName = name + "_" + game + "Infinity" + ".ser";
-        if (loadFromFile("answer" + FileName) != null &&
-                loadFromFile("score" + FileName) != null &&
-                loadFromFile("entered" + FileName) != null) {
+        if (saveManager.loadFromFile("answer_" + saveFileNameInf) != null &&
+                saveManager.loadFromFile("entered_" + saveFileNameInf) != null &&
+                saveManager.loadFromFile("score_" + saveFileNameInf) != null) {
             switchToInfinity();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
@@ -83,11 +101,10 @@ public class HangmanModes extends AppCompatActivity {
      * load the saved game for battle mode of hangman. Show the user if there is no existing file.
      */
     private void loadBattle() {
-        String FileName = name + "_" + game + "Battle" + ".ser";
-        if (loadFromFile("answer" + FileName) != null &&
-                loadFromFile("score" + FileName) != null &&
-                loadFromFile("entered" + FileName) != null &&
-                loadFromFile("battle" + FileName) != null) {
+        if (saveManager.loadFromFile("answer_" + saveFileNameBat) != null &&
+                saveManager.loadFromFile("battle_" + saveFileNameBat) != null &&
+                saveManager.loadFromFile("entered_" + saveFileNameBat) != null &&
+                saveManager.loadFromFile("score_" + saveFileNameBat) != null) {
             switchToBattle();
         } else {
             Toast.makeText(this, "No existing file", Toast.LENGTH_SHORT).show();
@@ -117,11 +134,12 @@ public class HangmanModes extends AppCompatActivity {
         HangmanModes.this.startActivity(goToInfinity);
 
     }
-    /**
+    /*
      * @param fileName the name of the file we want to load from
      * @return the object we read from the file: usually the score, answer of the game, and the
      * letters the user has entered (as well as the battle state for battle mode only)
      */
+    /*
     private Object loadFromFile(String fileName) {
 
         try {
@@ -142,4 +160,5 @@ public class HangmanModes extends AppCompatActivity {
         }
         return null;
     }
+    */
 }
