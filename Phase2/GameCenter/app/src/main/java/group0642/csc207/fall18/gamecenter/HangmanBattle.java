@@ -3,6 +3,7 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -113,6 +114,7 @@ public class HangmanBattle extends AppCompatActivity {
         wordList = saveManager.readTextFromFile("vocabulary_list.txt");
         randomGenerator = new Random();
         answer = new Word(chooseTheAnswer());
+        Log.d("HMB answer", answer.word);
         update();
         updatePicture(level, monsters);
 
@@ -249,14 +251,17 @@ public class HangmanBattle extends AppCompatActivity {
     private void endingDetermination() {
         answer.setFinalDisplay();
         if (charHlth > 0) {
+            Log.d("HMB pre-check level", Integer.toString(level));
             if (level <= 4) {
                 level++;
                 score = level;
+                Log.d("HMB level", Integer.toString(level));
                 entered = new ArrayList();
                 makeToastEntryText("Level " + level);
 
                 battle = new Battle(level, level);
                 answer = new Word(chooseTheAnswer());
+                Log.d("HMB answer", answer.word);
 
                 disableAllButton(true);
                 update();
@@ -266,6 +271,7 @@ public class HangmanBattle extends AppCompatActivity {
             } else {
                 makeToastEntryText("You win");
                 score = level;
+                Log.d("HMB level", Integer.toString(level));
                 new ScoreBoard().updateScoreBoard(game, name, score);
                 disableAllButton(false);
                 result = true;
@@ -276,6 +282,7 @@ public class HangmanBattle extends AppCompatActivity {
             makeToastEntryText("You lose ");
             disableAllButton(false);
             score = level;
+            Log.d("HMB level", Integer.toString(level));
             new ScoreBoard().updateScoreBoard(game, name, score);
             result = true;
             showScoreboard_1.setText("Show scoreboard");
@@ -348,9 +355,12 @@ public class HangmanBattle extends AppCompatActivity {
      */
     private void loadGame() {
         answer = (Word) saveManager.loadFromFile("answer_" + saveFileName);
+        Log.d("HMB la", answer.word);
         battle = (Battle) saveManager.loadFromFile("battle_" + saveFileName);
         entered = (ArrayList) saveManager.loadFromFile("entered_" + saveFileName);
         score = (int) saveManager.loadFromFile("score_" + saveFileName);
+        Log.d("HMB ls", Integer.toString(score));
+        level = score;
 
         update();
         updatePicture(score, monsters);
@@ -372,6 +382,10 @@ public class HangmanBattle extends AppCompatActivity {
             saveFileNames.add(prefix + saveFileName);
         }
         collectObjectsToSave();
+        Word saveAnswer = (Word) objectsToSave.get(0);
+        int saveScore = (int) objectsToSave.get(3);
+        Log.d("HMB sa", saveAnswer.word);
+        Log.d("HMB ss", Integer.toString(score));
         saveManager.newObjects(objectsToSave);
         saveManager.saveToFiles(saveFileNames);
     }

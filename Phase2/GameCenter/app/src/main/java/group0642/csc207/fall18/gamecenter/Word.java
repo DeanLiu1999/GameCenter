@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 class Word implements Serializable {
 
-    private String word;
+    String word;
 
     private int length;
 
