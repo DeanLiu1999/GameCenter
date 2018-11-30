@@ -288,17 +288,6 @@ class SaveManager {
         }
 
         /**
-         * Assigns the objects to be saved by a new SaveManager.
-         *
-         * @param objects the object
-         * @return this Builder
-         */
-        Builder objects(ArrayList<Object> objects) {
-            this.objects = objects;
-            return this;
-        }
-
-        /**
          * Assigns the context for a new SaveManager.
          *
          * @param context the context
