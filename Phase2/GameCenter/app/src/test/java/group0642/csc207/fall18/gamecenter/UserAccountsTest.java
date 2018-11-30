@@ -1,19 +1,25 @@
 package group0642.csc207.fall18.gamecenter;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@Ignore
 public class UserAccountsTest {
-    /*
+
+    private void setUpEmptyFile(){
+        final String dirPath = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
+        final String fileName = "user_accounts.ser";
+        SaveManager saveManager = new SaveManager.Builder()
+                .saveDirectory(dirPath)
+                .build();
+        saveManager.saveToFile(fileName);
+    }
+
     @Test
     public void testUserAccounts(){
-        SaveManager s = new SaveManager();
-        s.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/user_accounts.ser", null);
+        setUpEmptyFile();
         UserAccounts u = new UserAccounts();
         assertFalse(u.resetPassword("dean", "2"));
         assertTrue(u.signUp("lc", "1"));
@@ -23,5 +29,4 @@ public class UserAccountsTest {
         assertTrue(u.signIn("lc","2"));
         assertFalse(u.signIn("bob", "1"));
     }
-    */
 }

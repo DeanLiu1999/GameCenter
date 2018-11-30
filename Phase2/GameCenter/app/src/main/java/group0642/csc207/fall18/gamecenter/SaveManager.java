@@ -56,22 +56,20 @@ class SaveManager {
      * @param fileName the name of the file that will be written to
      */
     void saveToFile(String fileName) {
-        if (object != null) {
-            String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
-            verifyDir(saveDirectory);
-            File saveFile = new File(filePath);
-            try {
-                saveFile.createNewFile();
+        String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
+        verifyDir(saveDirectory);
+        File saveFile = new File(filePath);
+        try {
+            saveFile.createNewFile();
 
-                OutputStream fileStream = new FileOutputStream(saveFile);
-                OutputStream bufferStream = new BufferedOutputStream(fileStream);
-                ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
+            OutputStream fileStream = new FileOutputStream(saveFile);
+            OutputStream bufferStream = new BufferedOutputStream(fileStream);
+            ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
 
-                outputStream.writeObject(object);
-                outputStream.close();
-            } catch (IOException e) {
-                Log.e(tag, "File write failed: " + e.toString());
-            }
+            outputStream.writeObject(object);
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e(tag, "File write failed: " + e.toString());
         }
     }
 
@@ -144,12 +142,6 @@ class SaveManager {
             autoSaveTracker = 0;
         }
     }
-
-    /*
-    void setAutoSaveInterval(int i) {
-        autoSaveInterval = i;
-    }
-    */
 
     /**
      * Resets the auto-save tracker.

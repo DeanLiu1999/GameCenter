@@ -1,6 +1,5 @@
 package group0642.csc207.fall18.gamecenter;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,18 +7,20 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Ignore
 public class ScoreBoardTest {
 
-    /*
-    private void setUpEmptyScoreBoard(){
-        SaveManager s = new SaveManager();
-        s.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/scoreboard.ser", null);
+    private void setUpEmptyFile(){
+        final String dirPath = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
+        final String fileName = "scoreboard.ser";
+        SaveManager saveManager = new SaveManager.Builder()
+                .saveDirectory(dirPath)
+                .build();
+        saveManager.saveToFile(fileName);
     }
 
     @Test
     public void testGetScoreGameUser(){
-        setUpEmptyScoreBoard();
+        setUpEmptyFile();
         ScoreBoard sc = new ScoreBoard();
         assertNull(sc.getScoreGameUser("SlidingTiles", "lc"));
         sc.updateScoreBoard("SlidingTiles", "lc", 1000);
@@ -34,7 +35,7 @@ public class ScoreBoardTest {
 
     @Test
     public void testGetScorePerGame(){
-        setUpEmptyScoreBoard();
+        setUpEmptyFile();
         ScoreBoard sc = new ScoreBoard();
         assertNull(sc.getScorePerGame("SlidingTiles"));
         sc.updateScoreBoard("SlidingTiles", "lc", 1000);
@@ -44,7 +45,7 @@ public class ScoreBoardTest {
 
     @Test
     public void testGetAfterGameScore(){
-        setUpEmptyScoreBoard();
+        setUpEmptyFile();
         ScoreBoard sc = new ScoreBoard();
         assertNull(sc.getAfterGameScore("SlidingTiles", "lc", 1000));
         sc.updateScoreBoard("SlidingTiles", "lc", 1000);
@@ -60,5 +61,4 @@ public class ScoreBoardTest {
         assertEquals(sc.getAfterGameScore("SlidingTiles", "lc3", 999).get(2)[1], "lc3");
         assertEquals(sc.getAfterGameScore("SlidingTiles", "lc3", 999).get(2)[2], 999);
     }
-    */
 }
