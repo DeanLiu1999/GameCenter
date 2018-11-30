@@ -21,29 +21,11 @@ class SaveManagerNew {
     private int autoSaveInterval = 5;
     private int autoSaveTracker = 0;
 
-    /*
-    SaveManager(Object object = null, String saveDirectory) {
-        this.object = object;
-        this.context = null;
-        this.saveDirectory = saveDirectory;
-
-        verifyDir(this.saveDirectory);
-    }
-
-    SaveManager(Object object = null, Context context, String user, String game) {
-        this.object = object;
-        this.context = context;
-
-        File filesDir = context.getFilesDir();
-        String filesDirStr = filesDir.getPath();
-        File saveDir = new File(filesDirStr + "/" + user + "/" + game);
-        this.saveDirectory = saveDir.getPath();
-
-        verifyDir(this.saveDirectory);
-    }
-    */
-
-    // TODO
+    /**
+     * A SaveManager with an Object to save/load, Context and a file directory to save to.
+     *
+     * @param b the Builder for this SaveManager
+     */
     private SaveManagerNew(Builder b) {
         this.object = b.object;
         this.context = b.context;
@@ -51,7 +33,10 @@ class SaveManagerNew {
     }
 
     /**
+     * Serialize an Object to a file with the given file name, creating non-existent files and
+     * directories in the process. Will overwrite files with duplicate file name.
      *
+     * @param fileName the name of the file that will be written to
      */
     void saveToFile(String fileName) {
         if (object != null) {
@@ -74,7 +59,11 @@ class SaveManagerNew {
     }
 
     /**
+     * Read and return the Object from a file specified by the given file name.
      *
+     * @param fileName the name of the file that will be read
+     * @return de-serialized object contained in the file specified by fileName;
+     * null if file is empty
      */
     Object loadFromFile(String fileName) {
         String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
@@ -98,6 +87,12 @@ class SaveManagerNew {
         return object;
     }
 
+    /**
+     *
+     *
+     * @param fileName
+     * @return
+     */
     boolean hasFile(String fileName){
         File saveDir = new File(saveDirectory);
         String[] saveList = saveDir.list();
@@ -109,14 +104,26 @@ class SaveManagerNew {
         return false;
     }
 
+    /**
+     *
+     *
+     * @param object
+     */
     void newObject(Object object) {
         this.object = object;
     }
 
+    /*
     String getSaveDirectory() {
         return saveDirectory;
     }
+    */
 
+    /**
+     *
+     *
+     * @param fileName
+     */
     void tickAutoSave(String fileName) {
         Log.d(tag, Integer.toString(autoSaveTracker));
         if (!(++autoSaveTracker < autoSaveInterval)) {
@@ -127,15 +134,21 @@ class SaveManagerNew {
         }
     }
 
+    /*
     void setAutoSaveInterval(int i) {
         autoSaveInterval = i;
     }
+    */
 
+    /**
+     *
+     */
     void resetAutoSave() {
         autoSaveTracker = -1;
     }
 
     /**
+     *
      *
      * @param path the file path to be checked
      */
@@ -148,10 +161,16 @@ class SaveManagerNew {
         }
     }
 
+    /**
+     *
+     */
     private void makeToastSavedText() {
         Toast.makeText(context, "Game Saved", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     *
+     */
     public static class Builder {
         private Object object = null;
         private Context context = null;
@@ -164,16 +183,35 @@ class SaveManagerNew {
         }
         */
 
+        /**
+         *
+         *
+         * @param context
+         * @return
+         */
         public Builder context(Context context) {
             this.context = context;
             return this;
         }
 
+        /**
+         *
+         *
+         * @param saveDirectory
+         * @return
+         */
         public Builder saveDirectory(String saveDirectory) {
             this.saveDirectory = saveDirectory;
             return this;
         }
 
+        /**
+         *
+         *
+         * @param user
+         * @param game
+         * @return
+         */
         public Builder saveDirectory(String user, String game) {
             if (context != null) {
                 File filesDir = context.getFilesDir();
@@ -184,6 +222,11 @@ class SaveManagerNew {
             return this;
         }
 
+        /**
+         *
+         *
+         * @return
+         */
         // TODO
         public SaveManagerNew build() {
             return new SaveManagerNew(this);
