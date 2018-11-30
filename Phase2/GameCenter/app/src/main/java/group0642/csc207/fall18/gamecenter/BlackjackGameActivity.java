@@ -55,7 +55,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private String game;
 
     private boolean load = false;
-    private long d = 1000;
+    private long d = 800;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
