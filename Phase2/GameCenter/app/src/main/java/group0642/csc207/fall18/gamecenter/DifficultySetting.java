@@ -20,17 +20,25 @@ import java.io.ObjectOutputStream;
 public class DifficultySetting extends AppCompatActivity {
     private Spinner spinner1;
     private BoardManager boardManager;
+    // TODO
+    private SaveManagerNew saveManager;
     private static final String[] paths = {"4 * 4", "3 * 3", "5 * 5"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(StartingActivity.TEMP_SAVE_FILENAME);
-        setContentView(R.layout.activity_difficulty);
 
         Intent i = getIntent();
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
+
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
+
+        boardManager = (BoardManager) saveManager.loadFromFile(StartingActivity.TEMP_SAVE_FILENAME);
+        setContentView(R.layout.activity_difficulty);
 
         final EditText maxUndo = findViewById(R.id.maxundo);
         final Button go = findViewById(R.id.gobutton);
@@ -40,7 +48,7 @@ public class DifficultySetting extends AppCompatActivity {
                 String max = maxUndo.getText().toString();
                 boardManager.setUndo(Integer.parseInt(max));
                 boardManager.refresh_board_manager();
-                saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
+                saveManager.saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
                 switchToGame(name, game);
             }
         });
@@ -74,6 +82,8 @@ public class DifficultySetting extends AppCompatActivity {
 
     }
 
+    // TODO
+    /*
     private void loadFromFile(String fileName) {
 
         try {
@@ -91,12 +101,14 @@ public class DifficultySetting extends AppCompatActivity {
             Log.e("login activity", "File contained unexpected data type: " + e.toString());
         }
     }
-
-    /**
+    */
+    /*
      * Save the board manager to fileName.
      *
      * @param fileName the name of the file
      */
+    /*
+    // TODO
     public void saveToFile(String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -107,6 +119,7 @@ public class DifficultySetting extends AppCompatActivity {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+    */
     private void switchToGame(String s, String t) {
         Intent tmp = new Intent(this, GameActivity.class);
         tmp.putExtra("name", s);

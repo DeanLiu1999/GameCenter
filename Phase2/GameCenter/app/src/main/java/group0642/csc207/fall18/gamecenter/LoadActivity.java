@@ -19,7 +19,11 @@ public class LoadActivity extends AppCompatActivity {
     /**
      * The log tag of this class.
      */
-    private static final String TAG = "LoadActivity_SlidingTiles";
+    private static final String tag = "LoadActivity_SlidingTiles";
+
+    // TODO
+    private BoardManager boardManager;
+    private SaveManagerNew saveManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,12 @@ public class LoadActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String name = intent.getStringExtra("name");
         final String game = intent.getStringExtra("game");
+
+        boardManager = null;
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
 
         threeByThreeListener(name, game);
         fourByFourListener(name, game);
@@ -83,11 +93,13 @@ public class LoadActivity extends AppCompatActivity {
         });
     }
 
-    /**
+    /*
      * Load the board manager from fileName.
      *
      * @param fileName the name of the file
      */
+    // TODO
+    /*
     private BoardManager loadFromFile(String fileName) {
 
         try {
@@ -108,12 +120,15 @@ public class LoadActivity extends AppCompatActivity {
         }
         return null;
     }
+    */
 
-    /**
+    /*
      * Save the board manager to fileName.
      *
      * @param fileName the name of the file
      */
+    // TODO
+    /*
     public void saveToFile(BoardManager boardManager, String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -124,6 +139,7 @@ public class LoadActivity extends AppCompatActivity {
             Log.e(TAG, "File write failed: " + e.toString());
         }
     }
+    */
 
     /**
      * Display that a game was loaded successfully.
@@ -147,15 +163,16 @@ public class LoadActivity extends AppCompatActivity {
      * @param game       the currently selected game
      */
     private void prepareSavedGame(int complexity, String name, String game) {
-        String saveFileName = name + "_" + game + "_" + Integer.toString(complexity) + ".ser";
-        BoardManager boardManager = loadFromFile(saveFileName);
-        if (boardManager == null) {
-            makeToastNoSave();
-        } else {
+        String saveFileName = "save_file_" + Integer.toString(complexity) + ".ser";
+
+        if (saveManager.hasFile(saveFileName)) {
+            boardManager = (BoardManager) saveManager.loadFromFile(saveFileName);
             Board.setGameSize(complexity);
-            saveToFile(boardManager, StartingActivity.TEMP_SAVE_FILENAME);
+            saveManager.saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
             makeToastLoadedText();
             switchToGame(boardManager, name, game);
+        } else {
+            makeToastNoSave();
         }
     }
 
@@ -170,7 +187,7 @@ public class LoadActivity extends AppCompatActivity {
         Intent tmp = new Intent(LoadActivity.this, GameActivity.class);
         tmp.putExtra("name", name);
         tmp.putExtra("game", game);
-        saveToFile(boardManager, StartingActivity.TEMP_SAVE_FILENAME);
+        saveManager.saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
         startActivity(tmp);
     }
 }

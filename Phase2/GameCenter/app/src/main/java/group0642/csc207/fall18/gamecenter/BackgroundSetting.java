@@ -18,6 +18,8 @@ import java.io.ObjectOutputStream;
 
 public class BackgroundSetting extends AppCompatActivity {
     private BoardManager boardManager;
+    // TODO
+    private SaveManagerNew saveManager;
     private static final String[] paths = {"number", "flower", "deathwing", "illidan", "jaina",
             "leader", "malfurion", "medivh", "thrall", "tyrande", "velen", "arthas", "car", "elf"};
 
@@ -25,9 +27,15 @@ public class BackgroundSetting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_background_choosing);
+
         Intent i = getIntent();
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
+
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .saveDirectory(name, game)
+                .build();
 
         // Default complexity (4x4) and background (no image) for a game of SlidingTiles.
 
@@ -41,7 +49,8 @@ public class BackgroundSetting extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener()
         {
             public void onClick (View v){
-                saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
+                saveManager.newObject(boardManager);
+                saveManager.saveToFile(StartingActivity.TEMP_SAVE_FILENAME);
                 switchToDifficulty(name, game);
             }
         });
@@ -66,11 +75,13 @@ public class BackgroundSetting extends AppCompatActivity {
     }
 
 
-    /**
+    /*
      * Save the board manager to fileName.
      *
      * @param fileName the name of the file
      */
+    // TODO
+    /*
     public void saveToFile(String fileName) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
@@ -81,6 +92,7 @@ public class BackgroundSetting extends AppCompatActivity {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+    */
     private void switchToDifficulty(String s, String t) {
         Intent tmp = new Intent(this, DifficultySetting.class);
         tmp.putExtra("name", s);
