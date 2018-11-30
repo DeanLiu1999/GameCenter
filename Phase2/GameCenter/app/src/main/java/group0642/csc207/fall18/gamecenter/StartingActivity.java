@@ -23,10 +23,6 @@ public class StartingActivity extends AppCompatActivity {
      * A temporary save file.
      */
     public static final String TEMP_SAVE_FILENAME = "save_file_temp.ser";
-    // private final String tag = "StartingActivity";
-
-    // TODO
-    //private SaveManager saveManager;
     private static final String TAG = "StartingActivity";
 
     private String name;
@@ -42,11 +38,6 @@ public class StartingActivity extends AppCompatActivity {
         Intent inherit = getIntent();
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
-        /*
-        saveManager = new SaveManager.Builder()
-                .context(this)
-                .build();
-        */
         TextView title = findViewById(R.id.GameText);
         title.setText(String.format("Welcome to %s", game));
 
@@ -62,13 +53,14 @@ public class StartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (game){
-                    case "Blackjack":
-                        switchToBlackjack();
-                    case "Sliding Tiles":
-                        switchToSlidingTilesSetting();
-                    case "Hangman":
-                        switchToHangman();
+                if (game.equals("Blackjack")) {
+                    switchToBlackjack();
+
+                } else if (game.equals("Sliding Tiles")) {
+
+                    switchToSlidingTilesSetting();
+                } else if (game.equals("Hangman")) {
+                    switchToHangman();
                 }
             }
         });
@@ -83,18 +75,16 @@ public class StartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (game){
-                    case "Sliding Tiles":
-                        LoadSlidingTiles();
-
-                    case "Blackjack":
-                        loadIndicator = true;
-                        LoadBlackjack();
-
-                    case "Hangman":
-                        loadIndicator = true;
-                        switchToHangman();
+                if (game.equals("Sliding Tiles")) {
+                    LoadSlidingTiles();
+                } else if (game.equals("Blackjack")) {
+                    loadIndicator = true;
+                    LoadBlackjack();
+                } else if (game.equals("Hangman")) {
+                    loadIndicator = true;
+                    switchToHangman();
                 }
+
             }
         });
     }

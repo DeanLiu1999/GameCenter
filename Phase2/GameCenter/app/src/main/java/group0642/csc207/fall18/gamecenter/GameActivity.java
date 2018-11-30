@@ -53,7 +53,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
      *
      */
     // TODO
-    private SaveManager saveManager;
+    private SaveManagerNew saveManager;
     private String saveFileName;
     /**
      * The buttons for undo and scoreboard.
@@ -137,7 +137,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
 
-        saveManager = new SaveManager.Builder()
+        saveManager = new SaveManagerNew.Builder()
                 .context(this)
                 .saveDirectory(name, game)
                 .build();

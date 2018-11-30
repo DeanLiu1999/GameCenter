@@ -3,6 +3,7 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,10 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class SlidingTileSetting extends AppCompatActivity {
     private BoardManager boardManager;
-    private SaveManager saveManager;
+    private SaveManagerNew saveManager;
     private static final String[] paths = {"4 * 4", "3 * 3", "5 * 5"};
     private static final String[] paths2 = {"number", "flower", "deathwing", "illidan", "jaina",
             "leader", "malfurion", "medivh", "thrall", "tyrande", "velen", "arthas", "car", "elf"};
@@ -27,7 +30,7 @@ public class SlidingTileSetting extends AppCompatActivity {
         final String name = i.getStringExtra("name");
         final String game = i.getStringExtra("game");
 
-        saveManager = new SaveManager.Builder()
+        saveManager = new SaveManagerNew.Builder()
                 .context(this)
                 .saveDirectory(name, game)
                 .build();

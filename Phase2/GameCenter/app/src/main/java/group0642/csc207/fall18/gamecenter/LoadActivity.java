@@ -23,7 +23,7 @@ public class LoadActivity extends AppCompatActivity {
 
     // TODO
     private BoardManager boardManager;
-    private SaveManager saveManager;
+    private SaveManagerNew saveManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class LoadActivity extends AppCompatActivity {
         final String game = intent.getStringExtra("game");
 
         boardManager = null;
-        saveManager = new SaveManager.Builder()
+        saveManager = new SaveManagerNew.Builder()
                 .context(this)
                 .saveDirectory(name, game)
                 .build();

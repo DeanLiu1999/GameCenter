@@ -1,233 +1,81 @@
 package group0642.csc207.fall18.gamecenter;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.*;
 
 class SaveManager {
 
+    SaveManager(){}
+
     /**
      * The log tag of this class.
      */
-    private final String tag = "SaveManager";
-
-    private Object object;
-    private Context context;
-    private String saveDirectory;
-
-    private int autoSaveInterval = 5;
-    private int autoSaveTracker = 0;
+    private static final String TAG = "SaveManager";
 
     /**
-     * A SaveManager with an Object to save/load, Context and a file directory to save to.
-     *
-     * @param b the Builder for this SaveManager
-     */
-    private SaveManager(Builder b) {
-        this.object = b.object;
-        this.context = b.context;
-        this.saveDirectory = b.saveDirectory;
-    }
-
-    /**
-     * Serialize an Object to a file with the given file name, creating non-existent files and
+     * Serialize an Object to a file at the given file path, creating non-existent files and
      * directories in the process. Will overwrite files with duplicate file name.
      *
-     * @param fileName the name of the file that will be written to
+     * @param filePath the path to the file that will be written to
+     * @param o        the object that will be serialized and written to the file at filePath
      */
-    void saveToFile(String fileName) {
-        if (object != null) {
-            String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
-            verifyDir(saveDirectory);
-            File saveFile = new File(filePath);
-            try {
-                saveFile.createNewFile();
-
-                OutputStream fileStream = new FileOutputStream(saveFile);
-                OutputStream bufferStream = new BufferedOutputStream(fileStream);
-                ObjectOutputStream outputStream = new ObjectOutputStream(bufferStream);
-
-                outputStream.writeObject(object);
-                outputStream.close();
-            } catch (IOException e) {
-                Log.e(tag, "File write failed: " + e.toString());
-            }
+    void writeToFile(String filePath, Object o) {
+        new SaveManager().check(filePath);
+        try {
+            ObjectOutputStream objectOutputStream =
+                    new ObjectOutputStream(new FileOutputStream(filePath));
+            objectOutputStream.writeObject(o);
+            objectOutputStream.close();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e(TAG, "File write failed: " + e.toString());
         }
     }
 
     /**
-     * Read and return the Object from a file specified by the given file name.
+     * Read and return the Object from a file specified by its file path.
      *
-     * @param fileName the name of the file that will be read
-     * @return de-serialized object contained in the file specified by fileName;
+     * @param filePath the path to the file that will be read
+     * @return de-serialized object contained in the file specified by filePath;
      * null if file is empty
      */
-    Object loadFromFile(String fileName) {
-        String filePath = (saveDirectory.equals("")) ? fileName : saveDirectory + "/" + fileName;
-        verifyDir(saveDirectory);
-        File saveFile = new File(filePath);
+    Object loadFromFile(String filePath) {
+        new SaveManager().check(filePath);
+        Object o = null;
         try {
-            InputStream fileStream = new FileInputStream(saveFile);
-            InputStream bufferStream = new BufferedInputStream(fileStream);
-            ObjectInputStream inputStream = new ObjectInputStream(bufferStream);
-
-            object = inputStream.readObject();
-            inputStream.close();
-
+            File f = new File(filePath);
+            if (f.length() != 0) {
+                ObjectInputStream objectInputStream =
+                        new ObjectInputStream(new FileInputStream(filePath));
+                o = objectInputStream.readObject();
+                objectInputStream.close();
+            }
         } catch (FileNotFoundException e) {
-            Log.e(tag, "File not found: " + e.toString());
+            Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e(tag, "Can not read file: " + e.toString());
+            Log.e(TAG, "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
-            Log.e(tag, "File contained unexpected data type: " + e.toString());
+            Log.e(TAG, "File contained unexpected data type: " + e.toString());
         }
-        return object;
+        return o;
     }
 
     /**
+     * Check if the specified directory and file exist, creating any that do not yet exist.
      *
-     *
-     * @param fileName
-     * @return
+     * @param filePath the file path to be checked
      */
-    boolean hasFile(String fileName){
-        File saveDir = new File(saveDirectory);
-        String[] saveList = saveDir.list();
-        for (String save : saveList) {
-            if (fileName.equals(save)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     *
-     *
-     * @param object
-     */
-    void newObject(Object object) {
-        this.object = object;
-    }
-
-    /*
-    String getSaveDirectory() {
-        return saveDirectory;
-    }
-    */
-
-    /**
-     *
-     *
-     * @param fileName
-     */
-    void tickAutoSave(String fileName) {
-        Log.d(tag, Integer.toString(autoSaveTracker));
-        if (!(++autoSaveTracker < autoSaveInterval)) {
-            Log.d(tag, "Auto-saving");
-            saveToFile(fileName);
-            makeToastSavedText();
-            autoSaveTracker = 0;
-        }
-    }
-
-    /*
-    void setAutoSaveInterval(int i) {
-        autoSaveInterval = i;
-    }
-    */
-
-    /**
-     *
-     */
-    void resetAutoSave() {
-        autoSaveTracker = -1;
-    }
-
-    /**
-     *
-     *
-     * @param path the file path to be checked
-     */
-    private void verifyDir(String path) {
-        if (!(path.equals(""))) {
-            File directory = new File(path);
-            if (!directory.isDirectory()) {
-                directory.mkdirs();
-            }
-        }
-    }
-
-    /**
-     *
-     */
-    private void makeToastSavedText() {
-        Toast.makeText(context, "Game Saved", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     *
-     */
-    public static class Builder {
-        private Object object = null;
-        private Context context = null;
-        private String saveDirectory = "";
-
-        /*
-        public Builder object(Object object) {
-            this.object = object;
-            return this;
-        }
-        */
-
-        /**
-         *
-         *
-         * @param context
-         * @return
-         */
-        public Builder context(Context context) {
-            this.context = context;
-            return this;
-        }
-
-        /**
-         *
-         *
-         * @param saveDirectory
-         * @return
-         */
-        public Builder saveDirectory(String saveDirectory) {
-            this.saveDirectory = saveDirectory;
-            return this;
-        }
-
-        /**
-         *
-         *
-         * @param user
-         * @param game
-         * @return
-         */
-        public Builder saveDirectory(String user, String game) {
-            if (context != null) {
-                File filesDir = context.getFilesDir();
-                String filesDirStr = filesDir.getPath();
-                File saveDir = new File(filesDirStr + "/" + user + "/" + game);
-                this.saveDirectory = saveDir.getPath();
-            }
-            return this;
-        }
-
-        /**
-         *
-         *
-         * @return
-         */
-        public SaveManager build() {
-            return new SaveManager(this);
+    private void check(String filePath) {
+        try {
+            File f = new File(filePath);
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e(TAG, "Can not access file: " + e.toString());
         }
     }
 }
