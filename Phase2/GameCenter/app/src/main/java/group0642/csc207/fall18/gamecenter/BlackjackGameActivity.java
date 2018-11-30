@@ -54,7 +54,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
     private String name;
     private String game;
 
-    public static boolean load = false;
+    private boolean load = false;
     private long d = 1000;
 
     @Override
@@ -65,6 +65,7 @@ public class BlackjackGameActivity extends AppCompatActivity {
         Intent i = getIntent();
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
+        load = i.getBooleanExtra("load", false);
 
         bankManager = new BankManager();
         bankSaveManager = new SaveManager.Builder()
