@@ -26,7 +26,7 @@ public class StartingActivity extends AppCompatActivity {
     // private final String tag = "StartingActivity";
 
     // TODO
-    private SaveManager saveManager;
+    //private SaveManager saveManager;
     private static final String TAG = "StartingActivity";
 
     private String name;
@@ -42,11 +42,11 @@ public class StartingActivity extends AppCompatActivity {
         Intent inherit = getIntent();
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
-
+        /*
         saveManager = new SaveManager.Builder()
                 .context(this)
                 .build();
-
+        */
         TextView title = findViewById(R.id.GameText);
         title.setText(String.format("Welcome to %s", game));
 
@@ -112,7 +112,7 @@ public class StartingActivity extends AppCompatActivity {
      * Switch to the BackgroundSetting to configure the tile background.
      */
     private void switchToSlidingTilesSetting() {
-        Intent GameSettingIntent = new Intent(this, BackgroundSetting.class);
+        Intent GameSettingIntent = new Intent(this, SlidingTileSetting.class);
         GameSettingIntent.putExtra("name", name);
         GameSettingIntent.putExtra("game", game
         );
