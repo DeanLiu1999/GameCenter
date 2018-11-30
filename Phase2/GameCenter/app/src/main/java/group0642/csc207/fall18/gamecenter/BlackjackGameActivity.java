@@ -48,8 +48,8 @@ public class BlackjackGameActivity extends AppCompatActivity {
      * The name of the save file.
      */
     private String saveFileName = "save_file.ser";
-    ImageView toast;
-    ImageView gameOver;
+    private ImageView toast;
+    private ImageView gameOver;
 
     private String name;
     private String game;
