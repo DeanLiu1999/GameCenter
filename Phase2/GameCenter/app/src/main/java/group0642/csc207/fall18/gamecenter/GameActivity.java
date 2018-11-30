@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -18,11 +17,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,26 +28,17 @@ import static group0642.csc207.fall18.gamecenter.StartingActivity.TEMP_SAVE_FILE
  */
 public class GameActivity extends AppCompatActivity implements Observer {
 
-    /*
-    Application of logcat for debugging based on information and examples adapted from
-    https://developer.android.com/studio/debug/am-logcat
-    Retrieved Oct. 27, 2018
-     */
-
-    /**
-     * The log tag of this class.
-     */
-    private final String tag = "GameActivity_SlidingTiles";
     /**
      * The board manager.
      */
     private BoardManager boardManager;
-
     /**
-     *
+     * The save manager.
      */
-    // TODO
-    private SaveManagerNew saveManager;
+    private SaveManager saveManager;
+    /**
+     * The name of the save file.
+     */
     private String saveFileName;
     /**
      * The buttons for undo and scoreboard.
@@ -74,14 +59,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
      */
     private GestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
-    /*
-     * Tracker and preset interval for auto-saving.
-     */
-    /*
-    // TODO
-    private static int autoSaveTracker;
-    private static final int AUTO_SAVE_INTERVAL = 5;
-    */
     /**
      * Name of current game, username of current active user, and score.
      */
@@ -120,7 +97,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
      * Set up the background image for each button based on the master list
      * of positions, and then call the adapter to set the view.
      */
-    // Display
     public void display() {
         updateTileButtons();
         gridView.setAdapter(new CustomAdapter(tileButtons, columnWidth, columnHeight));
@@ -137,7 +113,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
         name = i.getStringExtra("name");
         game = i.getStringExtra("game");
 
-        saveManager = new SaveManagerNew.Builder()
+        saveManager = new SaveManager.Builder()
                 .context(this)
                 .saveDirectory(name, game)
                 .build();
@@ -152,8 +128,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
         final Button showImage = findViewById(R.id.fullbutton);
 
         addSaveButtonListener(name, game);
-        // Give an initial value to begin tracking the interval for auto-saving.
-        // TODO autoSaveTracker = 0;
 
         showImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +240,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
         });
     }
 
-
     /**
      * Dispatch onPause() to fragments.
      */
@@ -275,51 +248,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
         super.onPause();
         saveManager.saveToFile(TEMP_SAVE_FILENAME);
     }
-
-    /*
-     * Load the board manager from fileName.
-     *
-     * @param fileName the name of the file
-     */
-    // TODO
-    /*
-    private void loadFromFile(String fileName) {
-
-        try {
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                boardManager = (BoardManager) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
-        }
-    }
-    */
-
-    /*
-     * Save the board manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    // TODO
-    /*
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(boardManager);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File write failed: " + e.toString());
-        }
-    }
-    */
 
     /**
      * Add a new score to the ScoreBoard.
@@ -330,23 +258,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
         s = score;
         new ScoreBoard().updateScoreBoard(GameActivity.game, GameActivity.name, score);
     }
-
-    /*
-     * Tick autoSaveTracker forward and save the game at predefined AUTO_SAVE_INTERVAL.
-     */
-    // TODO
-    /*
-    private void tickAutoSave() {
-        Log.d(tag, Integer.toString(autoSaveTracker));
-        if (!(++autoSaveTracker < AUTO_SAVE_INTERVAL)) {
-            Log.d(tag, "Auto-saving");
-            String saveFileName = name + "_" + game + "_" + Board.NUM_ROWS + ".ser";
-            saveToFile(saveFileName);
-            makeToastSavedText();
-            autoSaveTracker = 0;
-        }
-    }
-    */
 
     /**
      * Display that a game was saved successfully.
@@ -363,7 +274,6 @@ public class GameActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Log.d(tag, "State updated");
         if (boardManager.puzzleSolved()) {
             undo.setEnabled(false);
             scoreboard.setEnabled(true);
