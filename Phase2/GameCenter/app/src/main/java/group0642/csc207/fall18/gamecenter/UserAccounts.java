@@ -14,7 +14,7 @@ class UserAccounts {
     /**
      * The save manager.
      */
-    private SaveManagerNew saveManager;
+    private SaveManager saveManager;
     /**
      * HashMap mapping users their respective passwords.
      */
@@ -25,7 +25,7 @@ class UserAccounts {
      */
     UserAccounts() {
         String userAccountsDir = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
-        saveManager = new SaveManagerNew.Builder()
+        saveManager = new SaveManager.Builder()
                 .saveDirectory(userAccountsDir)
                 .build();
         userAccounts = (HashMap) saveManager.loadFromFile(userAccountsFileName);

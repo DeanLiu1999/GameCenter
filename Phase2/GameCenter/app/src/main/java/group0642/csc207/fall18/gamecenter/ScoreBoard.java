@@ -17,7 +17,7 @@ class ScoreBoard {
     /**
      * The save manager.
      */
-    private SaveManagerNew saveManager;
+    private SaveManager saveManager;
     /**
      * HashMap mapping users to all of their game-specific scores.
      */
@@ -28,7 +28,7 @@ class ScoreBoard {
      */
     public ScoreBoard() {
         String scoreboardDir = "storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files";
-        saveManager = new SaveManagerNew.Builder()
+        saveManager = new SaveManager.Builder()
                 .saveDirectory(scoreboardDir)
                 .build();
         scoreBoard = (HashMap) saveManager.loadFromFile(scoreboardFileName);

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 @Ignore
 public class UserAccountsTest {
+    /*
     @Test
     public void testUserAccounts(){
         SaveManager s = new SaveManager();
@@ -22,5 +23,5 @@ public class UserAccountsTest {
         assertTrue(u.signIn("lc","2"));
         assertFalse(u.signIn("bob", "1"));
     }
-
+    */
 }

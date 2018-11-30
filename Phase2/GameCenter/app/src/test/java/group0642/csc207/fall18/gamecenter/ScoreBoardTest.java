@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNull;
 @Ignore
 public class ScoreBoardTest {
 
+    /*
     private void setUpEmptyScoreBoard(){
         SaveManager s = new SaveManager();
         s.writeToFile("storage/emulated/0/Android/data/group0642.csc207.fall18.gamecenter/files/scoreboard.ser", null);
@@ -59,4 +60,5 @@ public class ScoreBoardTest {
         assertEquals(sc.getAfterGameScore("SlidingTiles", "lc3", 999).get(2)[1], "lc3");
         assertEquals(sc.getAfterGameScore("SlidingTiles", "lc3", 999).get(2)[2], 999);
     }
+    */
 }
