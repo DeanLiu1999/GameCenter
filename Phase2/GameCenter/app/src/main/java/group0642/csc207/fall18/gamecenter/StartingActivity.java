@@ -62,14 +62,13 @@ public class StartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (game.equals("Blackjack")) {
-                    switchToBlackjack();
-
-                } else if (game.equals("Sliding Tiles")) {
-
-                    switchToSlidingTilesSetting();
-                } else if (game.equals("Hangman")) {
-                    switchToHangman();
+                switch (game){
+                    case "Blackjack":
+                        switchToBlackjack();
+                    case "Sliding Tiles":
+                        switchToSlidingTilesSetting();
+                    case "Hangman":
+                        switchToHangman();
                 }
             }
         });
@@ -84,16 +83,18 @@ public class StartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (game.equals("Sliding Tiles")) {
-                    LoadSlidingTiles();
-                } else if (game.equals("Blackjack")) {
-                    loadIndicator = true;
-                    LoadBlackjack();
-                } else if (game.equals("Hangman")) {
-                    loadIndicator = true;
-                    switchToHangman();
-                }
+                switch (game){
+                    case "Sliding Tiles":
+                        LoadSlidingTiles();
 
+                    case "Blackjack":
+                        loadIndicator = true;
+                        LoadBlackjack();
+
+                    case "Hangman":
+                        loadIndicator = true;
+                        switchToHangman();
+                }
             }
         });
     }
