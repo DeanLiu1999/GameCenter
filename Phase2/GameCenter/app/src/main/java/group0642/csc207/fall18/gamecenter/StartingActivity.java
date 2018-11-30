@@ -23,19 +23,29 @@ public class StartingActivity extends AppCompatActivity {
      * A temporary save file.
      */
     public static final String TEMP_SAVE_FILENAME = "save_file_temp.ser";
-    private static final String TAG = "StartingActivity";
+    // private final String tag = "StartingActivity";
+
+    // TODO
+    private SaveManagerNew saveManager;
 
     private String name;
     private String game;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getExternalFilesDir(null);//create the directory for file writing and reading
         setContentView(R.layout.activity_starting_);
+
         Intent inherit = getIntent();
         name = inherit.getStringExtra("name");
         game = inherit.getStringExtra("game");
+
+        saveManager = new SaveManagerNew.Builder()
+                .context(this)
+                .build();
+
         TextView title = findViewById(R.id.GameText);
         title.setText(String.format("Welcome to %s", game));
 
@@ -148,8 +158,7 @@ public class StartingActivity extends AppCompatActivity {
 
     private void LoadBlackjack(String s, String t) {
         String FileName = name + "_" + game + ".ser";
-        if(
-                loadFromFile("bankManager" + FileName) != null) {
+        if(saveManager.loadFromFile("bankManager" + FileName) != null) {
             Intent BlackjackLoadIntent = new Intent(this, BlackjackGameActivity.class);
             BlackjackLoadIntent.putExtra("name", s);
             BlackjackLoadIntent.putExtra("game", t);
@@ -160,6 +169,7 @@ public class StartingActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private Object loadFromFile(String fileName) {
 
         try {
@@ -172,14 +182,15 @@ public class StartingActivity extends AppCompatActivity {
                 return object;
             }
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + e.toString());
+            Log.e(tag, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e(TAG, "Can not read file: " + e.toString());
+            Log.e(tag, "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, "File contained unexpected data type: " + e.toString());
+            Log.e(tag, "File contained unexpected data type: " + e.toString());
         }
         return null;
     }
+    */
 
     private void makeToastText(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
