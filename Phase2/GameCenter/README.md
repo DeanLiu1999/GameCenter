@@ -41,7 +41,7 @@ are from kingdom rush
 cardback.png is from Hearthstone
 
 ## Code coverage
-class BlackjackGameActivity, class CustomAdapter, class Ending score, class GameActivity,
+class BlackjackGameActivity, class CustomAdapter, class EndingScore, class GameActivity,
 class GestureDetectGridView, class HangmanActivity, class HangmanBattle, class HangmanModes,
 class LoadActivity, class LoginActivity, class MovementController, class PasswordReset,
 class Preface, class Register, class ScoreDisplay, class ScorePerGame, class SlidingTileSetting,
