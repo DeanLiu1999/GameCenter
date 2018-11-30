@@ -3,15 +3,9 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 
 public class HangmanModes extends AppCompatActivity {
     private boolean loadOrNot;
@@ -132,33 +126,5 @@ public class HangmanModes extends AppCompatActivity {
         goToInfinity.putExtra("game", game);
         HangmanActivity.load = loadOrNot;
         HangmanModes.this.startActivity(goToInfinity);
-
     }
-    /*
-     * @param fileName the name of the file we want to load from
-     * @return the object we read from the file: usually the score, answer of the game, and the
-     * letters the user has entered (as well as the battle state for battle mode only)
-     */
-    /*
-    private Object loadFromFile(String fileName) {
-
-        try {
-            Object object;
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                object = input.readObject();
-                inputStream.close();
-                return object;
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("Exception", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("Exception", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("Exception", "File contained unexpected data type: " + e.toString());
-        }
-        return null;
-    }
-    */
 }

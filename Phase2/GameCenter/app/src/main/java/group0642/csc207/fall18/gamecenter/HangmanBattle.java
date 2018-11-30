@@ -3,20 +3,12 @@ package group0642.csc207.fall18.gamecenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -124,10 +116,7 @@ public class HangmanBattle extends AppCompatActivity {
         update();
         updatePicture(level, monsters);
 
-        objectsToSave.add(answer);
-        objectsToSave.add(battle);
-        objectsToSave.add(entered);
-        objectsToSave.add(score);
+        collectObjectsToSave();
 
         buttonListActions();
         setShowScoreboard_1Listener();
@@ -370,6 +359,7 @@ public class HangmanBattle extends AppCompatActivity {
             index = alphabet.indexOf((char) entered.get(i));
             entries[index].setEnabled(false);
         }
+        collectObjectsToSave();
         makeToastEntryText("Game Loaded");
     }
 
@@ -381,7 +371,18 @@ public class HangmanBattle extends AppCompatActivity {
         for (String prefix : saveFilePrefixes) {
             saveFileNames.add(prefix + saveFileName);
         }
+        collectObjectsToSave();
         saveManager.newObjects(objectsToSave);
         saveManager.saveToFiles(saveFileNames);
+    }
+
+    /**
+     * Collects all objects intended to be saved.
+     */
+    private void collectObjectsToSave() {
+        objectsToSave.add(answer);
+        objectsToSave.add(battle);
+        objectsToSave.add(entered);
+        objectsToSave.add(score);
     }
 }
