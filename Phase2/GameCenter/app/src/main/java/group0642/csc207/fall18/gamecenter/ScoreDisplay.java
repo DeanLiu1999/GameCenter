@@ -15,6 +15,10 @@ public class ScoreDisplay extends AppCompatActivity {
     // 1 for displaying score per-game, and 2 for displaying score per-person.
     public static int scoreboardMode = 1;
     private ArrayList scoreList;
+    private ArrayList<ArrayList> pages;
+    private int limit;
+    private Button nextTen, prevTen;
+    private ArrayToString format = new ArrayToString();
 
 
     /**
@@ -22,17 +26,13 @@ public class ScoreDisplay extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_display);
 
         Intent intent = getIntent();
         String ID = intent.getStringExtra("userId");
         String gameName = intent.getStringExtra("gameName_1");
-
         TextView title = findViewById(R.id.title_2);
-
-
         if (scoreboardMode == 1) {
             scoreList = new ScoreBoard().getScorePerGame(gameName);
             title.setText(String.format("%s top scores", gameName));
@@ -41,91 +41,67 @@ public class ScoreDisplay extends AppCompatActivity {
             title.setText(String.format("Your score in %s", gameName));
         }
 
-        final ArrayList<ArrayList> pages = divideBy10(scoreList);
-        final int limit = pages.size();
-        final Button next_10 = findViewById(R.id.next_10);
-        final Button prev_10 = findViewById(R.id.prev_10);
-
+        pages = new ArrayListPartitioner().partitionByLengthTen(scoreList);
+        limit = pages.size();
+        nextTen = findViewById(R.id.next_10);
+        prevTen = findViewById(R.id.prev_10);
         // the initial page display
-        prev_10.setEnabled(false);
-        if (pages.size() == 0) {
-            next_10.setEnabled(false);
-
+        prevTen.setEnabled(false);
+        if (limit == 0) {
+            nextTen.setEnabled(false);
         } else if (counter == limit - 1) {
             display_score(pages.get(counter));
-            next_10.setEnabled(false);
+            nextTen.setEnabled(false);
         } else {
             display_score(pages.get(counter));
         }
 
+        setNextTenListener();
+        setPrevTenListener();
+
+    }
+
+    private void setNextTenListener() {
         // functionality for the next page(10 scores each page)
-        next_10.setOnClickListener(new View.OnClickListener() {
+        nextTen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 counter++;
-                prev_10.setEnabled(true);
+                prevTen.setEnabled(true);
                 if (counter < limit - 1) {
                     display_score(pages.get(counter));
                 } else if (counter == limit - 1) {
                     display_score(pages.get(counter));
-                    next_10.setEnabled(false);
+                    nextTen.setEnabled(false);
                 } else {
                     counter = limit - 1;
-                    next_10.setEnabled(false);
+                    nextTen.setEnabled(false);
                 }
 
             }
         });
+    }
+
+    private void setPrevTenListener() {
         // functionality for the previous page button
-        prev_10.setOnClickListener(new View.OnClickListener() {
+        prevTen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 counter--;
-                next_10.setEnabled(true);
+                nextTen.setEnabled(true);
                 if (counter > 0) {
                     display_score(pages.get(counter));
 
                 } else if (counter == 0) {
                     display_score(pages.get(counter));
-                    prev_10.setEnabled(false);
+                    prevTen.setEnabled(false);
                 } else {
                     counter = 0;
-                    prev_10.setEnabled(false);
+                    prevTen.setEnabled(false);
                 }
             }
         });
-
     }
-
-
-    /**
-     * @param lst an ArrayList
-     * @return an ArrayList that contains ArrayLists each of size ten.
-     */
-    private ArrayList<ArrayList> divideBy10(ArrayList lst) {
-        if (lst == null) {
-            return new ArrayList<>();
-        } else if (lst.size() <= 10) {
-            ArrayList<ArrayList> nest_1 = new ArrayList<ArrayList>();
-            nest_1.add(lst);
-            return nest_1;
-        }
-        ArrayList<ArrayList> nest = new ArrayList<ArrayList>();
-        ArrayList<ArrayList> lst_1 = new ArrayList<ArrayList>();
-        ArrayList<ArrayList> lst_2 = new ArrayList<ArrayList>();
-        lst_1.addAll(lst.subList(0, 10));
-        lst_2.addAll(lst.subList(10, lst.size()));
-        nest.add(lst_1);
-        nest.addAll(divideBy10(lst_2));
-        return nest;
-    }
-
-    private String getString(Object[] array) {
-        String username = (String) array[0];
-        String score = array[1].toString();
-        return String.format("%-30s             %3s", username, score);
-    }
-
 
     /**
      * @param lst an ArrayList of Objects
@@ -156,11 +132,10 @@ public class ScoreDisplay extends AppCompatActivity {
         while (i < lst.size()) {
             if (scoreboardMode == 1) {
                 Object[] arr = (Object[]) lst.get(i);
-                slots[i].setText(getString(arr));
+                slots[i].setText(format.getString(arr));
             } else {
                 String msg = lst.get(i).toString();
                 slots[i].setText(String.format("  %s", msg));
-
             }
             i++;
         }
