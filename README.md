@@ -2,7 +2,7 @@
 Group Project for CSC207 "Software Design"
 # GROUP 0642
 ## URL to clone
-https://markus.teach.cs.toronto.edu/git/csc207-2018-09-reg/group_0642
+https://github.com/DeanLiu1999/GameCenter
 ## Steps of setting up
 1.Open Android Studio
 
