@@ -1,4 +1,5 @@
 # GameCenter
+A game center supporting three games
 Group Project for CSC207 "Software Design"
 # GROUP 0642
 ## URL to clone
