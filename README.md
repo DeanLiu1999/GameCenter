@@ -29,21 +29,33 @@ https://github.com/DeanLiu1999/GameCenter
 
 12.Wait for Android Studio to finish building
 
-## Brief description to functionality
-We have three games now: SlidingTile, BlackJack and Hangman.
+Note: The app can run on virtual devices such as "Pixel 2 API 27" or "Nexus 5X API 27"
 
-SlidingTile is the same as Phase 1, except we now avoid unsolvable boards when user starts new game.
+## Brief description
+We have three games for the user to explore: SlidingTile, BlackJack and Hangman.
 
-We implement BlackJack using the regular rule. The user can add wagers and then press Deal to start
-a new game. The user can save the current game state and load it later.The game will also be
-automatically saved at save points and at the moment that the app is closed during the game.
-Moreover, the user can undo in order to get the wagers back before the user make any move after
-dealing. The user can cash out to record their current bank value as the score in ScoreBoard.
+The main code for this project can be found in Phase2/GameCenter/app/src/main/java/group0642/csc207/fall18/gamecenter.
 
-Hangman has two modes: the standard mode and the infinite mode. In standard mode the user get 10 
-lives and the regular hangman rule applied. In infinite mode the user can keep guessing the next
-word as long as his number of lives is positive, and his score will be the number of words guessed
-correctly.
+Some of the starter code are given by our professsor.
+
+Raymond Lu: Java implementation for hangman, infinite mode for hangman, unit test for Word
+         check unit test for all other classes to ensure code coverage
+
+Dean Liu: Modify BoardManager to avoid unsolvable board, java implementation and images for blackjack, 
+      organize Phase 1 code in bottom classes, unit test for Tile, StateManger, DeckManager, Card,
+      java implementation and unit test for player against monster mode in hangman
+      
+Cheng Lu: Enhance Scoreboard class to support two new games, avoid abuse of "static" keyword
+       wager, display, animation, undo and save for blackjack, 
+       unit test for Scoreboard, BankManager, Android test for whole program if possible
+       
+Yilun Li: Enhance buttons, displays, game center and user accounts for Phase 2, 
+       display and save for hangman game, timed mode for hangman if possible
+       button and display for player against monster mode in hangman
+       
+Ryan Zhang: Eliminate code smell from Phase 1, unit test for BoardManager, Board
+      improve the structure of activities (separation guied by design principles) in Phase 1 to 
+      enhance code coverage
 
 ## Images citation
 club_a.png, club_2.png, club_3.png, club_4.png, club_5.png, club_6.png, club_7.png, club_8.png,
